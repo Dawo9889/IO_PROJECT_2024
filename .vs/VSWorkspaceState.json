@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Backend",
-    "\\Backend\\Backend.Domain",
-    "\\Backend\\Backend.Infrastructure",
-    "\\Backend\\Backend.Infrastructure\\Backend.Infrastructure"
+    ""
   ],
-  "SelectedNode": "\\Backend\\Backend.Infrastructure\\Backend.Infrastructure\\Backend.Infrastructure.csproj",
+  "SelectedNode": "\\Project_IO.sln",
   "PreviewInSolutionExplorer": false
 }
