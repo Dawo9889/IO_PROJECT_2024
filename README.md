@@ -9,18 +9,22 @@ CUPID
 
 ![nuget console](Documentation/Images/nuget_console.png)
 
+3. Upewniamy się że mamy ustawione Infrastructure: 
+
+![nuiget_infrastructure](Documentation/Images/nuget_console_infrastructure.png)
+
 4. Sprawdzamy czy mamy jakieś migracje w projekcie:
    
 ![migrations](Documentation/Images/Migrations.png)
 
-    3.1. Jezeli nie mamy to tworzymy migracje w konsoli: `Add_Migration init`
+    4.1. Jezeli nie mamy to tworzymy migracje w konsoli: `Add_Migration init`
 
-6. Baza danych aktualnie jest na wbudowanym serwerze sql, który dostajemy podczas instalacji Visual Studio. Aby utworzyć baze danych na podstawie migracji wpisujemy w konsoli `update-database`
+5. Baza danych aktualnie jest na wbudowanym serwerze sql, który dostajemy podczas instalacji Visual Studio. Aby utworzyć baze danych na podstawie migracji wpisujemy w konsoli `update-database`
 
-7. W wyszukiwarce mozemy poszukac domyslnej apki do zarzadzania bazą danych:
+6. W wyszukiwarce mozemy poszukac domyslnej apki do zarzadzania bazą danych:
    
 ![sql_server_explorer](Documentation/Images/sql_explorer.png)
 
-9. Powinniśmy widzieć nasza baze danych:
+7. Powinniśmy widzieć nasza baze danych:
     
 ![baza danych](Documentation/Images/baza_w_sql_explorer.png)
