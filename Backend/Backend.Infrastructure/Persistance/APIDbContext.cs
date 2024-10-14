@@ -10,13 +10,13 @@ namespace Backend.Infrastructure.Persistance
 {
     internal class APIDbContext : DbContext
     {
+        public APIDbContext(DbContextOptions<APIDbContext> options): base(options) 
+        {
+
+        }
         internal DbSet<Media> Medias { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ProjectIO;Trusted_Connection=True;");
-        }
-
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
