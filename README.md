@@ -17,7 +17,7 @@ CUPID
    
 ![migrations](Documentation/Images/Migrations.png)
 
-    4.1. Jezeli nie mamy to tworzymy migracje w konsoli: `Add_Migration init`
+    4.1. Jezeli nie mamy to tworzymy migracje w konsoli: `Add-Migration init`
 
 5. Baza danych aktualnie jest na wbudowanym serwerze sql, który dostajemy podczas instalacji Visual Studio. Aby utworzyć baze danych na podstawie migracji wpisujemy w konsoli `update-database`
 
