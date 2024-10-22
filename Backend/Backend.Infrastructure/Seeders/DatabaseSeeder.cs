@@ -13,10 +13,8 @@ namespace Backend.Infrastructure.Seeders
         {
             if(await dbContext.Database.CanConnectAsync())
             {
-                if (!dbContext.Medias.Any())
-                {
-                    // tu seedowanie danych
-                }
+             //....
+
             }
         }
     }
