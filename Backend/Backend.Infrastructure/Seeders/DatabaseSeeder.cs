@@ -1,11 +1,6 @@
 ﻿using Backend.Domain.Entities;
-using Backend.Domain;
 using Backend.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Seeders
 {
@@ -77,13 +72,13 @@ namespace Backend.Infrastructure.Seeders
                 {
                     Id = Guid.NewGuid(),
                     EventDate = new DateTime(2024, 6, 15),
-                    Descritpion = "A beautiful summer wedding."
+                    Description = "A beautiful summer wedding."
                 },
                 new Wedding
                 {
                     Id = Guid.NewGuid(),
                     EventDate = new DateTime(2024, 8, 25),
-                    Descritpion = "An elegant autumn wedding."
+                    Description = "An elegant autumn wedding."
                 }
             };
 

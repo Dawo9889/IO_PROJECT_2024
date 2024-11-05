@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class APIDbContextModelSnapshot : ModelSnapshot
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -41,22 +41,7 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Wedding_CEO", b =>
-                {
-                    b.Property<Guid>("WeddingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("WeddingId", "AccountId");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("Wedding_CEOs");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Image", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,13 +64,13 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Wedding", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Descritpion")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -100,13 +85,39 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding_CEO", b =>
                 {
+                    b.Property<Guid>("WeddingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("WeddingId", "AccountId");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Wedding_CEOs");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
+                        .WithMany("Images")
+                        .HasForeignKey("WeddingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Wedding");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Wedding_CEO", b =>
+                {
                     b.HasOne("Backend.Domain.Entities.Account", "Account")
                         .WithMany("Wedding_CEOs")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Domain.Wedding", "Wedding")
+                    b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
                         .WithMany("Wedding_CEOs")
                         .HasForeignKey("WeddingId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -117,23 +128,12 @@ namespace Backend.Infrastructure.Migrations
                     b.Navigation("Wedding");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Image", b =>
-                {
-                    b.HasOne("Backend.Domain.Wedding", "Wedding")
-                        .WithMany("Images")
-                        .HasForeignKey("WeddingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Wedding");
-                });
-
             modelBuilder.Entity("Backend.Domain.Entities.Account", b =>
                 {
                     b.Navigation("Wedding_CEOs");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Wedding", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
                     b.Navigation("Images");
 

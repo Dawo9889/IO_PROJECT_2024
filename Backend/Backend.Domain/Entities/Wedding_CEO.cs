@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -9,10 +10,11 @@ namespace Backend.Domain.Entities
 {
     public class Wedding_CEO
     {
-        public Guid WeddingId { get; set; } // FK do wesela
+        public Guid WeddingId { get; set; }
         public Wedding Wedding { get; set; }
 
-        public Guid AccountId { get; set; } 
+        public Guid AccountId { get; set; }
         public Account Account { get; set; }
     }
+
 }

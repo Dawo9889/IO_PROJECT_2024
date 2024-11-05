@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Backend.Domain
+namespace Backend.Domain.Entities
 {
     public class Wedding
     {
@@ -16,10 +16,11 @@ namespace Backend.Domain
         public DateTime EventDate { get; set; } = default!;
 
         [MaxLength(200)]
-        public string Descritpion { get; set; } = default!;
+        public string Description { get; set; } = default!;
+
 
         // Relacja: Jedno wesele ma wiele zdjęć
-        public ICollection<Image> Images { get; set; }
+        public virtual ICollection<Image?> Images { get; set; }
         // Relacja Jedno wesele ma wielu adminow
         public ICollection<Wedding_CEO> Wedding_CEOs { get; set; }
     }

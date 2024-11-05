@@ -11,10 +11,12 @@ namespace Backend.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
 
-        public ICollection<Wedding_CEO> Wedding_CEOs { get; set; }
+        public ICollection<Wedding_CEO> Wedding_CEOs { get; set; } = new List<Wedding_CEO>();
 
     }
 }

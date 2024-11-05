@@ -1,4 +1,6 @@
-﻿using Backend.Infrastructure.Persistance;
+﻿using Backend.Domain.Interfaces;
+using Backend.Infrastructure.Persistance;
+using Backend.Infrastructure.Repositories;
 using Backend.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +22,10 @@ namespace Backend.Infrastructure.Extensions
 
             //Dodanie scope'u dla seedu
             services.AddScoped<DatabaseSeeder>();
+            services.AddScoped<IWeddingRepository, WeddingRepository>();
+
+
+
         }
     }
 }
