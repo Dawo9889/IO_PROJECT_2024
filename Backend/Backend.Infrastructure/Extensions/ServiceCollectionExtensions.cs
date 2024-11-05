@@ -1,4 +1,5 @@
 ﻿using Backend.Infrastructure.Persistance;
+using Backend.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,10 @@ namespace Backend.Infrastructure.Extensions
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<APIDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+            //Dodanie scope'u dla seedu
+            services.AddScoped<DatabaseSeeder>();
         }
     }
 }

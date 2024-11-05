@@ -1,5 +1,6 @@
 ﻿using Backend.Domain;
 using Backend.Domain.Entities;
+using Backend.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Persistance
 {
-    internal class APIDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public APIDbContext(DbContextOptions<APIDbContext> options): base(options) 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options) 
         {
 
         }
@@ -38,5 +39,6 @@ namespace Backend.Infrastructure.Persistance
                 .WithMany(a => a.Wedding_CEOs)
                 .HasForeignKey(wc => wc.AccountId);
         }
+
     }
 }
