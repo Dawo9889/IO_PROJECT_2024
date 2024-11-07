@@ -8,12 +8,19 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    npm install
+   npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
    ```
 
-2. Start the app
+2. Install Nativewind 
 
    ```bash
-    npx expo start
+    npm install nativewind tailwindcss react-native-reanimated react-native-safe-area-context
+   ```
+
+3. Start the app
+
+   ```bash
+    npx expo start -c
    ```
 
 In the output, you'll find options to open the app in a
