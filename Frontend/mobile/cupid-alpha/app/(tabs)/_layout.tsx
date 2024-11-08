@@ -24,12 +24,12 @@ export default function TabLayout() {
     <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarActiveTintColor: '#df45ff',
+          tabBarActiveTintColor: "#E6648C",   // secondary
           tabBarInactiveTintColor: '#CDCDE0',
           tabBarStyle: {
-            backgroundColor: '#59504e',
+            backgroundColor: '#20211A',       // primarygray
             borderTopWidth: 1,
-            borderTopColor: '#282333',
+            borderTopColor: '#CDCDE0',        // is it too intense?
             height: 70
           }
         }}

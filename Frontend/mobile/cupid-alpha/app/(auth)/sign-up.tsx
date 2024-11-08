@@ -36,7 +36,7 @@ const SignUp = () => {
   }
 
   return (
-    <SafeAreaView className='bg-primary h-full'>
+    <SafeAreaView className='bg-primarygray h-full'>
       <ScrollView>
         <View className='w-full justify-center min-h-[80vh] px-4 my-6'>
           <Text className='text-white text-2xl mt-10 font-bsemibold'>
@@ -48,7 +48,7 @@ const SignUp = () => {
             value={form.username}
             handleChangeText={(e: string) => setForm({ ...form, username: e })}
             otherStyles="mt-10"
-            placeholder=''          />
+            placeholder='' keyboardType='default'         />
 
           <FormField
             title="Email"
@@ -61,7 +61,7 @@ const SignUp = () => {
             title="Password"
             value={form.password}
             handleChangeText={(e: string) => setForm({ ...form, password: e })}
-            otherStyles="mt-7" placeholder=''        />
+            otherStyles="mt-7" placeholder='' keyboardType='default'        />
 
           <CustomButton 
             title="Sign up"
