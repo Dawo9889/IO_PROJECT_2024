@@ -1,0 +1,52 @@
+.album-web {
+    background: rgb(255, 251, 251);
+    text-align: center;
+}
+
+.page {
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+}
+
+.cover {
+    background-color: rgb(251, 225, 139);
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+}
+
+.btn,
+.form-control {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    appearance: none;
+    font-size: 1em;
+    line-height: 1.2;
+    padding: 0.5em var(--padding-x);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.btn {
+    background-color: aquamarine;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    --padding-x: 1.2em;
+    border-color: transparent;
+}
+
+.form-control {
+    --padding-x: 0.5em;
+}
+
+input {
+    text-align: center;
+}
+
+.formContainer {
+    align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
