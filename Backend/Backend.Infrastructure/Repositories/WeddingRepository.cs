@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities;
+﻿
+using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
 using Backend.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -14,19 +15,44 @@ namespace Backend.Infrastructure.Repositories
     {
 
         private readonly ApplicationDbContext _dbContext;
+
         public WeddingRepository(ApplicationDbContext applicationDbContext)
         {
             _dbContext = applicationDbContext;
+
         }
-        public async Task Create(Wedding wedding)
+
+
+
+        public async Task<Boolean> Create(Wedding wedding)
         {
-            _dbContext.Weddings.AddAsync(wedding);
-            await _dbContext.SaveChangesAsync();
+
+            await _dbContext.Weddings.AddAsync(wedding);
+
+       
+            var result = await _dbContext.SaveChangesAsync();
+
+ 
+            return result > 0;
         }
+
+
 
         public async Task<List<Wedding>> GetAllWeddings()
         {
             return await _dbContext.Weddings.ToListAsync();
+        }
+
+
+
+        public async Task<Wedding> GetDetailsById(Guid id)
+        {
+            var result = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.Id == id);
+            if(result == null)
+            {
+                return null;
+            }
+            return result;
         }
     }
 }

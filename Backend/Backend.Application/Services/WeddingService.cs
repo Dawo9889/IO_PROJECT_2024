@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities;
+﻿using AutoMapper;
+using Backend.Application.DTO.WeddingDTO;
+using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,19 +13,70 @@ namespace Backend.Application.Services
     public class WeddingService : IWeddingService
     {
         private readonly IWeddingRepository _weddingRepository;
-        public WeddingService(IWeddingRepository weddingRepository)
+        private readonly IMapper _mapper;
+        private readonly string _photosBasePath;
+
+
+
+        public WeddingService(IWeddingRepository weddingRepository, IMapper mapper)
         {
             _weddingRepository = weddingRepository;
-        }
-        public async Task Create(Wedding wedding)
-        {
-            await _weddingRepository.Create(wedding);
+            _mapper = mapper;
+
+            //pobranie sciezki do zdjec ze zmiennej srodowiskowej, ewentualnie folder projektu
+            _photosBasePath = Environment.GetEnvironmentVariable("PHOTOS_PATH")
+                          ?? Path.Combine(Directory.GetCurrentDirectory(), "zdjecia");
         }
 
-        public async Task<List<Wedding>> GetAllWeddings()
+
+
+
+
+        public async Task Create(WeddingDTO weddingDTO)
+        {
+            // Mapowanie 
+            var wedding = _mapper.Map<Wedding>(weddingDTO);
+
+
+            var result = await _weddingRepository.Create(wedding);
+
+            if (result)
+            {
+                // Ścieżka do folderu, gdzie mają być przechowywane zdjęcia
+                var weddingFolderPath = Path.Combine(_photosBasePath, weddingDTO.Name + "_" + weddingDTO.EventDate);
+
+                if (!Directory.Exists(weddingFolderPath))
+                {
+                    Directory.CreateDirectory(weddingFolderPath);
+                }
+            }
+            else
+            {
+                throw new Exception("Blad zapisu");
+            }
+        }
+
+
+
+
+
+
+        public async Task<List<WeddingDTO>> GetAllWeddings()
         {
             var weddings = await _weddingRepository.GetAllWeddings();
-            return weddings;
+
+            var weddingsDTO = _mapper.Map<List<WeddingDTO>>(weddings);
+
+            return weddingsDTO;
+        }
+
+
+
+        public async Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id)
+        {
+            var wedding = await _weddingRepository.GetDetailsById(id);
+            var weddingDetailsDTO = _mapper.Map<WeddingDetailsDTO>(wedding);
+            return weddingDetailsDTO;
         }
     }
 }

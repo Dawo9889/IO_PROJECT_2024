@@ -9,7 +9,9 @@ namespace Backend.Domain.Interfaces
 {
     public interface IWeddingRepository
     {
-        Task Create(Wedding wedding);
+        Task<Boolean> Create(Wedding wedding);
         Task<List<Wedding>> GetAllWeddings();
+
+        Task<Wedding> GetDetailsById(Guid id);
     }
 }

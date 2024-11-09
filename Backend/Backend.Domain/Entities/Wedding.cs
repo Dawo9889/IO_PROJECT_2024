@@ -13,6 +13,8 @@ namespace Backend.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [MaxLength(50)]
+        public string Name { get; set; } = default!;
 
         public DateOnly EventDate { get; set; } = default!;
 

@@ -1,4 +1,5 @@
-﻿using Backend.Application.Services;
+﻿using Backend.Application.DTO.WeddingDTO;
+using Backend.Application.Services;
 using Backend.Domain;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
@@ -15,18 +16,36 @@ namespace Backend.API.Controllers
         {
             _weddingService = weddingService;   
         }
+
+
+
+
         [HttpGet]
-        public async Task<List<Wedding>> GetAll()
+        public async Task<List<WeddingDTO>> GetAll()
         {
             var weddings = await _weddingService.GetAllWeddings();
             return weddings;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWedding(Wedding wedding)
+        public async Task<ActionResult> CreateWedding(WeddingDTO weddingDTO)
         {
-            await _weddingService.Create(wedding);
-            return Ok(wedding);
+            await _weddingService.Create(weddingDTO);
+            return Ok(weddingDTO);
         }
+
+
+        [HttpGet("details")]
+        public async Task<ActionResult<WeddingDetailsDTO>> GetByID([FromQuery] Guid id)
+        {
+            var weddingDetailsDto = await _weddingService.GetWeddingDetailsById(id);
+            if(weddingDetailsDto == null)
+            {
+                return NotFound();
+            }
+            return Ok(weddingDetailsDto);
+        }
+
+
     }
 }
