@@ -30,8 +30,6 @@ namespace Backend.Application.Services
 
 
 
-
-
         public async Task Create(WeddingDTO weddingDTO)
         {
             // Mapowanie 
@@ -57,10 +55,6 @@ namespace Backend.Application.Services
         }
 
 
-
-
-
-
         public async Task<List<WeddingDTO>> GetAllWeddings()
         {
             var weddings = await _weddingRepository.GetAllWeddings();
@@ -78,5 +72,12 @@ namespace Backend.Application.Services
             var weddingDetailsDTO = _mapper.Map<WeddingDetailsDTO>(wedding);
             return weddingDetailsDTO;
         }
+
+
+        public async Task<bool> Delete(Guid id)
+        {
+            return await _weddingRepository.DeleteWeedingById(id);
+        }
+
     }
 }

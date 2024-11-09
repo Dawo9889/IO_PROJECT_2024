@@ -18,20 +18,13 @@ namespace Backend.API.Controllers
         }
 
 
-
+        //Gets
 
         [HttpGet]
         public async Task<List<WeddingDTO>> GetAll()
         {
             var weddings = await _weddingService.GetAllWeddings();
             return weddings;
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateWedding(WeddingDTO weddingDTO)
-        {
-            await _weddingService.Create(weddingDTO);
-            return Ok(weddingDTO);
         }
 
 
@@ -47,5 +40,29 @@ namespace Backend.API.Controllers
         }
 
 
+        //Posts
+
+        [HttpPost]
+        public async Task<ActionResult> CreateWedding(WeddingDTO weddingDTO)
+        {
+            await _weddingService.Create(weddingDTO);
+            return Ok(weddingDTO);
+        }
+
+
+
+        //Delete
+        [HttpDelete]
+        public async Task<ActionResult> DeleteWedding([FromQuery] Guid id)
+        {
+            var result = await _weddingService.Delete(id);
+
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return NotFound();
+        }
     }
 }

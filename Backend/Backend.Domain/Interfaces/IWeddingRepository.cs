@@ -9,9 +9,11 @@ namespace Backend.Domain.Interfaces
 {
     public interface IWeddingRepository
     {
-        Task<Boolean> Create(Wedding wedding);
+        Task<bool> Create(Wedding wedding);
         Task<List<Wedding>> GetAllWeddings();
 
         Task<Wedding> GetDetailsById(Guid id);
+
+        Task<bool> DeleteWeedingById(Guid id);
     }
 }

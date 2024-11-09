@@ -9,5 +9,7 @@ namespace Backend.Application.Services
         Task<List<WeddingDTO>> GetAllWeddings();
 
         Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id);
+
+        Task<bool> Delete(Guid id);
     }
 }

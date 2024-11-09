@@ -24,7 +24,7 @@ namespace Backend.Infrastructure.Repositories
 
 
 
-        public async Task<Boolean> Create(Wedding wedding)
+        public async Task<bool> Create(Wedding wedding)
         {
 
             await _dbContext.Weddings.AddAsync(wedding);
@@ -35,7 +35,6 @@ namespace Backend.Infrastructure.Repositories
  
             return result > 0;
         }
-
 
 
         public async Task<List<Wedding>> GetAllWeddings()
@@ -53,6 +52,24 @@ namespace Backend.Infrastructure.Repositories
                 return null;
             }
             return result;
+        }
+
+
+
+        public async Task<bool> DeleteWeedingById(Guid id)
+        {
+
+            var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (wedding == null)
+            {
+                return false;
+            }
+            _dbContext.Weddings.Remove(wedding);
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }
