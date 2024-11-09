@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241105211325_init")]
-    partial class init
+    [Migration("20241109160505_add-key-expiration-date")]
+    partial class addkeyexpirationdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,13 @@ namespace Backend.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("EventDate")
+                    b.Property<DateOnly>("EventDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("SessionKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("SessionKeyExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -86,19 +92,19 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Weddings");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Wedding_CEO", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.WeddingAdmin", b =>
                 {
                     b.Property<Guid>("WeddingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("WeddingId", "AccountId");
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Wedding_CEOs");
+                    b.ToTable("WeddingAdmin");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
@@ -112,16 +118,16 @@ namespace Backend.Infrastructure.Migrations
                     b.Navigation("Wedding");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Wedding_CEO", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.WeddingAdmin", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Account", "Account")
-                        .WithMany("Wedding_CEOs")
+                        .WithMany("WeddingAdmin")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
-                        .WithMany("Wedding_CEOs")
+                        .WithMany("WeddingAdmin")
                         .HasForeignKey("WeddingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -133,14 +139,14 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Account", b =>
                 {
-                    b.Navigation("Wedding_CEOs");
+                    b.Navigation("WeddingAdmin");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
                     b.Navigation("Images");
 
-                    b.Navigation("Wedding_CEOs");
+                    b.Navigation("WeddingAdmin");
                 });
 #pragma warning restore 612, 618
         }

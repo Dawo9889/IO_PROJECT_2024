@@ -20,23 +20,23 @@ namespace Backend.Infrastructure.Persistance
         public DbSet<Wedding> Weddings { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<Wedding_CEO> Wedding_CEOs { get; set; }
+        public DbSet<WeddingAdmin> WeddingAdmin { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             
-            modelBuilder.Entity<Wedding_CEO>()
+            modelBuilder.Entity<WeddingAdmin>()
                 .HasKey(wc => new { wc.WeddingId, wc.AccountId });
 
-            modelBuilder.Entity<Wedding_CEO>()
+            modelBuilder.Entity<WeddingAdmin>()
                 .HasOne(wc => wc.Wedding)
-                .WithMany(w => w.Wedding_CEOs)
+                .WithMany(w => w.WeddingAdmin)
                 .HasForeignKey(wc => wc.WeddingId);
 
-            modelBuilder.Entity<Wedding_CEO>()
+            modelBuilder.Entity<WeddingAdmin>()
                 .HasOne(wc => wc.Account)
-                .WithMany(a => a.Wedding_CEOs)
+                .WithMany(a => a.WeddingAdmin)
                 .HasForeignKey(wc => wc.AccountId);
         }
 

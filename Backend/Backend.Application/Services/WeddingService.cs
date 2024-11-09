@@ -19,5 +19,11 @@ namespace Backend.Application.Services
         {
             await _weddingRepository.Create(wedding);
         }
+
+        public async Task<List<Wedding>> GetAllWeddings()
+        {
+            var weddings = await _weddingRepository.GetAllWeddings();
+            return weddings;
+        }
     }
 }

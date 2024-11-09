@@ -13,15 +13,28 @@ namespace Backend.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public DateTime EventDate { get; set; } = default!;
+
+        public DateOnly EventDate { get; set; } = default!;
 
         [MaxLength(200)]
         public string Description { get; set; } = default!;
 
+        public Guid SessionKey { get; set; } = Guid.NewGuid();
+
+        // Data wygaśnięcia klucza sesji
+        public DateTime SessionKeyExpirationDate { get; set; } = DateTime.UtcNow.AddHours(48);
 
         // Relacja: Jedno wesele ma wiele zdjęć
-        public virtual ICollection<Image?> Images { get; set; }
-        // Relacja Jedno wesele ma wielu adminow
-        public ICollection<Wedding_CEO> Wedding_CEOs { get; set; }
+        public ICollection<Image>? Images { get; set; }
+
+        // Relacja: Jedno wesele ma wielu administratorów
+        public ICollection<WeddingAdmin>? WeddingAdmin { get; set; }
+
+
+
+        //--------------------------------------------------------------------------------------
+        // Właściwość obliczeniowa do sprawdzania, czy klucz wygasł
+        public bool IsSessionKeyExpired => DateTime.UtcNow >= SessionKeyExpirationDate;
+
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class addkeyexpirationdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,8 +29,10 @@ namespace Backend.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    EventDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    EventDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    SessionKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SessionKeyExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,7 +60,7 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wedding_CEOs",
+                name: "WeddingAdmin",
                 columns: table => new
                 {
                     WeddingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -66,15 +68,15 @@ namespace Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wedding_CEOs", x => new { x.WeddingId, x.AccountId });
+                    table.PrimaryKey("PK_WeddingAdmin", x => new { x.WeddingId, x.AccountId });
                     table.ForeignKey(
-                        name: "FK_Wedding_CEOs_Accounts_AccountId",
+                        name: "FK_WeddingAdmin_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Wedding_CEOs_Weddings_WeddingId",
+                        name: "FK_WeddingAdmin_Weddings_WeddingId",
                         column: x => x.WeddingId,
                         principalTable: "Weddings",
                         principalColumn: "Id",
@@ -87,8 +89,8 @@ namespace Backend.Infrastructure.Migrations
                 column: "WeddingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wedding_CEOs_AccountId",
-                table: "Wedding_CEOs",
+                name: "IX_WeddingAdmin_AccountId",
+                table: "WeddingAdmin",
                 column: "AccountId");
         }
 
@@ -99,7 +101,7 @@ namespace Backend.Infrastructure.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
-                name: "Wedding_CEOs");
+                name: "WeddingAdmin");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

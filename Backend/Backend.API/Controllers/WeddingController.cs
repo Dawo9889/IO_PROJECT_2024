@@ -15,11 +15,12 @@ namespace Backend.API.Controllers
         {
             _weddingService = weddingService;   
         }
-        //[HttpGet]
-        //public IActionResult GetAll()
-        //{
-        //    return NotImplementedException;
-        //}
+        [HttpGet]
+        public async Task<List<Wedding>> GetAll()
+        {
+            var weddings = await _weddingService.GetAllWeddings();
+            return weddings;
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateWedding(Wedding wedding)

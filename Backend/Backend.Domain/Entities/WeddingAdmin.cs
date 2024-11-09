@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities
 {
-    public class Wedding_CEO
+    public class WeddingAdmin
     {
         public Guid WeddingId { get; set; }
-        public Wedding Wedding { get; set; }
+        public Wedding? Wedding { get; set; }
 
-        public Guid AccountId { get; set; }
-        public Account Account { get; set; }
+        public Guid? AccountId { get; set; }
+        public Account? Account { get; set; }
     }
 
 }

@@ -33,7 +33,7 @@ namespace Backend.Infrastructure.Seeders
                     await SeedImages();
                 }
 
-                if (!await _dbContext.Wedding_CEOs.AnyAsync())
+                if (!await _dbContext.WeddingAdmin.AnyAsync())
                 {
                     await SeedWeddingCEOs();
                 }
@@ -71,13 +71,13 @@ namespace Backend.Infrastructure.Seeders
                 new Wedding
                 {
                     Id = Guid.NewGuid(),
-                    EventDate = new DateTime(2024, 6, 15),
+                    EventDate = new DateOnly(2024, 6, 15),
                     Description = "A beautiful summer wedding."
                 },
                 new Wedding
                 {
                     Id = Guid.NewGuid(),
-                    EventDate = new DateTime(2024, 8, 25),
+                    EventDate = new DateOnly(2024, 8, 25),
                     Description = "An elegant autumn wedding."
                 }
             };
@@ -127,21 +127,21 @@ namespace Backend.Infrastructure.Seeders
                 return; // Exit the method if there are no accounts or weddings
             }
 
-            var weddingCEOs = new List<Wedding_CEO>
+            var weddingCEOs = new List<WeddingAdmin>
             {
-                new Wedding_CEO
+                new WeddingAdmin
                 {
                     WeddingId = weddings.First().Id,
                     AccountId = accounts.First().Id
                 },
-                new Wedding_CEO
+                new WeddingAdmin
                 {
                     WeddingId = weddings.Last().Id,
                     AccountId = accounts.Last().Id
                 }
             };
 
-            await _dbContext.Wedding_CEOs.AddRangeAsync(weddingCEOs);
+            await _dbContext.WeddingAdmin.AddRangeAsync(weddingCEOs);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Backend.Domain.Entities
         [EmailAddress]
         public string Email { get; set; }
 
-        public ICollection<Wedding_CEO> Wedding_CEOs { get; set; } = new List<Wedding_CEO>();
+        public ICollection<WeddingAdmin>? WeddingAdmin { get; set; }
 
     }
 }
