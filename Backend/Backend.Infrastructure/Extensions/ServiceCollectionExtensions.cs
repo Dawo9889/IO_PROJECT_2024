@@ -22,7 +22,9 @@ namespace Backend.Infrastructure.Extensions
 
             //Dodanie scope'u dla seedu
             services.AddScoped<DatabaseSeeder>();
+            //scope dla repozytoriów
             services.AddScoped<IWeddingRepository, WeddingRepository>();
+            services.AddScoped<InterfaceImageRepository, ImageRepository>();
 
 
 

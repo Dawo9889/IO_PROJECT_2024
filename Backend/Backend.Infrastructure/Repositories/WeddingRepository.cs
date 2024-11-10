@@ -79,17 +79,21 @@ namespace Backend.Infrastructure.Repositories
             return result > 0;
         }
 
-        //public async Task<bool> ValidateSessionKeyAsync(Guid sessionToken)
-        //{
-        //    var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.SessionKey == sessionToken);
+        public async Task<Wedding> ValidateSessionKeyAsync(Guid sessionToken)
+        {
+            var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.SessionKey == sessionToken);
 
+            if (wedding == null)
+            {
+                return null;
+            }
+            if (!wedding.IsSessionKeyExpired)
+            {
+                return wedding;
+            }
 
-        //    if (wedding == null)
-        //    {
-        //        return false; 
-        //    }
+            return null;
 
-        //    return !wedding.IsSessionKeyExpired;
-        //}
+        }
     }
 }

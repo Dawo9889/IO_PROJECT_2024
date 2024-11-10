@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities
 {
-    public class Image
+    public class ImageData
     {
         [Key]
         public Guid Id { get; set; }

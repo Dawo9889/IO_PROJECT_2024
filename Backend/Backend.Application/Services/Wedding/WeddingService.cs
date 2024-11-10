@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using Backend.Application.DTO.WeddingDTO;
-using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Backend.Domain.Entities;
 
-namespace Backend.Application.Services
+
+namespace Backend.Application.Services.Wedding
 {
     public class WeddingService : IWeddingService
     {
@@ -33,7 +29,7 @@ namespace Backend.Application.Services
         public async Task Create(WeddingDTO weddingDTO)
         {
             // Mapowanie 
-            var wedding = _mapper.Map<Wedding>(weddingDTO);
+            var wedding = _mapper.Map<Domain.Entities.Wedding>(weddingDTO);
 
 
             var result = await _weddingRepository.Create(wedding);
@@ -86,7 +82,7 @@ namespace Backend.Application.Services
 
             if (oldWedding == null)
             {
-                return false; 
+                return false;
             }
 
             var updatedWedding = _mapper.Map(newWeddingDTO, oldWedding);

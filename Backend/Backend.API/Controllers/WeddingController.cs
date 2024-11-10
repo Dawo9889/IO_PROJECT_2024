@@ -1,5 +1,5 @@
 ﻿using Backend.Application.DTO.WeddingDTO;
-using Backend.Application.Services;
+using Backend.Application.Services.Wedding;
 using Backend.Domain;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;

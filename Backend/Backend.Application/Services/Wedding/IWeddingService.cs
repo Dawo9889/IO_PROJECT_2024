@@ -1,7 +1,7 @@
 ﻿using Backend.Application.DTO.WeddingDTO;
 using Backend.Domain.Entities;
 
-namespace Backend.Application.Services
+namespace Backend.Application.Services.Wedding
 {
     public interface IWeddingService
     {

@@ -27,7 +27,7 @@ namespace Backend.Domain.Entities
         public DateTime SessionKeyExpirationDate { get; set; } = DateTime.UtcNow.AddHours(48);
 
         // Relacja: Jedno wesele ma wiele zdjęć
-        public ICollection<Image>? Images { get; set; }
+        public ICollection<ImageData>? ImageDatas { get; set; }
 
         // Relacja: Jedno wesele ma wielu administratorów
         public ICollection<WeddingAdmin>? WeddingAdmin { get; set; }

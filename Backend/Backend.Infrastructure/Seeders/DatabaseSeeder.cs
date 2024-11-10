@@ -28,9 +28,9 @@ namespace Backend.Infrastructure.Seeders
                     await SeedWeddings();
                 }
 
-                if (!await _dbContext.Images.AnyAsync())
+                if (!await _dbContext.ImageDatas.AnyAsync())
                 {
-                    await SeedImages();
+                    await SeedImageDatas();
                 }
 
                 if (!await _dbContext.WeddingAdmin.AnyAsync())
@@ -71,12 +71,14 @@ namespace Backend.Infrastructure.Seeders
                 new Wedding
                 {
                     Id = Guid.NewGuid(),
+                    Name = "Shrek and Fiona",
                     EventDate = new DateOnly(2024, 6, 15),
                     Description = "A beautiful summer wedding."
                 },
                 new Wedding
                 {
                     Id = Guid.NewGuid(),
+                    Name = "Perfect Wedding",
                     EventDate = new DateOnly(2024, 8, 25),
                     Description = "An elegant autumn wedding."
                 }
@@ -85,26 +87,26 @@ namespace Backend.Infrastructure.Seeders
             await _dbContext.Weddings.AddRangeAsync(weddings);
         }
 
-        private async Task SeedImages()
+        private async Task SeedImageDatas()
         {
             // Ensure that there are weddings to associate images with
             var weddings = await _dbContext.Weddings.ToListAsync();
             if (!weddings.Any())
             {
-                // No weddings available to seed images
+                // No weddings available to seed imageDatas
                 return; // Exit the method if there are no weddings
             }
 
-            var images = new List<Image>
+            var imageDatas = new List<ImageData>
             {
-                new Image
+                new ImageData
                 {
                     Id = Guid.NewGuid(),
                     FilePath = "/images/wedding1/photo1.jpg",
                     Author = "John Doe",
                     WeddingId = weddings.First().Id // Assuming the first wedding
                 },
-                new Image
+                new ImageData
                 {
                     Id = Guid.NewGuid(),
                     FilePath = "/images/wedding2/photo1.jpg",
@@ -113,7 +115,7 @@ namespace Backend.Infrastructure.Seeders
                 }
             };
 
-            await _dbContext.Images.AddRangeAsync(images);
+            await _dbContext.ImageDatas.AddRangeAsync(imageDatas);
         }
 
         private async Task SeedWeddingCEOs()
