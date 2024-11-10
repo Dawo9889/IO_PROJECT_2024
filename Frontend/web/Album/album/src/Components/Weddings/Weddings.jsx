@@ -9,7 +9,7 @@ export default function Weddings() {
     useEffect(() => {
         setLoading(true);
 
-        axios.get('https://localhost:7017/api/wedding/')
+        axios.get('https://localhost:7017/api/wedding')
             .then((response) => {
                 setWeddings(response.data);
             })
