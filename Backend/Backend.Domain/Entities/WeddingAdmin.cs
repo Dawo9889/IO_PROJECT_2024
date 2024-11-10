@@ -13,7 +13,7 @@ namespace Backend.Domain.Entities
         public Guid WeddingId { get; set; }
         public Wedding? Wedding { get; set; }
 
-        public Guid? AccountId { get; set; }
+        public string AccountId { get; set; }
         public Account? Account { get; set; }
     }
 

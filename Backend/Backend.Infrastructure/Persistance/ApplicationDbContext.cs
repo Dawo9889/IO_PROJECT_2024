@@ -1,6 +1,7 @@
 ﻿using Backend.Domain;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Seeders;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Persistance
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<Account>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options) 
         {
@@ -25,7 +26,8 @@ namespace Backend.Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<WeddingAdmin>()
                 .HasKey(wc => new { wc.WeddingId, wc.AccountId });
 

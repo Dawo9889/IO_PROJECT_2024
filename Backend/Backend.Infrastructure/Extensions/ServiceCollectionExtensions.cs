@@ -2,6 +2,7 @@
 using Backend.Infrastructure.Persistance;
 using Backend.Infrastructure.Repositories;
 using Backend.Infrastructure.Seeders;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
