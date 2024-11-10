@@ -14,5 +14,7 @@ namespace Backend.Application.Services.Wedding
 
         Task<bool> Update(WeddingDTO newWeddingDTO);
 
+        Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration);
+
     }
 }

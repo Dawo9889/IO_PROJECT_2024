@@ -83,6 +83,17 @@ namespace Backend.API.Controllers
             return Ok(newWeddingDTO); 
         }
 
+        [HttpPut("extend")]
+        public async Task<IActionResult> ExtendSession([FromQuery] Guid Id, [FromQuery] int hours)
+        {
+            var extended = await _weddingService.ExtendSessionKeyExpiration(Id, TimeSpan.FromHours(hours));
 
+            if (!extended)
+            {
+                return NotFound("Wesele nie zostało znalezione");
+            }
+
+            return Ok("Czas tokenu został wydłużony");
+        }
     }
 }

@@ -20,5 +20,6 @@ namespace Backend.Domain.Interfaces
         Task<bool> Update(Wedding wedding);
 
         Task<Wedding> ValidateSessionKeyAsync(Guid sessionToken);
+
     }
 }
