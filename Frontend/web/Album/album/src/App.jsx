@@ -15,6 +15,7 @@ import Unauthorized from './Components/Navpages/Unauthorized';
 import Lounge from './Components/Navpages/Lounge';
 import LinkPage from './Components/Navpages/LinkPage';
 import RequireAuth from './Components/Navpages/RequireAuth';
+import Weddings from "./Components/Weddings/Weddings";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="album" element={<MyAlbum />} />
             <Route path="admin" element={<Admin />} />
             <Route path="lounge" element={<Lounge />} />
+            <Route path="weddings" element={<Weddings />} />
   
           {/* catch all */}
           <Route path="*" element={<Missing />} />

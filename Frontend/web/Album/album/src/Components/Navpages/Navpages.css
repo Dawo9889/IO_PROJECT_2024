@@ -1,24 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
-* {
-    /* margin: 0;
+/* * {
+    margin: 0;
     padding: 0;
-    box-sizing: border-box; */
-}
+    box-sizing: border-box;
+} */
 
 body {
     /* min-height: 100vh; */
     background-color: dodgerblue;
 }
 
-.App {
-  /* display: flex;
+/* .App {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh; 
-  padding: 1rem 0.5rem; */
-}
+  padding: 1rem 0.5rem;
+} */
 
 section {
     width: 100%;

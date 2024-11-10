@@ -3,7 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import './Navpages.css'
 import axios from "../../api/axios";
-const LOGIN_URL = '/auth'
+const LOGIN_URL = 'https://localhost:7017/api/identity/login'
 
 const Login = () => {
     const {setAuth} = useAuth();
@@ -16,7 +16,7 @@ const Login = () => {
     const errRef = useRef()
 
     const [user, setUser] = useState('');
-    const [pwd, setPwd] = useState('');
+    const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
 
     useEffect(() => {
@@ -25,25 +25,21 @@ const Login = () => {
 
     useEffect(() => {
         setErrMsg('')
-    },[user,pwd])
+    },[user,password])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post(LOGIN_URL, 
-                JSON.stringify({user,pwd}),
-                    {
-                        headers: {'Content-Type': 'application/json'},
-                        withCredenitals: true
-                    }
+                {
+                    "email": user,
+                    "password": password
+                }
             );
-            console.log(JSON.stringify(response?.data))
-            // console.log(JSON.stringify(response))
-            const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles;
-            setAuth({user,pwd, roles, accessToken})
+            // console.log(response.data.accessToken)
+            setAuth({user,password})
             setUser('');
-            setPwd('');
+            setPassword('');
             navigate(from, {replace: true});
 
         } catch (err) {
@@ -82,8 +78,8 @@ const Login = () => {
             <input 
                 type="password" 
                 id="password"
-                onChange={(e) => setPwd(e.target.value)}
-                value={pwd}
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 required
             />
             <button>Sign In</button>

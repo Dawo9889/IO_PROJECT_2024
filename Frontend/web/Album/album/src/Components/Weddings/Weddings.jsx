@@ -8,8 +8,11 @@ export default function Weddings() {
 
     useEffect(() => {
         setLoading(true);
-
-        axios.get('https://localhost:7017/api/wedding')
+        axios.get('https://localhost:7017/api/wedding', {
+            headers: {
+                Authorization: `Bearer ${import.meta.env.VITE_APP_API_TOKEN}`
+            }
+        })
             .then((response) => {
                 setWeddings(response.data);
             })
@@ -21,6 +24,7 @@ export default function Weddings() {
             });
     }, []);
 
+    console.log(weddings)
     if (loading) return <p>Loading weddings...</p>;
     if (error) return <p>{error}</p>;
 
@@ -32,6 +36,7 @@ export default function Weddings() {
                     {weddings.map(wedding => (
                         <li key={wedding.id}>
                             <div className='header'>
+                                <h2>{wedding.id}</h2>
                                 <h2>{wedding.name}</h2>
                                 <p>Date: {wedding.eventDate}</p>
                                 <p>{wedding.description}</p>

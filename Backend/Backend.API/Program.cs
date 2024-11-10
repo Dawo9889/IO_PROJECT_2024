@@ -42,7 +42,7 @@ seeder.Seed().Wait();
 //identity
 app.MapGroup("api/identity").MapIdentityApi<Account>();
 app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
