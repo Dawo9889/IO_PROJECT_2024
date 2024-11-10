@@ -27,7 +27,7 @@
 }
 
 .btn {
-  background-color: aquamarine;
+  background-color: rgb(15, 43, 33);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -50,3 +50,16 @@ input {
   justify-content: center;
 }
 
+.main-box {
+  display: flex;
+  align-items: center;
+}
+.btn-nav {
+  background-color: rgb(15, 43, 33);
+  color: white;
+  height: 50px;
+}
+
+.btn-nav-disabled{
+  background-color: red;
+}
