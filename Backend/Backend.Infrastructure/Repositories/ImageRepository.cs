@@ -20,10 +20,10 @@ namespace Backend.Infrastructure.Repositories
 
         public async Task<bool> AddImageAsync(ImageData image)
         {
-            var weddingId = Guid.Parse("c74524db-6d1c-44d8-8d2c-ae9816fa2b75");
-            var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.Id == weddingId);
+            //var weddingId = Guid.Parse("c74524db-6d1c-44d8-8d2c-ae9816fa2b75");
+            //var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.Id == weddingId);
 
-            image.WeddingId = weddingId;
+            //image.WeddingId = weddingId;
             _dbContext.ImageDatas.Add(image);
             var result = await _dbContext.SaveChangesAsync();
 

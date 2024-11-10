@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Backend.Application.DTO.ImageDTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Backend.Application.Services.Images
 {
     public interface InterfaceImageService
     {
-        Task AddImageAsync(Domain.Entities.ImageData imageData);
+        Task AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
         Task<bool> IsSessionValid(Guid sessionToken);
     }
 }

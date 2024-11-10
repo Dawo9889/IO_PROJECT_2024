@@ -85,14 +85,14 @@ namespace Backend.Infrastructure.Repositories
 
             if (wedding == null)
             {
-                return null;
+               throw new InvalidOperationException("Niewlasciwy lub niewazny token."); 
             }
             if (!wedding.IsSessionKeyExpired)
             {
                 return wedding;
             }
 
-            return null;
+            throw new InvalidOperationException("Blad zapytania");
 
         }
     }

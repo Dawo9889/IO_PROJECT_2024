@@ -20,6 +20,7 @@ namespace Backend.Application.Extensions
 
             //AutoMapper
             services.AddAutoMapper(typeof(WeddingMappingProfile));
+            services.AddAutoMapper(typeof(ImageMappingProfile));
         }
 
 
