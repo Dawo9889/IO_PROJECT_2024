@@ -6,3 +6,7 @@
 *.log
 *.env
 /Backend/Backend.API/zdjecia/Perfect Wedding_25.08.2024
+/Backend/Backend.Infrastructure/Migrations/20241110150458_identity.cs
+/Backend/Backend.Infrastructure/Migrations/20241110150458_identity.Designer.cs
+/Backend/Backend.Infrastructure/Migrations/20241110212914_init.cs
+/Backend/Backend.Infrastructure/Migrations/20241110212914_init.Designer.cs
