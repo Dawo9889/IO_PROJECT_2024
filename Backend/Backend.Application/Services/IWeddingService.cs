@@ -11,5 +11,8 @@ namespace Backend.Application.Services
         Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id);
 
         Task<bool> Delete(Guid id);
+
+        Task<bool> Update(WeddingDTO newWeddingDTO);
+
     }
 }

@@ -79,5 +79,20 @@ namespace Backend.Application.Services
             return await _weddingRepository.DeleteWeedingById(id);
         }
 
+
+        public async Task<bool> Update(WeddingDTO newWeddingDTO)
+        {
+            var oldWedding = await _weddingRepository.GetDetailsById(newWeddingDTO.Id);
+
+            if (oldWedding == null)
+            {
+                return false; 
+            }
+
+            var updatedWedding = _mapper.Map(newWeddingDTO, oldWedding);
+
+            var updateSuccess = await _weddingRepository.Update(oldWedding);
+            return updateSuccess;
+        }
     }
 }
