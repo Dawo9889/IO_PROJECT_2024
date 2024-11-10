@@ -10,7 +10,12 @@ import rightArrow from "@/assets/icons/right-arrow.png";
 import logout from "@/assets/icons/logout.png";
 import eyeHide from "@/assets/icons/eye-hide.png";
 import eye from "@/assets/icons/eye.png";
-import camera from "@/assets/icons/camera.png"
+import camera from "@/assets/icons/camera.png";
+import switchcam from "@/assets/icons/switchcam.png";
+import takeapic from "@/assets/icons/takeapic.png";
+import cupidlogo from "@/assets/icons/cupidlogo.png";
+import cupidlogosvg from "@/assets/icons/cupidlogo.svg";
+import cupidlogohorizontalsvg from "@/assets/icons/cupidlogohorizontal.svg";
 
 export default {
   bookmark,
@@ -25,5 +30,10 @@ export default {
   logout,
   eyeHide,
   eye,
-  camera
+  camera,
+  switchcam,
+  takeapic,
+  cupidlogo,
+  cupidlogosvg,
+  cupidlogohorizontalsvg,
 };

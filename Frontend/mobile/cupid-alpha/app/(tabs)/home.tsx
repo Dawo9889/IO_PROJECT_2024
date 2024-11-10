@@ -1,10 +1,12 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+
+import icons from '@/constants/icons'
 
 const Home = () => {
   return (
@@ -13,6 +15,7 @@ const Home = () => {
         height: '100%'
       }}>
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
+        <Image source={icons.cupidlogo} className='h-[200px]' resizeMode='contain' tintColor='#CDCDE0' />
           <View className='relative mt-5'>
             <Text className='text-3xl text-primary text-center font-bold'>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium nisi corporis sapiente! Soluta quo rerum deleniti nesciunt sint quae recusandae consequatur, minus delectus id. Quam explicabo quos suscipit maxime. {' '}
@@ -29,7 +32,7 @@ const Home = () => {
             />
         </View>     
       </ScrollView>
-      <StatusBar backgroundColor='#20211A' style='light' />
+      <StatusBar translucent={true} />
     </SafeAreaView>
   )
 }
