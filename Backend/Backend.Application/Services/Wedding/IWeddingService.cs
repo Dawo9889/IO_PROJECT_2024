@@ -1,7 +1,7 @@
 ﻿using Backend.Application.DTO.WeddingDTO;
 using Backend.Domain.Entities;
 
-namespace Backend.Application.Services
+namespace Backend.Application.Services.Wedding
 {
     public interface IWeddingService
     {
@@ -11,5 +11,8 @@ namespace Backend.Application.Services
         Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id);
 
         Task<bool> Delete(Guid id);
+
+        Task<bool> Update(WeddingDTO newWeddingDTO);
+
     }
 }

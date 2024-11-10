@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241109163426_wedding-name")]
-    partial class weddingname
+    [Migration("20241110085521_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasIndex("WeddingId");
 
-                    b.ToTable("Images");
+                    b.ToTable("ImageDatas");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
@@ -112,10 +112,10 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("WeddingAdmin");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
-                        .WithMany("Images")
+                        .WithMany("ImageDatas")
                         .HasForeignKey("WeddingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -149,7 +149,7 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("ImageDatas");
 
                     b.Navigation("WeddingAdmin");
                 });

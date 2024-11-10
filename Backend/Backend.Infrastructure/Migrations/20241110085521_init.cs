@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addkeyexpirationdate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,7 @@ namespace Backend.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     EventDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     SessionKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -40,7 +41,7 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "ImageDatas",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -50,9 +51,9 @@ namespace Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_ImageDatas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Images_Weddings_WeddingId",
+                        name: "FK_ImageDatas_Weddings_WeddingId",
                         column: x => x.WeddingId,
                         principalTable: "Weddings",
                         principalColumn: "Id",
@@ -84,8 +85,8 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_WeddingId",
-                table: "Images",
+                name: "IX_ImageDatas_WeddingId",
+                table: "ImageDatas",
                 column: "WeddingId");
 
             migrationBuilder.CreateIndex(
@@ -98,7 +99,7 @@ namespace Backend.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "ImageDatas");
 
             migrationBuilder.DropTable(
                 name: "WeddingAdmin");

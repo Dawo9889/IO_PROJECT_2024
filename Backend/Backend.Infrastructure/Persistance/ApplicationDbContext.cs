@@ -18,7 +18,7 @@ namespace Backend.Infrastructure.Persistance
 
         }
         public DbSet<Wedding> Weddings { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<ImageData> ImageDatas { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<WeddingAdmin> WeddingAdmin { get; set; }
 

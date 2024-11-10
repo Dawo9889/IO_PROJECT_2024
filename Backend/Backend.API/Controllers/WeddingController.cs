@@ -1,5 +1,5 @@
 ﻿using Backend.Application.DTO.WeddingDTO;
-using Backend.Application.Services;
+using Backend.Application.Services.Wedding;
 using Backend.Domain;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
@@ -64,5 +64,25 @@ namespace Backend.API.Controllers
 
             return NotFound();
         }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateWedding([FromBody] WeddingDTO newWeddingDTO)
+        {
+            if (newWeddingDTO.Id == Guid.Empty)
+            {
+                return BadRequest("Wedding ID is required.");
+            }
+
+            var success = await _weddingService.Update(newWeddingDTO);
+
+            if (!success)
+            {
+                return NotFound("Wedding not found or update failed.");
+            }
+
+            return Ok(newWeddingDTO); 
+        }
+
+
     }
 }

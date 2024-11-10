@@ -17,7 +17,7 @@ namespace Backend.Application.Mappings
             CreateMap<Wedding, WeddingDTO>();
 
             CreateMap<Wedding, WeddingDetailsDTO>()
-            .ForMember(dest => dest.ImagesCount, opt => opt.MapFrom(src => src.Images != null ? src.Images.Count : 0));
+            .ForMember(dest => dest.ImagesCount, opt => opt.MapFrom(src => src.ImageDatas != null ? src.ImageDatas.Count : 0));
         }
     }
 }

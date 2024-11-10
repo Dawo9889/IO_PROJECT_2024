@@ -41,7 +41,7 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasIndex("WeddingId");
 
-                    b.ToTable("Images");
+                    b.ToTable("ImageDatas");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
@@ -109,10 +109,10 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("WeddingAdmin");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Image", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
-                        .WithMany("Images")
+                        .WithMany("ImageDatas")
                         .HasForeignKey("WeddingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -146,7 +146,7 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("ImageDatas");
 
                     b.Navigation("WeddingAdmin");
                 });

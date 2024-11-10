@@ -71,5 +71,29 @@ namespace Backend.Infrastructure.Repositories
 
             return true;
         }
+
+        public async Task<bool> Update(Wedding newWedding)
+        {
+            _dbContext.Weddings.Update(newWedding);
+            var result = await _dbContext.SaveChangesAsync();
+            return result > 0;
+        }
+
+        public async Task<Wedding> ValidateSessionKeyAsync(Guid sessionToken)
+        {
+            var wedding = await _dbContext.Weddings.FirstOrDefaultAsync(x => x.SessionKey == sessionToken);
+
+            if (wedding == null)
+            {
+               throw new InvalidOperationException("Niewlasciwy lub niewazny token."); 
+            }
+            if (!wedding.IsSessionKeyExpired)
+            {
+                return wedding;
+            }
+
+            throw new InvalidOperationException("Blad zapytania");
+
+        }
     }
 }
