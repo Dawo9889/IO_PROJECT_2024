@@ -90,5 +90,21 @@ namespace Backend.Application.Services.Wedding
             var updateSuccess = await _weddingRepository.Update(oldWedding);
             return updateSuccess;
         }
+
+        public async Task<bool> ExtendSessionKeyExpiration(Guid Id, TimeSpan extensionDuration)
+        {
+            var wedding = await _weddingRepository.GetDetailsById(Id);
+
+            if (wedding == null)
+            {
+                return false; 
+            }
+
+            // Aktualizacja daty wygaśnięcia klucza sesji
+            wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
+            await _weddingRepository.Update(wedding);
+
+            return true; 
+        }
     }
 }

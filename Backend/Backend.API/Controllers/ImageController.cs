@@ -2,12 +2,14 @@
 using Backend.Application.Services.Images;
 using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Controllers
 {
     [Route("api/image")]
     [ApiController]
+    [Authorize]
     public class ImageController : ControllerBase
     {
         private readonly InterfaceImageService _imageService;
@@ -19,6 +21,7 @@ namespace Backend.API.Controllers
 
 
         [HttpPost("upload")]
+        [AllowAnonymous]
         public async Task<ActionResult> Create([FromQuery] Guid token, [FromForm] CreateImageDTO createImageDTO)
         {
             var sessionValid = await _imageService.IsSessionValid(token);

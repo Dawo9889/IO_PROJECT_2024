@@ -3,12 +3,14 @@ using Backend.Application.Services.Wedding;
 using Backend.Domain;
 using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Controllers
 {
     [Route("api/wedding")]
     [ApiController]
+    [Authorize]
     public class WeddingController : ControllerBase
     {
         private readonly IWeddingService _weddingService;
@@ -83,6 +85,17 @@ namespace Backend.API.Controllers
             return Ok(newWeddingDTO); 
         }
 
+        [HttpPut("extend")]
+        public async Task<IActionResult> ExtendSession([FromQuery] Guid Id, [FromQuery] int hours)
+        {
+            var extended = await _weddingService.ExtendSessionKeyExpiration(Id, TimeSpan.FromHours(hours));
 
+            if (!extended)
+            {
+                return NotFound("Wesele nie zostało znalezione");
+            }
+
+            return Ok("Czas tokenu został wydłużony");
+        }
     }
 }

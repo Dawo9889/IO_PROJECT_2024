@@ -40,6 +40,8 @@ namespace Backend.API.Extensions
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
+            //dodanie uwierzytelniania
+            builder.Services.AddAuthentication();
 
 
         }
