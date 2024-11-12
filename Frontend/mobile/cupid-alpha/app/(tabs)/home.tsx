@@ -15,7 +15,7 @@ const Home = () => {
         height: '100%'
       }}>
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
-        <Image source={icons.cupidlogo} className='h-[200px]' resizeMode='contain' tintColor='#CDCDE0' />
+        <Image source={icons.cupidlogo} className='h-[200px]' resizeMode='contain' tintColor='#fff' />
           <View className='relative mt-5'>
             <Text className='text-3xl text-primary text-center font-bold'>
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium nisi corporis sapiente! Soluta quo rerum deleniti nesciunt sint quae recusandae consequatur, minus delectus id. Quam explicabo quos suscipit maxime. {' '}
@@ -26,8 +26,8 @@ const Home = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, molestiae dicta magni ut adipisci ab voluptatibus rerum. Odit nisi, vero, perspiciatis placeat sed, iure maiores laudantium culpa recusandae eaque totam!
           </Text>
           <CustomButton
-            title="Continue with Email"
-            handlePress={() => router.push('/sign-in')}
+            title="Create CUPID account"
+            handlePress={() => router.push('/sign-up')}
             containerStyles="w-full mt-7" textStyles={''} isLoading={false}
             />
         </View>     

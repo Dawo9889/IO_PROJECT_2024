@@ -14,8 +14,7 @@ import camera from "@/assets/icons/camera.png";
 import switchcam from "@/assets/icons/switchcam.png";
 import takeapic from "@/assets/icons/takeapic.png";
 import cupidlogo from "@/assets/icons/cupidlogo.png";
-import cupidlogosvg from "@/assets/icons/cupidlogo.svg";
-import cupidlogohorizontalsvg from "@/assets/icons/cupidlogohorizontal.svg";
+import cupidlogohorizontal from "@/assets/icons/cupidlogohorizontal.png";
 
 export default {
   bookmark,
@@ -34,6 +33,5 @@ export default {
   switchcam,
   takeapic,
   cupidlogo,
-  cupidlogosvg,
-  cupidlogohorizontalsvg,
+  cupidlogohorizontal,
 };

@@ -2,8 +2,16 @@ import { View, Text, TextInput, Image, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 import { icons } from '@/constants';
 
-const FormField = ({title, value, placeholder, handleChangeText, keyboardType, otherStyles, ...props}:
-                    {title: string, value: string, placeholder: string, handleChangeText: any, keyboardType: any, otherStyles: string}) => {
+interface FormFieldProps {
+  title: string,
+  value: string,
+  placeholder: string,
+  handleChangeText: any,
+  keyboardType: any,
+  otherStyles: string
+}
+
+const FormField = ({title, value, placeholder, handleChangeText, keyboardType, otherStyles, ...props}: FormFieldProps) => {
 
     const [showPassword, setSetshowPassword] = useState(false);
     const [isFocused, setIsFocused] = useState(false);

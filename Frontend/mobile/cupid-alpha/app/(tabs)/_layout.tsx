@@ -2,7 +2,15 @@ import { Tabs } from 'expo-router';
 import { View, Image, Text } from 'react-native';
 import { icons } from '@/constants'
 
-const TabIcon = ({icon, color, name, focused}: {icon: number; color: string; name: string; focused: boolean}) => {
+
+interface TabIcon{
+  icon: number,
+  color: string,
+  name: string,
+  focused: boolean
+}
+
+const TabIcon = ({icon, color, name, focused}: TabIcon) => {
     return(
     <View className="items-center justify-center gap-1">
       <Image
@@ -20,6 +28,7 @@ const TabIcon = ({icon, color, name, focused}: {icon: number; color: string; nam
 
 
 export default function TabLayout() {
+
   return (
     <Tabs
         screenOptions={{
