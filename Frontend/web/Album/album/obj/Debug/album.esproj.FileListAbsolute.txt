@@ -1,0 +1,2 @@
+C:\Users\Jakub\source\repos\Album\Album\obj\Debug\album.esproj.CoreCompileInputs.cache
+C:\Users\Jakub\source\repos\IO_PROJECT_2024\Frontend\web\Album\Album\obj\Debug\album.esproj.CoreCompileInputs.cache

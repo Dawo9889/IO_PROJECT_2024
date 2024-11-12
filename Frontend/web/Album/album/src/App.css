@@ -1,72 +1,175 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap');
-
-body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    color: #eaecef;
+/* Stylizacja albumu */
+.album-web {
+    background: rgb(255, 251, 251);
+    text-align: center;
+    margin: 0 auto;
+    max-shadow-opacity: 0.5;
 }
 
-header {
-    padding: 30px;
-    background:  #011627;
-    height: 40px;
+/* Stylizacja ka¿dej strony albumu */
+.page {
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+    position: relative;
+    padding-bottom: 30px;
+    max-width: 100%;
+    overflow: hidden; /* Zapobiega wyjœciu strony poza kontener */
 }
 
-.sidenav {
-    width: 240px;
-    background: #011627;
-    position: absolute;
-    height: 95vh;
-    padding: 0 30px;
-    left: -100%;
-    transition: all 0.3s;
+/* Stylizacja dla ok³adki */
+.cover {
+    background-color: rgb(251, 225, 139);
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
 }
 
-.sidenav.active {
-    left: 0;
-}
-
-.logo {
-    width: 100px;
-}
-
-ul {
-    padding: 0;
-}
- ul li {
-    list-style-type: none;
+/* Stylizacja nag³ówka na stronie */
+.page-header {
+    font-size: 1.2em; /* Zmniejszamy wielkoœæ nag³ówka */
     margin: 10px 0;
- }
+}
 
- ul li a {
-    color: #eaecef;
-    text-decoration: none;
-    font-size: 16px;
-    display: block;
-    padding: 10px 15px;
-    border-radius: 6px;
- }
-
- ul li a:hover, 
- ul li a.active{
-    background: #172b4d;
- } 
-
- header svg {
-    font-size: 40px;
- }
-
- .main {
-    height: 90vh;
+/* Pole do wyboru zdjêcia */
+.upload-box {
+    width: 150px;
+    height: 200px;
+    border: 2px dashed gray;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Stylizacja tekstu w polu wyboru zdjêcia */
+.upload-text {
+    color: gray;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Ukrywanie inputu dla wyboru pliku */
+.upload-box input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+}
+
+/* Stylizacja przycisków i pól formularza */
+.btn,
+.form-control {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    appearance: none;
+    font-size: 1em;
+    line-height: 1.2;
+    padding: 0.5em var(--padding-x);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.btn {
+    background-color: aquamarine;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 40px;
-    color: #c9c9c9;
-    margin-top: 40px;
-    flex-grow: 1;
-    /* padding: 20px; */
-    overflow-y: auto;
- }
+    --padding-x: 1.2em;
+    border-color: transparent;
+}
+
+.form-control {
+    --padding-x: 0.5em;
+}
+
+/* Centrowanie tekstu w polach input */
+input {
+    text-align: center;
+}
+
+/* Kontener dla formularza */
+.formContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/* Stylizacja numeru strony na dole */
+.page-number {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: gray;
+}
+
+/* Stylizacja obrazu na stronie */
+.page img {
+    width: 80%;
+    height: auto;
+    margin-top: 10px;
+}
+
+/* Kontener dla pól wyboru zdjêæ po prawej stronie */
+.right-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+/* Stylizacja dla drugiego obrazu na stronie */
+.page-image-bottom {
+    width: 80%;
+    height: auto;
+    margin-top: 10px;
+}
+/* Kontener dla pól wyboru zdjêcia w kolumnie */
+.upload-box-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-right: 20px;
+}
+/* Stylizacja dla wyboru strony */
+.page-select {
+    margin-top: 20px;
+    text-align: center;
+}
+
+    .page-select label {
+        font-size: 0.9em;
+        color: gray;
+        margin-bottom: 5px;
+        display: block;
+    }
+.image-gallery {
+    margin-top: 20px;
+}
+
+    .image-gallery h3 {
+        text-align: center;
+        color: gray;
+        margin-bottom: 10px;
+    }
+
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.gallery-image {
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+    .gallery-image:hover {
+        border-color: aquamarine;
+    }
