@@ -39,9 +39,9 @@ const SignIn = () => {
   return (
     <SafeAreaView className='bg-primarygray h-full'>
       <ScrollView>
-        <View className='w-full justify-center items-center min-h-[85vh] px-4'>
+        <View className='w-full items-center min-h-[85vh] px-4'>
           <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-6' resizeMode='contain' tintColor='#fff' />
-          <View className='relative mt-5 w-full'>
+          <View className='relative mt-[120px] w-full'>
             <Text className='text-white text-2xl mt-10 font-bsemibold'>
             Log in to Cupid
             </Text>
@@ -49,6 +49,7 @@ const SignIn = () => {
             <FormField
               title="Email"
               value={form.email}
+              isPassword={false}
               handleChangeText={(e: string) => setForm({ ...form, email: e })}
               otherStyles="mt-7"
               placeholder='' keyboardType='default'          />
@@ -56,8 +57,9 @@ const SignIn = () => {
             <FormField
               title="Password"
               value={form.password}
+              isPassword={true}
               handleChangeText={(e: string) => setForm({ ...form, password: e })}
-              otherStyles="mt-7" placeholder='' keyboardType='default'       />
+              otherStyles="mt-5" placeholder='' keyboardType='default'       />
 
             <CustomButton 
               title="Sign in"

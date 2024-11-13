@@ -19,7 +19,8 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("CorsPolicy", policy =>
     {
         // ufamy temu adresowi, niezele¿nie od nag³ówka lub metody (POST, PUT, etc.)
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:8081");
     });
 });
 
@@ -36,7 +37,7 @@ if (app.Environment.IsDevelopment())
 //seedowanie danych, jezeli nie istniej¹ 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-seeder.Seed().Wait();
+// seeder.Seed().Wait();
 
 
 //identity
