@@ -20,7 +20,7 @@ builder.Services.AddCors(opt =>
     {
         // ufamy temu adresowi, niezele¿nie od nag³ówka lub metody (POST, PUT, etc.)
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:8081");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://192.168.4.110:3000");
     });
 });
 
