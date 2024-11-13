@@ -1,175 +1,227 @@
 /* Stylizacja albumu */
 .album-web {
-  background: rgb(255, 251, 251);
-  text-align: center;
-  margin: 0 auto;
-  max-shadow-opacity: 0.5;
+    background: rgb(255, 251, 251);
+    text-align: center;
 }
 
-/* Stylizacja ka�dej strony albumu */
+/* Stylizacja każdej strony albumu */
 .page {
-  box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
-  position: relative;
-  padding-bottom: 30px;
-  max-width: 100%;
-  overflow: hidden; /* Zapobiega wyj�ciu strony poza kontener */
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+    padding: 20px 20px 40px; /* Ustawienie paddingu dla większej przestrzeni na stopkę */
+    max-width: 100%;
+    overflow: hidden; /* Zapobiega wyjściu strony poza kontener */
+    box-sizing: border-box;
+    background-color: whitesmoke;
 }
 
-/* Stylizacja dla ok�adki */
-.cover {
-  background-color: rgb(251, 225, 139);
-  box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
-}
-
-/* Stylizacja nag��wka na stronie */
+/* Stylizacja nagłówka strony */
 .page-header {
-  font-size: 1.2em; /* Zmniejszamy wielko�� nag��wka */
-  margin: 10px 0;
+    font-size: 1.2em;
+    margin: 10px 0;
+    z-index: 1;
+    position: relative; /* Zapewnienie, że nagłówek będzie na wierzchu */
 }
 
-/* Pole do wyboru zdj�cia */
-.upload-box {
-  width: 150px;
-  height: 200px;
-  border: 2px dashed gray;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  position: relative;
-}
-
-/* Stylizacja tekstu w polu wyboru zdj�cia */
-.upload-text {
-  color: gray;
-  text-align: center;
-  pointer-events: none;
-}
-
-/* Ukrywanie inputu dla wyboru pliku */
-.upload-box input[type="file"] {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  cursor: pointer;
-}
-
-/* Stylizacja przycisk�w i p�l formularza */
-.btn,
-.form-control {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  color: inherit;
-  appearance: none;
-  font-size: 1em;
-  line-height: 1.2;
-  padding: 0.5em var(--padding-x);
-  border-width: 2px;
-  border-style: solid;
-}
-
-.btn {
-  background-color: aquamarine;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  --padding-x: 1.2em;
-  border-color: transparent;
-}
-
-.form-control {
-  --padding-x: 0.5em;
-}
-
-/* Centrowanie tekstu w polach input */
-input {
-  text-align: center;
-}
-
-/* Kontener dla formularza */
-.formContainer {
-  align-items: center;
-  display: flex;
-  justify-content: center;
+/* Kontener dla obrazów na stronie */
+.page .image-container {
+    display: flex;
+    flex-direction: column; /* Ustawienie zdjęć w kolumnie */
+    gap: 10px; /* Odstęp między zdjęciami */
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Odstęp od nagłówka */
+    height: calc(100% - 80px); /* Dopasowanie wysokości kontenera do wysokości strony (uwzględniając padding i numer strony) */
 }
 
 /* Stylizacja numeru strony na dole */
 .page-number {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: 14px;
-  color: gray;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 18px;
+    color: white;
+    padding: 5px;
+    z-index: 10;
 }
 
-/* Stylizacja obrazu na stronie */
-.page img {
-  width: 80%;
-  height: auto;
-  margin-top: 10px;
+/* Stylizacja dla okładki */
+.cover {
+    background-color: rgb(251, 225, 139);
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
 }
 
-/* Kontener dla p�l wyboru zdj�� po prawej stronie */
+/* Pola do przeciągania zdjęć */
+.drop-zone {
+    width: 100%;
+    height: 100%; /* Zwiększona wysokość pola do przeciągania */
+    border: 2px dashed gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden; /* Ukrywa wszystko, co wyjdzie poza obszar kontenera */
+}
+
+    .drop-zone img {
+        width: 100%; /* Szerokość zdjęcia wypełnia 100% kontenera */
+        height: 100%; /* Wysokość zdjęcia wypełnia 100% kontenera */
+        object-fit: fill;
+    }
+
+    .drop-zone span {
+        color: gray;
+        text-align: center;
+        position: absolute;
+    }
+
+    /* Usuwanie obwodu po przeciągnięciu zdjęcia */
+    .drop-zone:has(img) {
+        text-indent: -9999px; /* Ukrywa tekst po dodaniu zdjęcia */
+    }
+
+
+/* Pole do wyboru zdjęcia */
+.upload-box {
+    width: 150px;
+    height: 200px;
+    border: 2px dashed gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Stylizacja tekstu w polu wyboru zdjęcia */
+.upload-text {
+    color: gray;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* Ukrywanie inputu dla wyboru pliku */
+.upload-box input[type="file"] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+}
+
+/* Stylizacja przycisków i pól formularza */
+.btn,
+.form-control {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: inherit;
+    appearance: none;
+    font-size: 1em;
+    line-height: 1.2;
+    padding: 0.5em var(--padding-x);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.btn {
+    background-color: aquamarine;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    --padding-x: 1.2em;
+    border-color: transparent;
+}
+
+.form-control {
+    --padding-x: 0.5em;
+}
+
+/* Centrowanie tekstu w polach input */
+input {
+    text-align: center;
+}
+
+/* Kontener dla formularza */
+.formContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+/* Stylizacja numeru strony na dole */
+.page-number {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: gray;
+}
+
+/* Kontener dla pól wyboru zdjęć po prawej stronie */
 .right-upload-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
+
 /* Stylizacja dla drugiego obrazu na stronie */
 .page-image-bottom {
-  width: 80%;
-  height: auto;
-  margin-top: 10px;
+    width: 80%;
+    height: auto;
+    margin-top: 10px;
 }
-/* Kontener dla p�l wyboru zdj�cia w kolumnie */
+
+/* Kontener dla pól wyboru zdjęcia w kolumnie */
 .upload-box-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-right: 20px;
 }
+
 /* Stylizacja dla wyboru strony */
 .page-select {
-  margin-top: 20px;
-  text-align: center;
+    margin-top: 20px;
+    text-align: center;
 }
 
-  .page-select label {
-      font-size: 0.9em;
-      color: gray;
-      margin-bottom: 5px;
-      display: block;
-  }
+    .page-select label {
+        font-size: 0.9em;
+        color: gray;
+        margin-bottom: 5px;
+        display: block;
+    }
+
 .image-gallery {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
-  .image-gallery h3 {
-      text-align: center;
-      color: gray;
-      margin-bottom: 10px;
-  }
+    .image-gallery h3 {
+        text-align: center;
+        color: gray;
+        margin-bottom: 10px;
+    }
 
 .gallery-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
 }
 
 .gallery-image {
-  width: 100px;
-  height: auto;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
+    width: 100px;
+    height: auto;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
 }
 
-  .gallery-image:hover {
-      border-color: aquamarine;
-  }
+    .gallery-image:hover {
+        border-color: aquamarine;
+    }
