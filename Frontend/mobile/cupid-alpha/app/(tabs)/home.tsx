@@ -1,29 +1,58 @@
-import { View, Text, ScrollView, Image } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import CustomButton from '@/components/CustomButton'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
 import icons from '@/constants/icons'
 
 const Home = () => {
+
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    if (counter >= 7) {
+      router.push('/about-us');
+      setCounter(0);
+    }
+  }, [counter])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setCounter(0);
+    }, [])
+  );
+
+  const handleClick = () => {
+    setCounter(c => c+1);
+  }
+
   return (
     <SafeAreaView className='bg-primarygray h-full'>  
       <ScrollView contentContainerStyle={{
         height: '100%'
       }}>
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
-        <Image source={icons.cupidlogo} className='h-[200px]' resizeMode='contain' tintColor='#fff' />
+        <View className="w-[200px] h-[200px] justify-center items-center absolute top-6">
+            <TouchableOpacity onPress={handleClick} className="justify-center items-center w-full h-full">
+              <Image 
+                source={icons.cupidlogo} 
+                className="w-[200px] h-[200px]"
+                resizeMode="contain" 
+                tintColor="#fff" 
+              />
+            </TouchableOpacity>
+          </View>
+        
           <View className='relative mt-5'>
             <Text className='text-3xl text-primary text-center font-bold'>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa laudantium nisi corporis sapiente! Soluta quo rerum deleniti nesciunt sint quae recusandae consequatur, minus delectus id. Quam explicabo quos suscipit maxime. {' '}
-              <Text className='text-secondary-200'>Cupid</Text>
+              App manual here
             </Text>
           </View>
           <Text className='text-sm text-tertiary font-pregular mt-7 text-center'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et, molestiae dicta magni ut adipisci ab voluptatibus rerum. Odit nisi, vero, perspiciatis placeat sed, iure maiores laudantium culpa recusandae eaque totam!
+            Something else here
           </Text>
           <CustomButton
             title="Create CUPID account"

@@ -1,32 +1,45 @@
 import axios, { AxiosError } from "axios";
 
-const API_AUTH_URL = 'https://localhost:7017/api/identity';
+const API_AUTH_URL = 'http://localhost:5286/api/identity';
+
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const response = await axios.post(`${API_AUTH_URL}/login`, {
+      "email": email,
+      "password": password
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response;
+  }
+};
 
 export const registerUser = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(`${API_AUTH_URL}/register`, { email, password });
-      return response; // Return the response if successful
-    } catch (error) {
-      console.log(error);
-      if (axios.isAxiosError(error) && error.response) {
-        // Return a message from server if available, otherwise generic message
-        const errorMessage = error.response.data?.message || "Registration failed. Please try again.";
-        throw new Error(errorMessage);
-      } else {
-        // Handle other errors (e.g., network issues)
-        throw new Error("Network error. Please try again later.");
-      }
+  try {
+        console.log('requesting register')
+        const response = await axios.post(`${API_AUTH_URL}/register`,
+            {
+                "email": email,
+                "password": password
+            }
+        );
+        console.log('abc')
+        console.log(response)
+        return(response)
+      } catch (err: any) {
+        console.log(err)
     }
-  };
+};
 
-export const loginUser = async (username: string, password: string) => {
-    try {
-      const response = await axios.post(`${API_AUTH_URL}/login`, {
-        username,
-        password,
-      });
-      return response;
-    } catch (error: any) {
-      throw error.response;
-    }
-  };
+
+export const checkIfTokenValid = async (token: string) => {
+
+  return 'Jacek i Placek';
+};
+
+
+export const uploadPicture = async (weddingId: string, photo: BinaryData) => {
+
+};
+
+

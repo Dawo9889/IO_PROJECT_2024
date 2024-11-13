@@ -25,7 +25,7 @@ const App = () => {
           Capture and create a unique, real-time event album right from your device! Snap photos directly in the app, add tags, text, or stickers in order to personalize each memory. The collaborative album builds throughout the event, capturing every special moment.
           </Text>
           <CustomButton
-            title="Log in"
+            title="Log in/Sign up"
             handlePress={() => router.push('/sign-in')}
             containerStyles="w-full mt-7" textStyles={''} isLoading={false}
             />
@@ -34,7 +34,7 @@ const App = () => {
             handlePress={() => router.push('/home')}
             containerStyles='w-full mt-3' textStyles='' isLoading={false}
             />
-            <Text className='mt-8 text-primary'>By continuing, you agree to <>Terms of use</></Text>
+            <Text className='mt-8 text-primary'>By continuing, you agree to <Text className='text-tertiary'>Terms of use</Text></Text>
         </View>     
       </ScrollView>
       <StatusBar translucent={true} />

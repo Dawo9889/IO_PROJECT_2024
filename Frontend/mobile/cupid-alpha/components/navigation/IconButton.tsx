@@ -13,9 +13,9 @@ const IconButton = ({iconName, onPress, containerStyle, iconSize}: IconButtonPro
   return (
     <TouchableOpacity
         onPress={onPress}
-        className={containerStyle}
+        className={`flex items-center justify-center ${containerStyle}`}
     >
-        <Ionicons name={iconName} color={'white'} size={iconSize} className='m-auto' />
+        <Ionicons name={iconName} color={'white'} size={iconSize}/>
     </TouchableOpacity>
   )
 }

@@ -7,22 +7,21 @@ using Backend.Infrastructure.Seeders;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
-
 builder.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-builder.Services.AddCors(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", policy =>
-    {
-        // ufamy temu adresowi, niezele¿nie od nag³ówka lub metody (POST, PUT, etc.)
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:8081");
-    });
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
 });
+
 
 var app = builder.Build();
 
@@ -34,16 +33,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//seedowanie danych, jezeli nie istniej¹ 
+// Seed data if not exist
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-// seeder.Seed().Wait();
+seeder.Seed().Wait();
 
 
-//identity
+// Identity
 app.MapGroup("api/identity").MapIdentityApi<Account>();
+
+
 app.UseHttpsRedirection();
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllers();
