@@ -22,10 +22,10 @@ const BottomCamActions = ({handleTakePicture, toggleCameraFacing}: BottomCamActi
           </TouchableOpacity> */}
 
           <IconButton
-              containerStyle='w-[60px] absolute left-1'
+              containerStyle='w-[60px] absolute left-[10px] bottom-[10px]'
               onPress={toggleCameraFacing}
               iconName={'sync-outline'}
-              iconSize={50}
+              iconSize={45}
             />
           
           {/* <TouchableOpacity onPress={handleTakePicture} className='absolute left-1/2 transform -translate-x-1/2 w-[100px]'>
