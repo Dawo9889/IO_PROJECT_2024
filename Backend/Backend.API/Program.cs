@@ -14,14 +14,15 @@ builder.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-builder.Services.AddCors(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", policy =>
-    {
-        // ufamy temu adresowi, niezele¿nie od nag³ówka lub metody (POST, PUT, etc.)
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://192.168.4.110:3000");
-    });
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:3000")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
@@ -37,7 +38,7 @@ if (app.Environment.IsDevelopment())
 //seedowanie danych, jezeli nie istniej¹ 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
-// seeder.Seed().Wait();
+seeder.Seed().Wait();
 
 
 //identity
