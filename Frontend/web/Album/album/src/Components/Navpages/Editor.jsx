@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import './Navpages.css'
+// import './Navpages.css'
 const Editor = () => {
     return (
         <section>

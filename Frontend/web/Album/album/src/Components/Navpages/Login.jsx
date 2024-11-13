@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import './Navpages.css'
+// import './Navpages.css'
 import axios from "axios";
 const LOGIN_URL = 'https://localhost:7017/api/identity/login'
 
@@ -60,11 +60,12 @@ const Login = () => {
     }
 
   return (
-    <section>
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-        <h1>Sign In</h1>
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="username">Username:</label>
+    <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm" : "offscreen"} aria-live="assertive">{errMsg}</p>
+    <h1 className="text-2xl font-bold text-center mb-4">Sign In</h1>
+    <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
             <input 
                 type="text" 
                 id="username"
@@ -73,24 +74,37 @@ const Login = () => {
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 required
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <label htmlFor="password">Password:</label>
+        </div>
+        <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
             <input 
                 type="password" 
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 required
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <button>Sign In</button>
-        </form>
-        <p>
-            Need an Account? <br />
-            <span className="line">
-                <a href="#">Sign Up</a>
-            </span>
-        </p>
-    </section>
+        </div>
+        <div className="flex justify-center">
+            <button 
+                type="submit" 
+                className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+                Sign In
+            </button>
+        </div>
+    </form>
+    <p className="mt-4 text-center text-sm text-gray-600">
+        Need an Account? <br />
+        <span className="line">
+            <a href="/register" className="text-indigo-600 hover:underline">Sign Up</a>
+        </span>
+    </p>
+</section>
+
   )
 }
 

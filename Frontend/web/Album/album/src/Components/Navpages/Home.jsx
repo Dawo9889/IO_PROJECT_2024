@@ -1,6 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
-import './Navpages.css'
 import AuthContext from "../context/AuthProvider";
 
 const Home = () => {
@@ -8,30 +7,30 @@ const Home = () => {
     const navigate = useNavigate();
 
     const logout = async () => {
-        // if used in more components, this should be in context 
-        // axios to /logout endpoint 
         setAuth({});
         navigate('/linkpage');
     }
 
     return (
-        <section>
-            <h1>Home</h1>
-            <br />
-            <p>You are logged in!</p>
-            <br />
-            <Link to="/album">Go to the Album Creator</Link>
-            {/* <br />
-            <Link to="/admin">Go to the Admin page</Link>
-            <br />
-            <Link to="/lounge">Go to the Lounge</Link>
-            <br />
-            <Link to="/linkpage">Go to the link page</Link> */}
-            <div className="flexGrow">
-                <button onClick={logout}>Sign Out</button>
+        <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <h1 className="text-2xl font-bold text-center mb-4">Home</h1>
+            <p className="text-lg mb-4">You are logged in!</p>
+            <Link 
+                to="/album" 
+                className="text-indigo-600 hover:underline"
+            >
+                Go to the Album Creator
+            </Link>
+            <div className="mt-4">
+                <button 
+                    onClick={logout} 
+                    className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                    Sign Out
+                </button>
             </div>
         </section>
-    )
+    );
 }
 
-export default Home
+export default Home;

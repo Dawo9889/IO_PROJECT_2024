@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MyAlbum from "./Components/MyAlbum/MyAlbum"
 import { useState } from "react";
-import "./App.css";
+// import "./App.css";
 import Register from './Components/Navpages/Register';
 import Login from './Components/Navpages/Login';
 import Home from './Components/Navpages/Home';

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import './Navpages.css'
+// import './Navpages.css'
 const Unauthorized = () => {
     const navigate = useNavigate();
 
