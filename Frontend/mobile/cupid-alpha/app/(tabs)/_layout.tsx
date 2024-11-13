@@ -12,7 +12,7 @@ interface TabIcon{
 
 const TabIcon = ({icon, color, name, focused}: TabIcon) => {
     return(
-    <View className="items-center justify-center gap-1">
+    <View className="items-center justify-center gap-1 w-[80px] mt-[25px]">
       <Image
       source={icon}
       resizeMode='contain'
@@ -49,7 +49,7 @@ export default function TabLayout() {
             title: 'Home',
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
-              <TabIcon 
+              <TabIcon
                 icon={icons.home}
                 color={color}
                 name={"Home"}
