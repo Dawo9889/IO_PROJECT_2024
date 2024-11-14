@@ -5,8 +5,10 @@ namespace Backend.Application.Services.Wedding
 {
     public interface IWeddingService
     {
-        Task Create(WeddingDTO weddingDTO);
+        Task Create(WeddingDTO weddingDTO, string userId);
         Task<List<WeddingDTO>> GetAllWeddings();
+
+        Task<List<WeddingDTO>> GetAllWeddingsByUser(String userID);
 
         Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id);
 
@@ -15,6 +17,8 @@ namespace Backend.Application.Services.Wedding
         Task<bool> Update(WeddingDTO newWeddingDTO);
 
         Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration);
+
+        Task<byte[]> GetQrCode(Guid weddingId);
 
     }
 }

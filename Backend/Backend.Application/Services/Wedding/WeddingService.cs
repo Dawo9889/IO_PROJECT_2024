@@ -2,6 +2,7 @@
 using Backend.Application.DTO.WeddingDTO;
 using Backend.Domain.Interfaces;
 using Backend.Domain.Entities;
+using QRCoder;
 
 
 namespace Backend.Application.Services.Wedding
@@ -26,13 +27,13 @@ namespace Backend.Application.Services.Wedding
 
 
 
-        public async Task Create(WeddingDTO weddingDTO)
+        public async Task Create(WeddingDTO weddingDTO, string userId)
         {
             // Mapowanie 
             var wedding = _mapper.Map<Domain.Entities.Wedding>(weddingDTO);
+            var result = await _weddingRepository.Create(wedding, userId);
 
 
-            var result = await _weddingRepository.Create(wedding);
 
             if (result)
             {
@@ -60,7 +61,12 @@ namespace Backend.Application.Services.Wedding
             return weddingsDTO;
         }
 
-
+        public async Task<List<WeddingDTO>> GetAllWeddingsByUser(string userID)
+        {
+            var userWeddings = await _weddingRepository.GetWeddingsByUser(userID);
+            var weddingsDTO = _mapper.Map<List<WeddingDTO>>(userWeddings);
+            return weddingsDTO;
+        }
 
         public async Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id)
         {
@@ -106,5 +112,29 @@ namespace Backend.Application.Services.Wedding
 
             return true; 
         }
+
+
+
+
+        public async Task<byte[]> GetQrCode(Guid weddingId)
+        {
+            var wedding = await _weddingRepository.GetDetailsById(weddingId);
+            if (wedding.IsSessionKeyExpired || wedding.IsSessionKeyExpired )
+            {
+                return null;
+            }
+            var sessionToken = wedding.SessionKey.ToString();
+
+            //generating qr code
+            using (var qrGenerator = new QRCodeGenerator())
+            using (var qrCodeData = qrGenerator.CreateQrCode(sessionToken, QRCodeGenerator.ECCLevel.Q))
+            using (var qrCode = new PngByteQRCode(qrCodeData))
+            {
+                byte[] qrCodeImage = qrCode.GetGraphic(20);
+                return qrCodeImage; // returning qr-code as byte image
+            }
+        }
+
+      
     }
 }
