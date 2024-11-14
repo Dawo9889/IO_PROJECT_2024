@@ -35,7 +35,7 @@ namespace Backend.API.Extensions
             });
 
             //identity
-            builder.Services.AddIdentityApiEndpoints<Account>(option => option.SignIn.RequireConfirmedEmail = false)
+            builder.Services.AddIdentityApiEndpoints<User>(option => option.SignIn.RequireConfirmedEmail = false)
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

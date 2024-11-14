@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities
 {
-    public class Account : IdentityUser
+    public class User : IdentityUser
     {
         
-        public ICollection<WeddingAdmin>? WeddingAdmin { get; set; }
+        public ICollection<WeddingUser>? WeddingUser { get; set; }
 
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241112153843_Init")]
-    partial class Init
+    [Migration("20241114205551_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,30 @@ namespace Backend.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Domain.Entities.Account", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("WeddingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WeddingId");
+
+                    b.ToTable("ImageDatas");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -90,29 +113,6 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.ImageData", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("WeddingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WeddingId");
-
-                    b.ToTable("ImageDatas");
-                });
-
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
                     b.Property<Guid>("Id")
@@ -143,19 +143,19 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Weddings");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.WeddingAdmin", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.WeddingUser", b =>
                 {
                     b.Property<Guid>("WeddingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AccountId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("WeddingId", "AccountId");
+                    b.HasKey("WeddingId", "UserId");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("WeddingAdmin");
+                    b.ToTable("WeddingUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -302,21 +302,21 @@ namespace Backend.Infrastructure.Migrations
                     b.Navigation("Wedding");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.WeddingAdmin", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.WeddingUser", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Account", "Account")
-                        .WithMany("WeddingAdmin")
-                        .HasForeignKey("AccountId")
+                    b.HasOne("Backend.Domain.Entities.User", "User")
+                        .WithMany("WeddingUser")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Backend.Domain.Entities.Wedding", "Wedding")
-                        .WithMany("WeddingAdmin")
+                        .WithMany("WeddingUser")
                         .HasForeignKey("WeddingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Account");
+                    b.Navigation("User");
 
                     b.Navigation("Wedding");
                 });
@@ -332,7 +332,7 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Account", null)
+                    b.HasOne("Backend.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -341,7 +341,7 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Account", null)
+                    b.HasOne("Backend.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,7 +356,7 @@ namespace Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Domain.Entities.Account", null)
+                    b.HasOne("Backend.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -365,23 +365,23 @@ namespace Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Account", null)
+                    b.HasOne("Backend.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Account", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.User", b =>
                 {
-                    b.Navigation("WeddingAdmin");
+                    b.Navigation("WeddingUser");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Wedding", b =>
                 {
                     b.Navigation("ImageDatas");
 
-                    b.Navigation("WeddingAdmin");
+                    b.Navigation("WeddingUser");
                 });
 #pragma warning restore 612, 618
         }

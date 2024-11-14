@@ -37,14 +37,14 @@ namespace Backend.Infrastructure.Repositories
             if (result > 0)
             {
                 // Creating many to many realtions between wedding and user
-                var weddingAdmin = new WeddingAdmin
+                var WeddingUser = new WeddingUser
                 {
-                    AccountId = userId,     
+                    UserId = userId,     
                     WeddingId = wedding.Id   
                 };
 
                 
-                await _dbContext.WeddingAdmin.AddAsync(weddingAdmin);
+                await _dbContext.WeddingUser.AddAsync(WeddingUser);
 
                 
                 var saveChangesResult = await _dbContext.SaveChangesAsync();
@@ -58,8 +58,8 @@ namespace Backend.Infrastructure.Repositories
 
         public async Task<bool> IsUserOwnerOfWedding(Guid weddingId, string userId)
         {
-            return await _dbContext.WeddingAdmin
-                .AnyAsync(wa => wa.WeddingId == weddingId && wa.AccountId == userId);
+            return await _dbContext.WeddingUser
+                .AnyAsync(wa => wa.WeddingId == weddingId && wa.UserId == userId);
             
         }
 
@@ -71,8 +71,8 @@ namespace Backend.Infrastructure.Repositories
 
         public async Task<List<Wedding>> GetWeddingsByUser(string userID)
         {
-            var weddings = await _dbContext.WeddingAdmin
-                .Where(wa => wa.AccountId == userID)
+            var weddings = await _dbContext.WeddingUser
+                .Where(wa => wa.UserId == userID)
                 .Select(w => new Wedding
                 {
                     Id = w.WeddingId,

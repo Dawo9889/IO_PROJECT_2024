@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Persistance
 {
-    public class ApplicationDbContext : IdentityDbContext<Account>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options) 
         {
@@ -20,26 +20,26 @@ namespace Backend.Infrastructure.Persistance
         }
         public DbSet<Wedding> Weddings { get; set; }
         public DbSet<ImageData> ImageDatas { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<WeddingAdmin> WeddingAdmin { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<WeddingUser> WeddingUser{ get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<WeddingAdmin>()
-                .HasKey(wc => new { wc.WeddingId, wc.AccountId });
+            modelBuilder.Entity<WeddingUser>()
+                .HasKey(wc => new { wc.WeddingId, wc.UserId });
 
-            modelBuilder.Entity<WeddingAdmin>()
+            modelBuilder.Entity<WeddingUser>()
                 .HasOne(wc => wc.Wedding)
-                .WithMany(w => w.WeddingAdmin)
+                .WithMany(w => w.WeddingUser)
                 .HasForeignKey(wc => wc.WeddingId);
 
-            modelBuilder.Entity<WeddingAdmin>()
-                .HasOne(wc => wc.Account)
-                .WithMany(a => a.WeddingAdmin)
-                .HasForeignKey(wc => wc.AccountId);
+            modelBuilder.Entity<WeddingUser>()
+                .HasOne(wc => wc.User)
+                .WithMany(a => a.WeddingUser)
+                .HasForeignKey(wc => wc.UserId);
         }
 
     }

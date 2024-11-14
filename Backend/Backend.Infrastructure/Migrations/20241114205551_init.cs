@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -193,23 +193,23 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WeddingAdmin",
+                name: "WeddingUser",
                 columns: table => new
                 {
                     WeddingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WeddingAdmin", x => new { x.WeddingId, x.AccountId });
+                    table.PrimaryKey("PK_WeddingUser", x => new { x.WeddingId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_WeddingAdmin_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
+                        name: "FK_WeddingUser_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WeddingAdmin_Weddings_WeddingId",
+                        name: "FK_WeddingUser_Weddings_WeddingId",
                         column: x => x.WeddingId,
                         principalTable: "Weddings",
                         principalColumn: "Id",
@@ -261,9 +261,9 @@ namespace Backend.Infrastructure.Migrations
                 column: "WeddingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WeddingAdmin_AccountId",
-                table: "WeddingAdmin",
-                column: "AccountId");
+                name: "IX_WeddingUser_UserId",
+                table: "WeddingUser",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -288,7 +288,7 @@ namespace Backend.Infrastructure.Migrations
                 name: "ImageDatas");
 
             migrationBuilder.DropTable(
-                name: "WeddingAdmin");
+                name: "WeddingUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
