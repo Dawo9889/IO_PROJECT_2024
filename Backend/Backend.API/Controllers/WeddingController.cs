@@ -22,6 +22,14 @@ namespace Backend.API.Controllers
 
 
         //Gets
+        [HttpGet("REMOVE_ME")]
+        public async Task<List<WeddingDTO>> GetAllWeddings()
+        {
+            
+
+            var weddings = await _weddingService.GetAllWeddings();
+            return weddings;
+        }
 
         [HttpGet]
         public async Task<List<WeddingDTO>> GetAllByUserId()
