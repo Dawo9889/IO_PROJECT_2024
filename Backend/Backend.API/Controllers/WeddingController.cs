@@ -86,9 +86,9 @@ namespace Backend.API.Controllers
         }
 
         [HttpPut("extend")]
-        public async Task<IActionResult> ExtendSession([FromQuery] Guid Id, [FromQuery] int hours)
+        public async Task<IActionResult> ExtendSession([FromQuery] Guid id, [FromQuery] int hours)
         {
-            var extended = await _weddingService.ExtendSessionKeyExpiration(Id, TimeSpan.FromHours(hours));
+            var extended = await _weddingService.ExtendSessionKeyExpiration(id, TimeSpan.FromHours(hours));
 
             if (!extended)
             {
@@ -96,6 +96,17 @@ namespace Backend.API.Controllers
             }
 
             return Ok("Czas tokenu został wydłużony");
+        }
+
+        [HttpGet("token-qr")]
+        public async Task <ActionResult> GetQRCodeForSession([FromQuery] Guid id)
+        {
+            var qrCode = await _weddingService.GetQrCode(id);
+            if(qrCode == null)
+            {
+                return BadRequest("Something went wrong, token might be expired");
+            }
+            return File(qrCode, "image/png");
         }
     }
 }

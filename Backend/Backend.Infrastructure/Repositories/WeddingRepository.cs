@@ -87,15 +87,16 @@ namespace Backend.Infrastructure.Repositories
 
             if (wedding == null)
             {
-               throw new InvalidOperationException("Niewlasciwy lub niewazny token."); 
+                return null;
             }
             if (!wedding.IsSessionKeyExpired)
             {
                 return wedding;
             }
 
-            throw new InvalidOperationException("Blad zapytania");
+            return null;
 
         }
+
     }
 }

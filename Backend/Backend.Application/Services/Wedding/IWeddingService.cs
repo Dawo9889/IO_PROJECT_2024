@@ -16,5 +16,7 @@ namespace Backend.Application.Services.Wedding
 
         Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration);
 
+        Task<byte[]> GetQrCode(Guid weddingId);
+
     }
 }

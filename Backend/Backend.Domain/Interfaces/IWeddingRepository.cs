@@ -21,5 +21,7 @@ namespace Backend.Domain.Interfaces
 
         Task<Wedding> ValidateSessionKeyAsync(Guid sessionToken);
 
+        
+
     }
 }

@@ -2,6 +2,7 @@
 using Backend.Application.DTO.WeddingDTO;
 using Backend.Domain.Interfaces;
 using Backend.Domain.Entities;
+using QRCoder;
 
 
 namespace Backend.Application.Services.Wedding
@@ -105,6 +106,28 @@ namespace Backend.Application.Services.Wedding
             await _weddingRepository.Update(wedding);
 
             return true; 
+        }
+
+
+
+
+        public async Task<byte[]> GetQrCode(Guid weddingId)
+        {
+            var wedding = await _weddingRepository.GetDetailsById(weddingId);
+            if (wedding.IsSessionKeyExpired || wedding.IsSessionKeyExpired )
+            {
+                return null;
+            }
+            var sessionToken = wedding.SessionKey.ToString();
+
+            //generating qr code
+            using (var qrGenerator = new QRCodeGenerator())
+            using (var qrCodeData = qrGenerator.CreateQrCode(sessionToken, QRCodeGenerator.ECCLevel.Q))
+            using (var qrCode = new PngByteQRCode(qrCodeData))
+            {
+                byte[] qrCodeImage = qrCode.GetGraphic(20);
+                return qrCodeImage; // returning qr-code as byte image
+            }
         }
     }
 }
