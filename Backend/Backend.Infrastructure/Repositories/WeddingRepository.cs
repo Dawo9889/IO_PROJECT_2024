@@ -3,6 +3,7 @@ using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
 using Backend.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Backend.Infrastructure.Repositories
 
 
 
-        public async Task<bool> Create(Wedding wedding)
+        public async Task<bool> Create(Wedding wedding, string userId)
         {
 
             await _dbContext.Weddings.AddAsync(wedding);
@@ -32,8 +33,26 @@ namespace Backend.Infrastructure.Repositories
        
             var result = await _dbContext.SaveChangesAsync();
 
- 
-            return result > 0;
+
+            if (result > 0)
+            {
+                // Creating many to many realtions between wedding and user
+                var weddingAdmin = new WeddingAdmin
+                {
+                    AccountId = userId,     
+                    WeddingId = wedding.Id   
+                };
+
+                
+                await _dbContext.WeddingAdmin.AddAsync(weddingAdmin);
+
+                
+                var saveChangesResult = await _dbContext.SaveChangesAsync();
+
+                return saveChangesResult > 0;
+            }
+
+            return false;
         }
 
 
@@ -42,7 +61,20 @@ namespace Backend.Infrastructure.Repositories
             return await _dbContext.Weddings.ToListAsync();
         }
 
-
+        public async Task<List<Wedding>> GetWeddingsByUser(string userID)
+        {
+            var weddings = await _dbContext.WeddingAdmin
+                .Where(wa => wa.AccountId == userID)
+                .Select(w => new Wedding
+                {
+                    Id = w.WeddingId,
+                    Name = w.Wedding.Name,
+                    Description = w.Wedding.Description,
+                    EventDate = w.Wedding.EventDate,
+                })
+                .ToListAsync();
+            return weddings;
+        }
 
         public async Task<Wedding> GetDetailsById(Guid id)
         {
@@ -98,5 +130,6 @@ namespace Backend.Infrastructure.Repositories
 
         }
 
+        
     }
 }

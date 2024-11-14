@@ -5,6 +5,7 @@ using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.API.Controllers
 {
@@ -25,7 +26,8 @@ namespace Backend.API.Controllers
         [HttpGet]
         public async Task<List<WeddingDTO>> GetAll()
         {
-            var weddings = await _weddingService.GetAllWeddings();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var weddings = await _weddingService.GetAllWeddingsByUser(userId);
             return weddings;
         }
 
@@ -47,7 +49,8 @@ namespace Backend.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateWedding(WeddingDTO weddingDTO)
         {
-            await _weddingService.Create(weddingDTO);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _weddingService.Create(weddingDTO, userId);
             return Ok(weddingDTO);
         }
 

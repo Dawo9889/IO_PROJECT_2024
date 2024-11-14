@@ -27,13 +27,13 @@ namespace Backend.Application.Services.Wedding
 
 
 
-        public async Task Create(WeddingDTO weddingDTO)
+        public async Task Create(WeddingDTO weddingDTO, string userId)
         {
             // Mapowanie 
             var wedding = _mapper.Map<Domain.Entities.Wedding>(weddingDTO);
+            var result = await _weddingRepository.Create(wedding, userId);
 
 
-            var result = await _weddingRepository.Create(wedding);
 
             if (result)
             {
@@ -61,7 +61,12 @@ namespace Backend.Application.Services.Wedding
             return weddingsDTO;
         }
 
-
+        public async Task<List<WeddingDTO>> GetAllWeddingsByUser(string userID)
+        {
+            var userWeddings = await _weddingRepository.GetWeddingsByUser(userID);
+            var weddingsDTO = _mapper.Map<List<WeddingDTO>>(userWeddings);
+            return weddingsDTO;
+        }
 
         public async Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id)
         {
@@ -129,5 +134,7 @@ namespace Backend.Application.Services.Wedding
                 return qrCodeImage; // returning qr-code as byte image
             }
         }
+
+      
     }
 }
