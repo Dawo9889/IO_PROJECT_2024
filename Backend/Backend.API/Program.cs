@@ -16,14 +16,15 @@ builder.Services.AddApplication();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins",
+    options.AddPolicy("AllowAllOrigins",
         builder =>
         {
-            builder.WithOrigins("https://localhost:3000")
+            builder.AllowAnyOrigin()
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
 });
+
 
 var app = builder.Build();
 
@@ -44,7 +45,7 @@ seeder.Seed().Wait();
 //identity
 app.MapGroup("api/identity").MapIdentityApi<Account>();
 app.UseHttpsRedirection();
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
 app.MapControllers();
