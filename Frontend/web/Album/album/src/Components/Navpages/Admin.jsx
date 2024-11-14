@@ -2,12 +2,21 @@ import { Link } from "react-router-dom"
 // import './Navpages.css'
 const Admin = () => {
     return (
-        <section>
-            <h1>Admins Page</h1>
+        <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <h1 className="text-2xl font-bold text-center mb-4">Admins Page</h1>
             <br />
-            <p>You must have been assigned an Admin role.</p>
+            <p className="mt-4 text-center text-sm text-gray-600">Dashboard</p>
             <div className="flexGrow">
-                <Link to="/">Home</Link>
+                <Link to="/" className="text-indigo-600 hover:underline">Home</Link>
+            </div>
+            <div className="flexGrow">
+                <Link to="/album" className="text-indigo-600 hover:underline">Album Creator</Link>
+            </div>
+            <div className="flexGrow">
+                <Link to="/linkpage" className="text-indigo-600 hover:underline">Link page</Link>
+            </div>
+            <div className="flexGrow">
+                <Link to="/weddings" className="text-indigo-600 hover:underline">All weddings</Link>
             </div>
         </section>
     )

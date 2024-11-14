@@ -7,10 +7,12 @@ export default function Weddings() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setLoading(true);
+        const authData = JSON.parse(localStorage.getItem("auth"));
+        const accessToken = authData?.accessToken;
+        // console.log(authData)
         axios.get('https://localhost:7017/api/wedding', {
             headers: {
-                Authorization: `Bearer ${import.meta.env.VITE_APP_API_TOKEN}`
+                 Authorization: `Bearer ${accessToken}`
             }
         })
             .then((response) => {
@@ -24,7 +26,7 @@ export default function Weddings() {
             });
     }, []);
 
-    console.log(weddings)
+    // console.log(weddings)
     if (loading) return <p>Loading weddings...</p>;
     if (error) return <p>{error}</p>;
 
