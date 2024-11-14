@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-// import './Navpages.css'
 const Admin = () => {
     return (
         <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -16,7 +15,7 @@ const Admin = () => {
                 <Link to="/linkpage" className="text-indigo-600 hover:underline">Link page</Link>
             </div>
             <div className="flexGrow">
-                <Link to="/weddings" className="text-indigo-600 hover:underline">All weddings</Link>
+                <Link to="/weddings" className="text-indigo-600 hover:underline">Weddings managment</Link>
             </div>
         </section>
     )

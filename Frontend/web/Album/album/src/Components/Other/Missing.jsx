@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom"
-// import './Navpages.css'
 const Missing = () => {
     return (
         <article style={{ padding: "100px" }}>
