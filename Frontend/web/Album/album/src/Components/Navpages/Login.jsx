@@ -36,12 +36,15 @@ const Login = () => {
                     "password": password
                 }
             );
+            console.log(response.data.accessToken)
             localStorage.setItem("auth", JSON.stringify({ user, accessToken: response.data.accessToken }));
             localStorage.setItem('refreshToken', response.data.refreshToken);
-            setAuth({user,password})
+            // console.log(localStorage.getItem('auth'))
+            setAuth({ user, accessToken: response.data.accessToken })
             setUser('');
             setPassword('');
             navigate(from, {replace: true});
+            navigate(0)
 
         } catch (err) {
             if(!err?.response){

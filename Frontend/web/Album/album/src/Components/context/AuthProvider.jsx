@@ -5,7 +5,6 @@ const AuthContext = createContext({});
 export const AuthProvider = ({children}) => {
     const [auth, setAuth] = useState(() => {
         const storedAuth = localStorage.getItem("auth");
-        console.log(storedAuth)
         return storedAuth ? JSON.parse(storedAuth) : {};
     });
 
@@ -17,14 +16,14 @@ export const AuthProvider = ({children}) => {
         }
     }, [auth]);
 
-    console.log("Current Auth:", auth);
-    console.log("Stored Auth in LocalStorage:", localStorage.getItem("auth"));
+    // console.log("Current Auth:", auth);
+    // console.log("Stored Auth in LocalStorage:", localStorage.getItem("auth"));
 
     return (
         <AuthContext.Provider value={{auth, setAuth}}>
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthContext;

@@ -9,6 +9,15 @@ const Admin = () => {
             <div className="flexGrow">
                 <Link to="/" className="text-indigo-600 hover:underline">Home</Link>
             </div>
+            <div className="flexGrow">
+                <Link to="/album" className="text-indigo-600 hover:underline">Album Creator</Link>
+            </div>
+            <div className="flexGrow">
+                <Link to="/linkpage" className="text-indigo-600 hover:underline">Link page</Link>
+            </div>
+            <div className="flexGrow">
+                <Link to="/weddings" className="text-indigo-600 hover:underline">All weddings</Link>
+            </div>
         </section>
     )
 }

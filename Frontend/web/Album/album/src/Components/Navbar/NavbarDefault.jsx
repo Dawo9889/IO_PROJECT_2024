@@ -12,10 +12,10 @@ function NavbarDefault() {
   }, []);
 
   const handleLogout = () => {
-    // Usuń dane z localStorage i zaktualizuj stan
+
     localStorage.removeItem("auth");
     setIsAuthenticated(false);
-    navigate("/"); // Przekierowanie na stronę logowania po wylogowaniu
+    navigate("/login");
   };
   return (
     <div>
@@ -31,26 +31,6 @@ function NavbarDefault() {
                   >
                     CUPID
                   </a>
-
-                  {/* <a
-                    href="/"
-                    className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Team
-                  </a>
-
-                  <a
-                    href="/"
-                    className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Docs
-                  </a>
-                  <a
-                    href="/linkpage"
-                    className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Linkpage
-                  </a> */}
                   {isAuthenticated && (
                     <a
                       href="/admin"
@@ -144,26 +124,6 @@ function NavbarDefault() {
                 >
                   CUPID
                 </a>
-
-                {/* <a
-                  href="/"
-                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Team
-                </a>
-
-                <a
-                  href="/"
-                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Docs
-                </a>
-                <a
-                  href="/linkpage"
-                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Linkpage
-                </a> */}
                 {isAuthenticated && (
                     <a
                       href="/admin"
