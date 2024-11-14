@@ -12,8 +12,8 @@ import Missing from './Components/Navpages/Missing';
 import Unauthorized from './Components/Navpages/Unauthorized';
 import Lounge from './Components/Navpages/Lounge';
 import LinkPage from './Components/Navpages/LinkPage';
-import RequireAuth from './Components/Navpages/RequireAuth'
 import Weddings from "./Components/Weddings/Weddings";
+import PrivateRoute from './Components/AuthMechanizm/PrivateRoute'
 
 function App() {
     return (
@@ -27,10 +27,10 @@ function App() {
   
           {/* we want to protect these routes */}
             <Route path="/" element={<Home />} />
-            <Route path="album" element={<MyAlbum />} />
-            <Route path="admin" element={<Admin />} />
+            <Route path="album" element={<PrivateRoute element={<MyAlbum />} />} />
+            <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
             <Route path="lounge" element={<Lounge />} />
-            <Route path="weddings" element={<Weddings />} />
+            <Route path="weddings" element={<PrivateRoute element={<Weddings />} />} />
   
           {/* catch all */}
           <Route path="*" element={<Missing />} />

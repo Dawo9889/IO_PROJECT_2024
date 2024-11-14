@@ -1,33 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { Transition } from "@headlessui/react";
-
+import { useNavigate } from "react-router-dom";
 function NavbarDefault() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("auth");
+    setIsAuthenticated(storedAuth ? true : false);
+  }, []);
+
+  const handleLogout = () => {
+    // Usuń dane z localStorage i zaktualizuj stan
+    localStorage.removeItem("auth");
+    setIsAuthenticated(false);
+    navigate("/"); // Przekierowanie na stronę logowania po wylogowaniu
+  };
   return (
     <div>
       <nav className="bg-indigo-800 mb-4">
         <div className="max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-              </div>
+            <div className="flex items-stretch ">
               <div className="hidden md:block">
                 <div className="ml-10 flex items-baseline space-x-4">
                   <a
                     href="/"
                     className=" hover:bg-indigo-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    Dashboard
+                    CUPID
                   </a>
 
-                  <a
-                    href="/login"
-                    className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Login
-                  </a>
-
-                  <a
+                  {/* <a
                     href="/"
                     className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
@@ -45,14 +50,32 @@ function NavbarDefault() {
                     className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Linkpage
-                  </a>
+                  </a> */}
+                  {isAuthenticated && (
+                    <a
+                      href="/admin"
+                      className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Admin Panel
+                    </a>
+                  )}
                   <a
-                    href="/weddings"
-                    className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    href={isAuthenticated ? "#" : "/login"}
+                    onClick={isAuthenticated ? handleLogout : null}
+                    className={`${
+                      isAuthenticated ? "text-red-600" : "text-indigo-300"
+                    } hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium`}
                   >
-                    Weddings
+                    {isAuthenticated ? "Logout" : "Login"}
                   </a>
-
+                  {!isAuthenticated && (
+                    <a
+                      href="/register"
+                      className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Register
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -119,60 +142,59 @@ function NavbarDefault() {
                   href="/"
                   className="hover:bg-indigo-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Dashboard
+                  CUPID
                 </a>
 
-                <a
-                  href="/login"
-                  className="text-indigo-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Login
-                </a>
-
-                <a
+                {/* <a
                   href="/"
-                  className="text-indigo-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Team
                 </a>
 
                 <a
                   href="/"
-                  className="text-indigo-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Docs
                 </a>
                 <a
                   href="/linkpage"
-                  className="text-indigo-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  className="text-indigo-300 hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Linkpage
-                </a>
-                <a
-                  href="/weddings"
-                  className="text-indigo-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                >
-                  Weddings
-                </a>
-
+                </a> */}
+                {isAuthenticated && (
+                    <a
+                      href="/admin"
+                      className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Admin Panel
+                    </a>
+                  )}
+                  <a
+                    href={isAuthenticated ? "#" : "/login"}
+                    onClick={isAuthenticated ? handleLogout : null}
+                    className={`${
+                      isAuthenticated ? "text-red-600" : "text-indigo-300"
+                    } hover:bg-indigo-700 hover:text-white block px-3 py-2 rounded-md text-sm font-medium`}
+                  >
+                    {isAuthenticated ? "Logout" : "Login"}
+                  </a>
+                  {!isAuthenticated && (
+                    <a
+                      href="/register"
+                      className="text-indigo-300 hover:bg-indigo-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Register
+                    </a>
+                  )}
               </div>
             </div>
           )}
         </Transition>
       </nav>
 
-      {/* <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        </div>
-      </header> */}
-      {/* <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="px-4 py-6 sm:px-0">
-            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
-          </div>
-        </div>
-      </main> */}
     </div>
   );
 }
