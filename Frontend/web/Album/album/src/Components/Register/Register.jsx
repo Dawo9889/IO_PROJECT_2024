@@ -2,7 +2,6 @@ import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
-// import './Navpages.css'
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 const RESGISTER_URL = 'https://localhost:7017/api/identity/register';
@@ -32,8 +31,6 @@ const Register = () => {
 
     useEffect(() => {
         const result = USER_REGEX.test(user);
-        // console.log(result)
-        // console.log(user)
         setValidName(result)
     }, [user])
 
@@ -72,9 +69,7 @@ const Register = () => {
             // console.log(response.accessToken)
             // console.log(JSON.stringify(response))
             setSuccess(true)
-            //clear input fields
         } catch (err) {
-            // console.log(err)
             if(!err?.response) {
                 setErrMsg('No server response')
             }

@@ -4,7 +4,6 @@ const Profile = () => {
     const { auth, setAuth } = useAuth();
 
     const handleLogout = () => {
-        // Wylogowanie użytkownika
         setAuth({ user: null, token: null });
         localStorage.removeItem('auth');
     };
