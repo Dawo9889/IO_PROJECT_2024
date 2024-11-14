@@ -10,7 +10,7 @@ export default function Weddings() {
         setLoading(true);
         axios.get('https://localhost:7017/api/wedding', {
             headers: {
-                Authorization: `Bearer ${import.meta.env.VITE_APP_API_TOKEN}`
+                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
             .then((response) => {

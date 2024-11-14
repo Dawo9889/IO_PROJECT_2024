@@ -36,7 +36,8 @@ const Login = () => {
                     "password": password
                 }
             );
-            // console.log(response.data.accessToken)
+            localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem('refreshToken', response.data.refreshToken);
             setAuth({user,password})
             setUser('');
             setPassword('');
