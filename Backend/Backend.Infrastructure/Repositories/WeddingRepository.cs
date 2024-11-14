@@ -56,6 +56,14 @@ namespace Backend.Infrastructure.Repositories
         }
 
 
+        public async Task<bool> IsUserOwnerOfWedding(Guid weddingId, string userId)
+        {
+            return await _dbContext.WeddingAdmin
+                .AnyAsync(wa => wa.WeddingId == weddingId && wa.AccountId == userId);
+            
+        }
+
+
         public async Task<List<Wedding>> GetAllWeddings()
         {
             return await _dbContext.Weddings.ToListAsync();
@@ -78,6 +86,7 @@ namespace Backend.Infrastructure.Repositories
 
         public async Task<Wedding> GetDetailsById(Guid id)
         {
+            
             var result = await _dbContext.Weddings
                 .Include(w => w.ImageDatas)
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -130,6 +139,6 @@ namespace Backend.Infrastructure.Repositories
 
         }
 
-        
+      
     }
 }

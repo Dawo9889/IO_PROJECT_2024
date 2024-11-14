@@ -8,17 +8,17 @@ namespace Backend.Application.Services.Wedding
         Task Create(WeddingDTO weddingDTO, string userId);
         Task<List<WeddingDTO>> GetAllWeddings();
 
-        Task<List<WeddingDTO>> GetAllWeddingsByUser(String userID);
+        Task<List<WeddingDTO>> GetAllWeddingsByUser(string userID);
 
-        Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id);
+        Task<WeddingDetailsDTO> GetWeddingDetailsById(Guid id, string userId);
 
-        Task<bool> Delete(Guid id);
+        Task<bool> Delete(Guid id, string userId);
 
-        Task<bool> Update(WeddingDTO newWeddingDTO);
+        Task<bool> Update(WeddingDTO newWeddingDTO, string UserId);
 
-        Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration);
+        Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration, string userId);
 
-        Task<byte[]> GetQrCode(Guid weddingId);
+        Task<byte[]> GetQrCode(Guid weddingId, string userId);
 
     }
 }
