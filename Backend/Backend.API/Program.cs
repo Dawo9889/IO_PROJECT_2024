@@ -45,7 +45,7 @@ var seeder = scope.ServiceProvider.GetRequiredService<DatabaseSeeder>();
 
 //identity
 app.MapGroup("api/identity").MapIdentityApi<User>();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
 
