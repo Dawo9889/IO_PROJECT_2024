@@ -33,7 +33,7 @@ export default function Weddings() {
     return (
         <div className="min-h-screen flex justify-start pl-6"> {/* Kontener główny, który umieszcza całość po lewej stronie */}
             <div className="max-h-max max-w-md p-6 bg-white border border-indigo-400 rounded-lg shadow-lg"> {/* Kontener dla listy ślubów */}
-                <h1 className="text-2xl font-bold text-center mb-6">Wedding List</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">Weddings List</h1>
                 <div className="flex flex-col gap-6">
                     {weddings.map(wedding => (
                         <div key={wedding.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-indigo-200">
