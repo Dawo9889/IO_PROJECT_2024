@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-const API_AUTH_URL = 'https://192.168.4.110:7017/api/identity';
+const API_AUTH_URL = 'http://localhost:5286/api/identity';
 
 export const registerUser = async (email: string, password: string) => {
   try {
@@ -11,6 +11,7 @@ export const registerUser = async (email: string, password: string) => {
                 "password": password
             }
         );
+        console.log('abc')
         console.log(response)
         return(response)
       } catch (err: any) {
@@ -18,11 +19,11 @@ export const registerUser = async (email: string, password: string) => {
     }
   };
 
-export const loginUser = async (username: string, password: string) => {
+export const loginUser = async (email: string, password: string) => {
     try {
       const response = await axios.post(`${API_AUTH_URL}/login`, {
-        username,
-        password,
+        "email": email,
+        "password": password
       });
       return response;
     } catch (error: any) {

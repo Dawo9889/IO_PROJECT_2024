@@ -21,7 +21,7 @@ const SignUp = () => {
   useEffect(() => {
     if (form.password == confirmPassword) setPasswordsMatch(true);
     else setPasswordsMatch(false);
-  }, [confirmPassword])
+  }, [confirmPassword, form.password])
 
   const submit = async () => {
     if (!form.email || !form.password || !confirmPassword){

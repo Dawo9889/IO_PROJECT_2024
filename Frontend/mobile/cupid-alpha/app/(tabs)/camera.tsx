@@ -47,7 +47,11 @@ export default function Camera() {
   const handleTakePicture = async () => {
     if (cameraRef.current) {  // camera reference available
       try {
-        const photo = await cameraRef.current?.takePictureAsync({});
+        const photo = await cameraRef.current?.takePictureAsync({
+          quality: 1,  // Set quality to the highest level
+          base64: true, // Optional: this can allow further processing of the image if needed
+          exif: true    // Optional: enables metadata capture
+        });
       
         if (photo) {
           // Flip the image if the camera is front-facing
