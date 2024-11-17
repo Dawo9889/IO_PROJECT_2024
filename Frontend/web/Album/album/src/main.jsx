@@ -6,6 +6,7 @@ import App from "./App";
 import { AuthProvider } from "./Components/context/AuthProvider";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavbarDefault from './Components/Navbar/NavbarDefault'
+import NavbarUpdate from "./Components/Navbar/navbar-update";
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
@@ -14,7 +15,8 @@ root.render(
     <StrictMode>
     <BrowserRouter>
     <AuthProvider>
-      <NavbarDefault />
+      <NavbarUpdate />
+      {/* <NavbarDefault /> */}
       <Routes>
         <Route path='/*' element={<App />} />
       </Routes>
