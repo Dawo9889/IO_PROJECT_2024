@@ -40,6 +40,16 @@ namespace Backend.API.Controllers
             return weddings;
         }
 
+        [HttpGet("verifyToken")]
+        public async Task<ActionResult<WeddingDTO>> VerifyWeddingToken([FromQuery] Guid token)
+        {
+            var weddingDTO = await _weddingService.ValidateWeddingToken(token);
+            if (weddingDTO == null)
+            {
+                return NotFound();
+            }
+            return weddingDTO;
+        }
 
         [HttpGet("details")]
         public async Task<ActionResult<WeddingDetailsDTO>> GetByID([FromQuery] Guid id)

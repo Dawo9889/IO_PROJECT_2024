@@ -157,6 +157,15 @@ namespace Backend.Application.Services.Wedding
             }
         }
 
-      
+        public async Task<WeddingDTO> ValidateWeddingToken(Guid token)
+        {
+           var wedding = await _weddingRepository.ValidateSessionKeyAsync(token);
+            if(wedding == null)
+            {
+                return null;
+            }
+           var weddingDTO = _mapper.Map<WeddingDTO>(wedding);
+           return weddingDTO;
+        }
     }
 }
