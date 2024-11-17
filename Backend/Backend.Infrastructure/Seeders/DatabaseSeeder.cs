@@ -6,15 +6,15 @@ namespace Backend.Infrastructure.Seeders
 {
     public class DatabaseSeeder
     {
-        //    private readonly ApplicationDbContext _dbContext;
+            private readonly ApplicationDbContext _dbContext;
 
-        //    public DatabaseSeeder(ApplicationDbContext dbContext)
-        //    {
-        //        _dbContext = dbContext;
-        //    }
+            public DatabaseSeeder(ApplicationDbContext dbContext)
+            {
+                _dbContext = dbContext;
+            }
 
-        //    public async Task Seed()
-        //    {
+            public async Task Seed()
+           {
         //        if (await _dbContext.Database.CanConnectAsync())
         //        {
         //            // Check if data is already seeded
@@ -137,7 +137,7 @@ namespace Backend.Infrastructure.Seeders
         //    //    };
 
         //    //    await _dbContext.WeddingAdmin.AddRangeAsync(weddingCEOs);
-        //    //}
+        }
     }
     
 }
