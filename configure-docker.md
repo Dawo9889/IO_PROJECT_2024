@@ -48,7 +48,12 @@ add-migration init
 update-database
 ```
 
-## 1.4 Na zdalnym urządzeniu tam gdzie mamy nasze pliki projektu twrzymy plik docker-compose 
+## 1.4 W pliku .env w katalogu ./Frontend/web/Album/album dodajemy wpis
+```
+VITE_LOCALHOST_IP=adres_IP
+```
+
+## 1.5 Na zdalnym urządzeniu tam gdzie mamy nasze pliki projektu twrzymy plik docker-compose 
 
 ```
 version: "3.8"
