@@ -5,6 +5,7 @@ const OthersLayout = () => {
     <>
       <Stack>
         <Stack.Screen name="about-us" options={{ headerShown: false }} />
+        <Stack.Screen name="join-party" options={{ headerShown: false }} />
       </Stack>
     </>
   )

@@ -2,45 +2,37 @@ import { CameraMode } from "expo-camera";
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 
-import icons from '@/constants/icons'
 import IconButton from "./navigation/IconButton";
 
 interface BottomCamActionsProps{
     handleTakePicture: () => void;
     toggleCameraFacing: () => void;
+    joinParty: () => void;
 }
 
-const BottomCamActions = ({handleTakePicture, toggleCameraFacing}: BottomCamActionsProps) => {
+const BottomCamActions = ({handleTakePicture, toggleCameraFacing, joinParty}: BottomCamActionsProps) => {
   return (
         <View className="flex-row mt-auto w-full h-[90px] items-center">
-          {/* <TouchableOpacity onPress={toggleCameraFacing} className='w-[60px] absolute left-1'>
-            <Image 
-              source={icons.switchcam} 
-              tintColor='#CDCDE0' 
-              className='w-[40px] static m-auto' 
-              resizeMode='contain'/>
-          </TouchableOpacity> */}
 
           <IconButton
-              containerStyle='w-[60px] absolute left-[10px] bottom-[10px]'
+              containerStyle='w-[50px] h-[50px] absolute left-[10px] bottom-[10px]'
               onPress={toggleCameraFacing}
               iconName={'sync-outline'}
-              iconSize={45}
+              iconSize={40}
             />
-          
-          {/* <TouchableOpacity onPress={handleTakePicture} className='absolute left-1/2 transform -translate-x-1/2 w-[100px]'>
-            <Image 
-              source={icons.takeapic} 
-              tintColor='#CDCDE0' 
-              className='w-[60px] static m-auto' 
-              resizeMode='contain'/>
-          </TouchableOpacity> */}
 
           <IconButton
               containerStyle='absolute left-1/2 transform -translate-x-1/2 w-[100px]'
               onPress={handleTakePicture}
               iconName={'ellipse-outline'}
               iconSize={90}
+            />
+
+          <IconButton
+              containerStyle='w-[50px] h-[50px] absolute right-[10px] bottom-[10px]'
+              onPress={joinParty}
+              iconName={'qr-code-outline'}
+              iconSize={40}
             />
 
         </View>
