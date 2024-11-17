@@ -1,15 +1,66 @@
-import { Children, createContext, useState } from "react";
+import { useEffect, createContext, useState } from "react";
+import axios from 'axios'
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
-    const [auth, setAuth] = useState({});
+    const [auth, setAuth] = useState(() => {
+        const storedAuth = localStorage.getItem("auth");
+        if (storedAuth) {
+            const parsedAuth = JSON.parse(storedAuth);
+            const currentTime = Date.now();
+            // console.log(parsedAuth.refreshToken)
+            if (parsedAuth.expiryTime && currentTime < parsedAuth.expiryTime) {
+                return parsedAuth;
+            } else {
+                localStorage.removeItem("auth");
+                return {};
+            }
+        }
+        return {};
+    });
+
+    const refreshAccessToken = async () => {
+        try {
+            const response = await axios.post(import.meta.env.VITE_BASE_URL + "/identity/refresh", {
+                refreshToken: auth.refreshToken
+            });
+            
+            const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
+            const updatedAuth = {
+                ...auth,
+                accessToken: response.data.accessToken,
+                expiryTime: newExpiryTime
+            };
+            setAuth(updatedAuth);
+            localStorage.setItem("auth", JSON.stringify(updatedAuth));
+        } catch (error) {
+            console.error("Error refreshing token:", error);
+            // Wylogowanie użytkownika w przypadku błędu
+            setAuth({});
+            localStorage.removeItem("auth");
+        }
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const currentTime = Date.now();
+            if (auth.expiryTime && currentTime > auth.expiryTime - 60 * 1000) {
+                refreshAccessToken();
+            }
+        }, 60 * 1000); // Sprawdzaj co minutę
+
+        return () => clearInterval(interval);
+    }, [auth]);
+
+    // console.log("Current Auth:", auth);
+    // console.log("Stored Auth in LocalStorage:", localStorage.getItem("auth"));
 
     return (
         <AuthContext.Provider value={{auth, setAuth}}>
             {children}
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthContext;

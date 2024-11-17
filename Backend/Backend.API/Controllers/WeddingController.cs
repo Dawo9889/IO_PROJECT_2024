@@ -5,6 +5,7 @@ using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.API.Controllers
 {
@@ -21,22 +22,44 @@ namespace Backend.API.Controllers
 
 
         //Gets
-
-        [HttpGet]
-        public async Task<List<WeddingDTO>> GetAll()
+        [HttpGet("REMOVE_ME")]
+        public async Task<List<WeddingDTO>> GetAllWeddings()
         {
+            
+
             var weddings = await _weddingService.GetAllWeddings();
             return weddings;
         }
 
+        [HttpGet]
+        public async Task<List<WeddingDTO>> GetAllByUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var weddings = await _weddingService.GetAllWeddingsByUser(userId);
+            return weddings;
+        }
+
+        [HttpGet("verifyToken")]
+        public async Task<ActionResult<WeddingDTO>> VerifyWeddingToken([FromQuery] Guid token)
+        {
+            var weddingDTO = await _weddingService.ValidateWeddingToken(token);
+            if (weddingDTO == null)
+            {
+                return NotFound();
+            }
+            return weddingDTO;
+        }
 
         [HttpGet("details")]
         public async Task<ActionResult<WeddingDetailsDTO>> GetByID([FromQuery] Guid id)
         {
-            var weddingDetailsDto = await _weddingService.GetWeddingDetailsById(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var weddingDetailsDto = await _weddingService.GetWeddingDetailsById(id, userId);
             if(weddingDetailsDto == null)
             {
-                return NotFound();
+                return NotFound("Wedding not found");
             }
             return Ok(weddingDetailsDto);
         }
@@ -47,7 +70,8 @@ namespace Backend.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateWedding(WeddingDTO weddingDTO)
         {
-            await _weddingService.Create(weddingDTO);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _weddingService.Create(weddingDTO, userId);
             return Ok(weddingDTO);
         }
 
@@ -57,14 +81,16 @@ namespace Backend.API.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteWedding([FromQuery] Guid id)
         {
-            var result = await _weddingService.Delete(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var result = await _weddingService.Delete(id, userId);
 
             if (result)
             {
                 return NoContent();
             }
 
-            return NotFound();
+            return NotFound("Wedding not found");
         }
 
         [HttpPut]
@@ -75,7 +101,9 @@ namespace Backend.API.Controllers
                 return BadRequest("Wedding ID is required.");
             }
 
-            var success = await _weddingService.Update(newWeddingDTO);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var success = await _weddingService.Update(newWeddingDTO, userId);
 
             if (!success)
             {
@@ -86,16 +114,30 @@ namespace Backend.API.Controllers
         }
 
         [HttpPut("extend")]
-        public async Task<IActionResult> ExtendSession([FromQuery] Guid Id, [FromQuery] int hours)
+        public async Task<IActionResult> ExtendSession([FromQuery] Guid id, [FromQuery] int hours)
         {
-            var extended = await _weddingService.ExtendSessionKeyExpiration(Id, TimeSpan.FromHours(hours));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var extended = await _weddingService.ExtendSessionKeyExpiration(id, TimeSpan.FromHours(hours), userId);
 
             if (!extended)
             {
-                return NotFound("Wesele nie zostało znalezione");
+                return NotFound("Wedding could not be found");
             }
 
-            return Ok("Czas tokenu został wydłużony");
+            return Ok("Expiration date extended");
+        }
+
+        [HttpGet("token-qr")]
+        public async Task <ActionResult> GetQRCodeForSession([FromQuery] Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var qrCode = await _weddingService.GetQrCode(id, userId);
+            if(qrCode == null)
+            {
+                return NotFound("Something went wrong, token might be expired");
+            }
+            return File(qrCode, "image/png");
         }
     }
 }

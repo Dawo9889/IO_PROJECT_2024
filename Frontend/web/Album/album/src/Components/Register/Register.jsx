@@ -2,7 +2,6 @@ import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
-// import './Navpages.css'
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 const RESGISTER_URL = 'https://localhost:7017/api/identity/register';
@@ -32,15 +31,13 @@ const Register = () => {
 
     useEffect(() => {
         const result = USER_REGEX.test(user);
-        console.log(result)
-        console.log(user)
         setValidName(result)
     }, [user])
 
     useEffect(() => {
         const result = PWD_REGEX.test(pwd);
-        console.log(result)
-        console.log(pwd)
+        // console.log(result)
+        // console.log(pwd)
         setValidPwd(result)
         const match = pwd === matchPwd;
         setValidMatch(match)
@@ -60,7 +57,7 @@ const Register = () => {
             setErrMsg("Invalid entry");
             return;
         }
-        console.log(user,pwd)
+        // console.log(user,pwd)
         try {
             const response = await axios.post(RESGISTER_URL,
                 {
@@ -68,13 +65,11 @@ const Register = () => {
                     "password": pwd
                 }
             );
-            console.log(response.data)
+            // console.log(response.data)
             // console.log(response.accessToken)
-            console.log(JSON.stringify(response))
+            // console.log(JSON.stringify(response))
             setSuccess(true)
-            //clear input fields
         } catch (err) {
-            console.log(err)
             if(!err?.response) {
                 setErrMsg('No server response')
             }
@@ -105,7 +100,7 @@ const Register = () => {
               <h1 className="text-2xl font-bold text-center mb-4">Register</h1>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">Email:</label>
                   <div className="relative">
                     <input 
                       type="text"
@@ -127,12 +122,12 @@ const Register = () => {
                       <FontAwesomeIcon icon={faTimes} />
                     </span>
                   </div>
-                  <p id="uidnote" className={userFocus && user && !validName ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
+                  {/* <p id="uidnote" className={userFocus && user && !validName ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     4 to 24 characters. <br />
                     Must begin with a letter. <br />
                     Letters, numbers, underscores, hyphens allowed.
-                  </p>
+                  </p> */}
                 </div>
       
                 <div>
@@ -158,14 +153,14 @@ const Register = () => {
                     </span>
                   </div>
                   <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} />
+                    {/* <FontAwesomeIcon icon={faInfoCircle} />
                     8 to 24 characters.<br />
                     Must include uppercase and lowercase letters, a number and a special character.<br />
-                    Allowed special characters: <span aria-label="exclamation mark">!</span>
-                    <span aria-label="at symbol">@</span>
+                    Allowed special characters: <span aria-label="exclamation mark">!</span> */}
+                    {/* <span aria-label="at symbol">@</span>
                     <span aria-label="hashtag">#</span>
                     <span aria-label="dollar sign">$</span>
-                    <span aria-label="percent">%</span>
+                    <span aria-label="percent">%</span> */}
                   </p>
                 </div>
       
@@ -191,10 +186,10 @@ const Register = () => {
                       <FontAwesomeIcon icon={faTimes} />
                     </span>
                   </div>
-                  <p id="confirmnote" className={matchFocus && !validMatch ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
+                  {/* <p id="confirmnote" className={matchFocus && !validMatch ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     Must match the first password input field.
-                  </p>
+                  </p> */}
                 </div>
       
                 <button 

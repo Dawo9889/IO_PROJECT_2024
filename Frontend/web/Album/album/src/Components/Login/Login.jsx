@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react"
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-// import './Navpages.css'
 import axios from "axios";
 const LOGIN_URL = 'https://localhost:7017/api/identity/login'
 
@@ -36,11 +35,23 @@ const Login = () => {
                     "password": password
                 }
             );
-            // console.log(response.data.accessToken)
-            setAuth({user,password})
+
+            const expiryTime = Date.now() + response.data.expiresIn * 1000;
+
+            localStorage.setItem("auth", JSON.stringify({
+                user,
+                accessToken: response.data.accessToken,
+                expiresIn: response.data.expiresIn,
+                refreshToken: response.data.refreshToken,
+                expiryTime
+            }));
+
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+            setAuth({ user, accessToken: response.data.accessToken, expiryTime });
             setUser('');
             setPassword('');
             navigate(from, {replace: true});
+            navigate(0)
 
         } catch (err) {
             if(!err?.response){

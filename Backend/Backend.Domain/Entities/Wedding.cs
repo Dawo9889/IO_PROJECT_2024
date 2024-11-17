@@ -30,7 +30,7 @@ namespace Backend.Domain.Entities
         public ICollection<ImageData>? ImageDatas { get; set; }
 
         // Relacja: Jedno wesele ma wielu administratorów
-        public ICollection<WeddingAdmin>? WeddingAdmin { get; set; }
+        public ICollection<WeddingUser>? WeddingUser { get; set; }
 
 
 
