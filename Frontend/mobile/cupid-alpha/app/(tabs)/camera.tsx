@@ -1,27 +1,25 @@
 import { CameraView, CameraType, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState } from 'react';
-import { Alert, Button, Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Image } from 'react-native';
-import { usePermissions } from 'expo-media-library';
 
 import icons from '@/constants/icons'
 import BottomCamActions from '@/components/BottomCamActions';
-import QRtokenControls from '@/components/QRtokenControls';
 import PicturePreview from '@/components/PicturePreview';
 import { FlipType, manipulateAsync } from 'expo-image-manipulator';
+import { router } from 'expo-router';
+import { checkIfTokenValid } from '@/constants/api';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function Camera() {
+
+  const isFocused = useIsFocused();
   const cameraRef = useRef<CameraView>(null);
   const [facing, setFacing] = useState<CameraType>('back');
   const [camPermission, requestCamPermission] = useCameraPermissions();
-  const [libPermission, requestLibPermission] = usePermissions();
-  const [currentToken, setCurrentToken] = useState("");
-  const [QRdetected, setQRdetected] = useState(false);
-  const [tokenValidating, setTokenValidating] = useState(false);
-  const [tokenValid, setTokenValid] = useState(false);
+  const [QRfound, setQRfound] = useState(false);
 
   const [picture, setPicture] = useState<{uri: string} | null>(null);
 
@@ -47,7 +45,11 @@ export default function Camera() {
   const handleTakePicture = async () => {
     if (cameraRef.current) {  // camera reference available
       try {
-        const photo = await cameraRef.current?.takePictureAsync({});
+        const photo = await cameraRef.current?.takePictureAsync({
+          quality: 1,  // Set quality to the highest level
+          base64: true, // Optional: this can allow further processing of the image if needed
+          exif: true    // Optional: enables metadata capture
+        });
       
         if (photo) {
           // Flip the image if the camera is front-facing
@@ -63,48 +65,28 @@ export default function Camera() {
     }
   }
 
-  const handleQRscanned = (scanningResult: BarcodeScanningResult) => {
-    if (scanningResult.data){
-      // TODO: check if scanned token is valid
-
-      if (currentToken !== '')setCurrentToken(scanningResult.data);
-      setQRdetected(true);
-
-      // TODO: if different than used now => prompt change session 
-    }
-  }
-
   if (picture) return <PicturePreview picture={picture} setPicture={setPicture} />;
 
   return (
     <SafeAreaView className="flex-1 bg-black h-full" edges={['left', 'right']}>
       <StatusBar translucent backgroundColor="transparent" style="light" />
+      {isFocused &&
       <View className="flex-1 h-full">
         <CameraView
             ref={cameraRef}
             facing={facing}
             mirror={false}
             style={{ flex: 1 }}
-            barcodeScannerSettings={{
-              barcodeTypes: ['qr']
-            }}
-            onBarcodeScanned={handleQRscanned}>
-
-          {tokenValidating ? null : QRdetected ? (
-            <QRtokenControls
-              isValid={true}
-              changeSession={function (): void {
-            throw new Error('Function not implemented.');
-          } } continueSession={function (): void {
-            throw new Error('Function not implemented.');
-          } } />): null}
+          >
 
           <BottomCamActions
               handleTakePicture={() => handleTakePicture()}
-              toggleCameraFacing={() => toggleCameraFacing()} 
+              toggleCameraFacing={() => toggleCameraFacing()}
+              joinParty={() => router.push('/join-party')}
               /> 
         </CameraView>
       </View>
+    }
     </SafeAreaView>
   );
 }

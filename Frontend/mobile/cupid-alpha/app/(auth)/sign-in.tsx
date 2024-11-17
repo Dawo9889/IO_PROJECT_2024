@@ -6,6 +6,7 @@ import CustomButton from '@/components/CustomButton'
 import { Link, router } from 'expo-router'
 
 import icons from '@/constants/icons'
+import { loginUser } from '@/constants/api'
 
 const SignIn = () => {
 
@@ -24,7 +25,7 @@ const SignIn = () => {
     setIsSubmitting(true);
 
     try{
-      // await signIn(form.email, form.password);
+      await loginUser(form.email, form.password);
 
       router.replace('/home');
     }

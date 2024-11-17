@@ -1,6 +1,18 @@
 import axios, { AxiosError } from "axios";
 
-const API_AUTH_URL = 'https://192.168.4.110:7017/api/identity';
+const API_AUTH_URL = 'http://localhost:5286/api/identity';
+
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const response = await axios.post(`${API_AUTH_URL}/login`, {
+      "email": email,
+      "password": password
+    });
+    return response.data;
+  } catch (error: any) {
+    throw error.response;
+  }
+};
 
 export const registerUser = async (email: string, password: string) => {
   try {
@@ -11,21 +23,23 @@ export const registerUser = async (email: string, password: string) => {
                 "password": password
             }
         );
+        console.log('abc')
         console.log(response)
         return(response)
       } catch (err: any) {
         console.log(err)
     }
-  };
+};
 
-export const loginUser = async (username: string, password: string) => {
-    try {
-      const response = await axios.post(`${API_AUTH_URL}/login`, {
-        username,
-        password,
-      });
-      return response;
-    } catch (error: any) {
-      throw error.response;
-    }
-  };
+
+export const checkIfTokenValid = async (token: string) => {
+
+  return 'Jacek i Placek';
+};
+
+
+export const uploadPicture = async (weddingId: string, photo: BinaryData) => {
+
+};
+
+
