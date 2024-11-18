@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react"
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-const LOGIN_URL = 'https://localhost:7017/api/identity/login'
+const LOGIN_URL = 'https://${import.meta.env.VITE_LOCALHOST_IP}:8080/api/identity/login'
 
 const Login = () => {
     const {setAuth} = useAuth();
