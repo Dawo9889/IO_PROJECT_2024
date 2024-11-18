@@ -101,13 +101,14 @@ namespace Backend.Application.Services.Wedding
             {
                 return false;
             }
+            
 
             var updatedWedding = _mapper.Map(newWeddingDTO, oldWedding);
             var updateSuccess = await _weddingRepository.Update(oldWedding);
             return updateSuccess;
         }
 
-        public async Task<bool> ExtendSessionKeyExpiration(Guid Id, TimeSpan extensionDuration, string userId)
+        public async Task<bool> UpdateSessionKeyExpiration(Guid Id, TimeSpan extensionDuration, string userId)
         {
             if (!await _weddingRepository.IsUserOwnerOfWedding(Id, userId))
             {
@@ -122,8 +123,17 @@ namespace Backend.Application.Services.Wedding
                 return false; 
             }
 
-            // Aktualizacja daty wygaśnięcia klucza sesji
-            wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
+            if (extensionDuration == TimeSpan.Zero)
+            {
+                // InvalidateToken
+                wedding.SessionKeyExpirationDate = new DateTime(1970, 1, 1);
+            }
+            else
+            {
+                // Eztend Token
+                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
+            }
+
             await _weddingRepository.Update(wedding);
 
             return true; 
@@ -167,5 +177,6 @@ namespace Backend.Application.Services.Wedding
            var weddingDTO = _mapper.Map<WeddingDTO>(wedding);
            return weddingDTO;
         }
+
     }
 }
