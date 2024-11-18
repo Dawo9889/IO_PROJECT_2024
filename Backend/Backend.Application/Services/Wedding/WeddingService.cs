@@ -35,11 +35,12 @@ namespace Backend.Application.Services.Wedding
             var result = await _weddingRepository.Create(wedding, userId);
 
 
-
+            
             if (result)
             {
+                var sanitazedName = wedding.Name.Trim().Replace(" ", "_");
                 // Ścieżka do folderu, gdzie mają być przechowywane zdjęcia
-                var weddingFolderPath = Path.Combine(_photosBasePath, weddingDTO.Name + "_" + weddingDTO.EventDate);
+                var weddingFolderPath = Path.Combine(_photosBasePath, sanitazedName + "_" + weddingDTO.EventDate.ToString());
 
                 if (!Directory.Exists(weddingFolderPath))
                 {

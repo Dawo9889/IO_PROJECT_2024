@@ -111,8 +111,8 @@ namespace Backend.API.Controllers
             return Ok(newWeddingDTO); 
         }
 
-        [HttpPut("extend")]
-        public async Task<IActionResult> ExtendSession([FromQuery] Guid id, [FromQuery] int hours)
+        [HttpPut("updateToken")]
+        public async Task<IActionResult> UpdateSession([FromQuery] Guid id, [FromQuery] int hours)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
