@@ -10,7 +10,7 @@ export default function Weddings() {
         const authData = JSON.parse(localStorage.getItem("auth"));
         const accessToken = authData?.accessToken;
         // console.log(authData)
-        axios.get(`http://${import.meta.env.VITE_LOCALHOST_IP}:8080/api/wedding`, {
+        axios.get(`${import.meta.env.VITE_API_URL}/wedding`, {
             headers: {
                  Authorization: `Bearer ${accessToken}`
             }
