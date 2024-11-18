@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-const RESGISTER_URL = 'https://${import.meta.env.VITE_LOCALHOST_IP}:8080/api/identity/register';
+const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
 
 const Register = () => {
     const userRef = useRef();
