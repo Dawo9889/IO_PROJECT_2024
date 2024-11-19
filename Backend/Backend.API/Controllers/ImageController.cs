@@ -4,6 +4,7 @@ using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.API.Controllers
 {
@@ -38,5 +39,21 @@ namespace Backend.API.Controllers
 
             return Ok("Photo saved");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetImagesForWedding([FromQuery] Guid weddingId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var images = await _imageService.GetImagesForWeddingAsync(weddingId, userId);
+            if(images == null)
+            {
+                return Forbid("User does not have access to this wedding.");
+            }
+
+            return Ok(images);
+        }
+
+
     }
 }

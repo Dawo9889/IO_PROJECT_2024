@@ -1,4 +1,5 @@
 ﻿using Backend.Application.DTO.ImageDTO;
+using Backend.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Backend.Application.Services.Images
     {
         Task AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
         Task<bool> IsSessionValid(Guid sessionToken);
+        Task<List<ImageData>> GetImagesForWeddingAsync(Guid weddingId, string userId);
     }
 }

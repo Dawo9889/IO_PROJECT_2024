@@ -27,6 +27,17 @@ namespace Backend.Infrastructure.Repositories
             return result > 0;
         }
 
+        public async Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId)
+        {
+            var imagesDatas = await _dbContext.ImageDatas
+                .Where(image => image.WeddingId == weddingId)
+                .ToListAsync();
 
+            if(imagesDatas == null)
+            {
+                return null;
+            }
+            return imagesDatas;
+        }
     }
 }
