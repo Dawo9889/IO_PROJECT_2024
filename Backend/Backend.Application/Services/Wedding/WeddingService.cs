@@ -38,9 +38,9 @@ namespace Backend.Application.Services.Wedding
             
             if (result)
             {
-                var sanitazedName = wedding.Name.Trim().Replace(" ", "_");
+                
                 // Ścieżka do folderu, gdzie mają być przechowywane zdjęcia
-                var weddingFolderPath = Path.Combine(_photosBasePath, sanitazedName + "_" + weddingDTO.EventDate.ToString());
+                var weddingFolderPath = Path.Combine(_photosBasePath, wedding.Id.ToString());
 
                 if (!Directory.Exists(weddingFolderPath))
                 {
@@ -49,7 +49,7 @@ namespace Backend.Application.Services.Wedding
             }
             else
             {
-                throw new Exception("Blad zapisu");
+                throw new Exception("Error with creating wedding Folder");
             }
         }
 

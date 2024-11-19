@@ -10,6 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
+
 namespace Backend.Application.Services.Images
 {
     public class ImageService : InterfaceImageService
@@ -40,15 +45,19 @@ namespace Backend.Application.Services.Images
                 throw new Exception("Wedding not found or session expired."); // Możesz zmienić to na bardziej odpowiedni wyjątek lub zwrócić wynik
             }
 
+            createImageDTO.Id = Guid.NewGuid();
+
             // Określenie autora zdjęcia
             string author = string.IsNullOrEmpty(createImageDTO.Author) ? "anonymous" : createImageDTO.Author;
 
-            // Wywołanie metody zapisującej plik
-            var filePath = await SaveImageFileAsync(createImageDTO.ImageFile, wedding.Name, wedding.EventDate, author);
+
+
+            var (originalFilePath, thumbnailFilePath) = await SaveImageFileAsync(createImageDTO, wedding.Id, author);
 
             // Mapowanie DTO na encję ImageData
             var imageData = _mapper.Map<ImageData>(createImageDTO);
-            imageData.FilePath = filePath;
+            imageData.FilePath = originalFilePath;
+            imageData.ThumbnailPath = thumbnailFilePath;
             imageData.WeddingId = wedding.Id;
 
             // Dodanie zdjęcia do bazy danych
@@ -63,10 +72,10 @@ namespace Backend.Application.Services.Images
 
             if (wedding == null)
             {
-                return false; 
+                return false;
             }
             return true;
-            //
+
         }
 
 
@@ -77,30 +86,84 @@ namespace Backend.Application.Services.Images
 
 
         // Metoda do zapisywania pliku na dysku
-        public async Task<string> SaveImageFileAsync(IFormFile imageFile, string weddingName, DateOnly eventDate, string author)
+        public async Task<(string originalPath, string thumbnailPath)> SaveImageFileAsync(CreateImageDTO imageDTO, Guid weddingId, string author)
         {
             // Ścieżka folderu, gdzie będą przechowywane zdjęcia
-            var sanitazedName = weddingName.Trim().Replace(" ", "_"); 
-            var weddingFolderPath = Path.Combine(_photosBasePath, sanitazedName + "_" + eventDate.ToString("yyyy-MM-dd"));
+            var weddingFolderPath = Path.Combine(_photosBasePath, weddingId.ToString());
+            var imageFolderPath = Path.Combine(weddingFolderPath, imageDTO.Id.ToString());
 
-            if (!Directory.Exists(weddingFolderPath))
+            if (!Directory.Exists(imageFolderPath))
             {
-                Directory.CreateDirectory(weddingFolderPath);
+                Directory.CreateDirectory(imageFolderPath);
             }
 
-            var fileName = author + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss") + Path.GetExtension(imageFile.FileName);
-
-            var filePath = Path.Combine(weddingFolderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            var originalPhotoFolder = Path.Combine(imageFolderPath, "originalPhoto");
+            var thumbnailFolder = Path.Combine(imageFolderPath, "thumbnail");
+            if (!Directory.Exists(originalPhotoFolder))
             {
-                await imageFile.CopyToAsync(stream);
+                Directory.CreateDirectory(originalPhotoFolder);
             }
 
-            return filePath;
+            if (!Directory.Exists(thumbnailFolder))
+            {
+                Directory.CreateDirectory(thumbnailFolder);
+            }
+
+            //save original files
+            var imageExtension = Path.GetExtension(imageDTO.ImageFile.FileName);
+
+            var originalFileName = imageDTO.Id.ToString() + imageExtension;
+            var originalFilePath = Path.Combine(originalPhotoFolder, originalFileName);
+
+            using (var stream = new FileStream(originalFilePath, FileMode.Create))
+            {
+                await imageDTO.ImageFile.CopyToAsync(stream);
+            }
+
+            //save thumbnail files
+            var thumbnailFilePath = Path.Combine(thumbnailFolder, originalFileName);
+
+            using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400)) // Rozmiar miniaturki
+            {
+                using (var fileStream = new FileStream(thumbnailFilePath, FileMode.Create))
+                {
+                    await thumbnailStream.CopyToAsync(fileStream);
+                }
+            }
+
+            return (originalFilePath, thumbnailFilePath);
         }
+
+
+        public async Task<Stream> GenerateThumbnailAsync(CreateImageDTO imageDTO, int width, int height)
+        {
+ 
+            using var originalStream = imageDTO.ImageFile.OpenReadStream();
+
+  
+            var thumbnailStream = new MemoryStream();
+
+
+            using (var image = await Image.LoadAsync(originalStream))
+            {
+                image.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Size = new Size(width, height),
+                    Mode = ResizeMode.Max 
+                }));
+
+
+                var encoder = new JpegEncoder { Quality = 75 }; 
+                await image.SaveAsync(thumbnailStream, encoder);
+            }
+
+
+            thumbnailStream.Position = 0;
+
+            return thumbnailStream;
+        }
+
+
+
     }
-
-
-
 }
