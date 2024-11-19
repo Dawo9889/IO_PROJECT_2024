@@ -9,9 +9,10 @@ import IconButton from './navigation/IconButton'
 interface PicturePreviewProps {
     picture: any,
     setPicture: any,
+    savePicture: any
 }
 
-const PicturePreview = ({picture, setPicture}: PicturePreviewProps) => {
+const PicturePreview = ({picture, setPicture, savePicture}: PicturePreviewProps) => {
 
   return (
     <SafeAreaView className="flex-1 h-full" edges={['left', 'right']}>
@@ -23,7 +24,7 @@ const PicturePreview = ({picture, setPicture}: PicturePreviewProps) => {
                   onPress={() => setPicture('')} iconSize={50} iconName={'close-outline'}
               />
           <IconButton containerStyle={'absolute bottom-[15px] right-[15px] w-[50px] h-[50px]'}
-                  onPress={() => {}} iconSize={50} iconName={'checkmark-done-outline'}
+                  onPress={() => savePicture()} iconSize={50} iconName={'checkmark-done-outline'}
               />
 
           {/* Top right controls */}
