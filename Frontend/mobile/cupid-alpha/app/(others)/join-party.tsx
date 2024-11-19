@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Button, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'react-native'
-import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
+import { useNavigation, useRouter, useLocalSearchParams, router } from "expo-router";
 import { StatusBar } from 'expo-status-bar'
 
 import icons from '@/constants/icons'
@@ -11,6 +11,7 @@ import { checkIfTokenValid } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
 import CustomButton from '@/components/CustomButton';
 import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
+import IconButton from '@/components/navigation/IconButton';
 
 
 const JoinParty = () => {
@@ -76,15 +77,17 @@ const JoinParty = () => {
       }
 
     return (
-        <SafeAreaView className='bg-primarygray h-full'>  
+        <SafeAreaView className='bg-primarygray h-full'> 
+        <StatusBar translucent={true} />
         <ScrollView contentContainerStyle={{
             height: '100%'
         }}>
             <View className='w-full items-center min-h-[85vh] px-4'>
             <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-6' resizeMode='contain' tintColor='#fff' />
-              <View className="absolute top-[150px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
+              <Text className='absolute top-[130px] text-3xl text-center font-bbold text-white'>Scan party token</Text>
+              <View className="absolute top-[170px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
                 <CameraView
-                style={{ flex: 1 }}
+                style={[{ flex: 1 }, {transform: [{ scale: 3}]}]}
                 facing='back'
                 onBarcodeScanned={scanned ? undefined : handleQRScanned}
                 barcodeScannerSettings={{
@@ -93,7 +96,7 @@ const JoinParty = () => {
                 />
               </View>
               {scanned &&
-              <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[400px] w-[200px] m-[10px]'} textStyles={''} isLoading={false} />
+              <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[420px] w-[200px] m-[10px]'} textStyles={''} isLoading={false} />
               }
               <View className='absolute top-[500px] w-full h-full'>
               {sameAsOld &&
@@ -115,8 +118,13 @@ const JoinParty = () => {
               }
               </View>
             </View>     
+            <IconButton
+                containerStyle={'absolute bottom-2 right-2'}
+                onPress={() => {router.replace('/camera')}}
+                iconName={'arrow-back-outline'}
+                iconSize={50}
+              />
         </ScrollView>
-        <StatusBar translucent={true} />
         </SafeAreaView>
     )
 }
