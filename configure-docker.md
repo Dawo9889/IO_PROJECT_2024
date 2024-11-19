@@ -68,16 +68,21 @@ services:
       - /IO-PROJ-DATA/database/log:/var/opt/mssql/log
       - /IO-PROJ-DATA/database/secrets:/var/opt/mssql/secrets
    ports:
-   - 1433:1433
+    - 1433:1433
   backend:
     build: ./Backend
+    environment:
+     - DATABASE_IP=192.168.100.200
     ports:
       - 8080:8080
     volumes:
       - /IO-PROJ-DATA/backend/zdjecia:/app/zdjecia
     restart: always
   frontend:
-    build: ./frontend-web
+    build:
+     context: ./frontend-web
+     args:
+      DOCKER_ENV_FRONT_URL: "192.168.100.200"
     ports:
       - 3001:3000
     restart: always
