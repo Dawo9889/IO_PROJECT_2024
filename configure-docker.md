@@ -62,7 +62,7 @@ services:
    image: 'mcr.microsoft.com/mssql/server:2022-latest'
    environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Zaq12wsx
+      - MSSQL_SA_PASSWORD={your_strong_password}
    volumes:
       - /IO-PROJ-DATA/database/data:/var/opt/mssql/data
       - /IO-PROJ-DATA/database/log:/var/opt/mssql/log
@@ -72,7 +72,7 @@ services:
   backend:
     build: ./Backend
     environment:
-     - DATABASE_IP=192.168.100.200
+     - DATABASE_IP={your_local_ip}
     ports:
       - 8080:8080
     volumes:
@@ -82,7 +82,7 @@ services:
     build:
      context: ./frontend-web
      args:
-      DOCKER_ENV_FRONT_URL: "192.168.100.200"
+      DOCKER_ENV_FRONT_URL: "{your_local_ip}"
     ports:
       - 3001:3000
     restart: always
