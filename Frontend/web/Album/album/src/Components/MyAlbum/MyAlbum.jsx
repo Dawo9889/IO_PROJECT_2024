@@ -484,7 +484,7 @@ function MyAlbum() {
 
     //główny "html"
     return (
-        <div style={{ backgroundColor: "LightCyan", minHeight: "100vh", padding: "20px" }}>
+        <div style={{ backgroundColor: "#CEE5F2", minHeight: "100vh", padding: "20px" }}>
             {!isStaticView ? ( // Jeśli dynamiczny widok
                 <div style={{ display: "flex" }}>
                     <div className="upload-box-container">
