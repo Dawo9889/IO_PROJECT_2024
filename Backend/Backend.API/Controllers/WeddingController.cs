@@ -62,9 +62,9 @@ namespace Backend.API.Controllers
                 return NotFound("Wedding not found");
             }
             return Ok(weddingDetailsDto);
+
         }
-
-
+    
         //Posts
 
         [HttpPost]
@@ -74,8 +74,6 @@ namespace Backend.API.Controllers
             await _weddingService.Create(weddingDTO, userId);
             return Ok(weddingDTO);
         }
-
-
 
         //Delete
         [HttpDelete]
@@ -113,12 +111,12 @@ namespace Backend.API.Controllers
             return Ok(newWeddingDTO); 
         }
 
-        [HttpPut("extend")]
-        public async Task<IActionResult> ExtendSession([FromQuery] Guid id, [FromQuery] int hours)
+        [HttpPut("updateToken")]
+        public async Task<IActionResult> UpdateSession([FromQuery] Guid id, [FromQuery] int hours)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var extended = await _weddingService.ExtendSessionKeyExpiration(id, TimeSpan.FromHours(hours), userId);
+            var extended = await _weddingService.UpdateSessionKeyExpiration(id, TimeSpan.FromHours(hours), userId);
 
             if (!extended)
             {

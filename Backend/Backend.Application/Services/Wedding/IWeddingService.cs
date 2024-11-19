@@ -16,11 +16,14 @@ namespace Backend.Application.Services.Wedding
 
         Task<bool> Update(WeddingDTO newWeddingDTO, string UserId);
 
-        Task<bool> ExtendSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration, string userId);
+        Task<bool> UpdateSessionKeyExpiration(Guid weddingId, TimeSpan extensionDuration, string userId);
 
         Task<byte[]> GetQrCode(Guid weddingId, string userId);
 
         Task<WeddingDTO> ValidateWeddingToken(Guid token);
+
+
+
 
     }
 }

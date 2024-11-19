@@ -80,14 +80,15 @@ namespace Backend.Application.Services.Images
         public async Task<string> SaveImageFileAsync(IFormFile imageFile, string weddingName, DateOnly eventDate, string author)
         {
             // Ścieżka folderu, gdzie będą przechowywane zdjęcia
-            var weddingFolderPath = Path.Combine(_photosBasePath, weddingName + "_" + eventDate);
+            var sanitazedName = weddingName.Trim().Replace(" ", "_"); 
+            var weddingFolderPath = Path.Combine(_photosBasePath, sanitazedName + "_" + eventDate.ToString("yyyy-MM-dd"));
 
             if (!Directory.Exists(weddingFolderPath))
             {
                 Directory.CreateDirectory(weddingFolderPath);
             }
 
-            var fileName = author + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + Path.GetExtension(imageFile.FileName);
+            var fileName = author + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss") + Path.GetExtension(imageFile.FileName);
 
             var filePath = Path.Combine(weddingFolderPath, fileName);
 
