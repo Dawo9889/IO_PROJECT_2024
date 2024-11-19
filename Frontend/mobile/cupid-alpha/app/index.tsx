@@ -16,12 +16,12 @@ const App = () => {
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
         <Image source={icons.cupidlogo} className='h-[200px]' resizeMode='contain' tintColor='#fff' />
           <View className='relative mt-5'>
-            <Text className='text-3xl text-primary text-center font-bold'>
+            <Text className='text-3xl text-primary text-center font-bbold'>
               Welcome to{' '}
             <Text className='text-secondary-200'>Cupid</Text>!
             </Text>
           </View>
-          <Text className='text-lg text-primary font-pregular mt-7 text-center'>
+          <Text className='text-lg text-primary font-bregular mt-7 text-center'>
           Capture and create a unique, real-time event album right from your device! Snap photos directly in the app, add tags, text, or stickers in order to personalize each memory. The collaborative album builds throughout the event, capturing every special moment.
           </Text>
           <CustomButton

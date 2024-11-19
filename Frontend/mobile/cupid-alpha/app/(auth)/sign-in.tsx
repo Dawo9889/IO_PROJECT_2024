@@ -25,9 +25,11 @@ const SignIn = () => {
     setIsSubmitting(true);
 
     try{
-      await loginUser(form.email, form.password);
-
-      router.replace('/home');
+      const response = await loginUser(form.email, form.password)
+      if (response == 200) {
+        Alert.alert('You are logged in!')
+        router.replace('/home');
+      } 
     }
     catch (error: any) {
       Alert.alert('Error', error.message)
