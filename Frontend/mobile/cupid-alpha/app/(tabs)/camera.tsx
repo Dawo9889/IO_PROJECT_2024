@@ -1,7 +1,7 @@
 import { CameraView, CameraType, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState } from 'react';
-import { Button, Text, View } from 'react-native';
+import { Alert, Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import icons from '@/constants/icons'
@@ -9,8 +9,9 @@ import BottomCamActions from '@/components/BottomCamActions';
 import PicturePreview from '@/components/PicturePreview';
 import { FlipType, manipulateAsync } from 'expo-image-manipulator';
 import { router } from 'expo-router';
-import { checkIfTokenValid } from '@/constants/api';
+import { checkIfTokenValid, uploadPicture } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
+import { storePartyToken } from '@/constants/storage';
 
 
 export default function Camera() {
@@ -48,7 +49,6 @@ export default function Camera() {
         const photo = await cameraRef.current?.takePictureAsync({
           quality: 1,  // Set quality to the highest level
           base64: true, // Optional: this can allow further processing of the image if needed
-          exif: true    // Optional: enables metadata capture
         });
       
         if (photo) {
@@ -65,7 +65,19 @@ export default function Camera() {
     }
   }
 
-  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} />;
+  const savePicture = async () => {
+    await storePartyToken('c2c75eee-024f-4ce6-9ec4-f44119919253');
+    try{
+      const result = await uploadPicture(picture);
+      setPicture(null);
+      if (result) Alert.alert('Picture uploaded!');
+    } catch (error: any) {
+      Alert.alert('Error', 'Your party token might be expired.');
+    }
+    
+  }
+
+  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} savePicture={savePicture} />;
 
   return (
     <SafeAreaView className="flex-1 bg-black h-full" edges={['left', 'right']}>

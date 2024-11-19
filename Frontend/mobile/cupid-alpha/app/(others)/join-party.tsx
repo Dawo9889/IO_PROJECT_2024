@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Button } from 'react-native'
+import { View, Text, ScrollView, Button, Alert } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'react-native'
@@ -9,16 +9,17 @@ import icons from '@/constants/icons'
 import { BarcodeScanningResult, Camera, CameraView, useCameraPermissions } from 'expo-camera';
 import { checkIfTokenValid } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
+import CustomButton from '@/components/CustomButton';
+import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
 
 
 const JoinParty = () => {
-
-    const isFocused = useIsFocused();
-    const cameraRef = useRef<CameraView>(null);
-    const [currentToken, setCurrentToken] = useState();
     const [camPermission, requestCamPermission] = useCameraPermissions();
-    const [zoom, setZoom] = useState(0.8);
-    const [QRfound, setQRfound] = useState(false);
+    const [scanned, setScanned] = useState(false);
+    const [sameAsOld, setSameAsOld] = useState(false);
+    const [tokenInvalid, setTokenInvalid] = useState(false);
+    const [newPartyName, setNewPartyName] = useState('');
+    const [newToken, setNewToken] = useState('');
 
     if (!camPermission) {
         // Camera permissions are still loading.
@@ -35,16 +36,43 @@ const JoinParty = () => {
         );
       }
 
+      const handleQRScanned = async (scanningResult: BarcodeScanningResult) => {
 
-    const handleQRscanned = async (scanningResult: BarcodeScanningResult) => {
-        if (scanningResult.data && !QRfound){
-          setQRfound(true);
-          // TODO: check if scanned token is valid
-          const partyTitle = await checkIfTokenValid(scanningResult.data);
-          console.log(scanningResult.data);
+        // DELETE THIS AFTER TOKEN VALIDATION
+        await storePartyToken('c2c75eee-024f-4ce6-9ec4-f44119919253');
 
+        setScanned(true);
+        const newToken = scanningResult.data;
+        const currentPartyToken = await getPartyToken();
+        if (currentPartyToken == newToken) setSameAsOld(true);
+        else {
+          const newValid = await checkIfTokenValid(newToken);
+          if (newValid) setNewPartyName(newValid);
+          else {
+            setTokenInvalid(true);
+          }
+            
         }
-        setQRfound(false);
+        
+      };
+
+      const joinNewParty = async () => {
+        try {
+          await storePartyToken(newToken);
+          Alert.alert('Welcome', `Welcome to ${newPartyName}`);
+        } catch (error: any) {
+          Alert.alert('Error', error);
+        }
+        
+        
+      }
+
+      const resetScanner = () => {
+        setScanned(false);
+        setTokenInvalid(false);
+        setSameAsOld(false);
+        setNewPartyName('');
+        setNewToken('');
       }
 
     return (
@@ -54,21 +82,38 @@ const JoinParty = () => {
         }}>
             <View className='w-full items-center min-h-[85vh] px-4'>
             <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-6' resizeMode='contain' tintColor='#fff' />
-            {isFocused &&
-            <View className="absolute top-[150px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
+              <View className="absolute top-[150px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
                 <CameraView
-                ref={cameraRef}
-                facing="back"
-                mirror={false}
-                style={{ flex: 1 }} // Make the camera fill the container
-                zoom={zoom}
+                style={{ flex: 1 }}
+                facing='back'
+                onBarcodeScanned={scanned ? undefined : handleQRScanned}
                 barcodeScannerSettings={{
                     barcodeTypes: ['qr'],
                 }}
-                onBarcodeScanned={handleQRscanned}
                 />
-            </View>
-            }   
+              </View>
+              {scanned &&
+              <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[400px] w-[200px] m-[10px]'} textStyles={''} isLoading={false} />
+              }
+              <View className='absolute top-[500px] w-full h-full'>
+              {sameAsOld &&
+                <View className='m-5 border-2 border-white rounded-lg p-[10px]'>
+                  <Text className='text-3xl text-center font-bbold text-white'>You already joined this party!</Text>
+                </View>
+              }
+              {tokenInvalid &&
+                <View className='m-5 border-2 border-white rounded-lg p-[10px]'>
+                  <Text className='text-3xl text-center font-bbold text-white'>Token is invalid or might be expired. Try again.</Text>
+                </View>
+              }
+              {newPartyName &&
+                <View className='m-5 border-2 border-white rounded-lg p-[10px]'>
+                  <Text className='text-3xl text-center font-bbold text-white'>{newPartyName}</Text>
+                  <Text className='text-xl text-white font-bbold'>Do you really want to join this party?</Text>
+                  <CustomButton title={'Join'} handlePress={joinNewParty} containerStyles={'mt-5'} textStyles={''} isLoading={false} />
+                </View>
+              }
+              </View>
             </View>     
         </ScrollView>
         <StatusBar translucent={true} />

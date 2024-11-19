@@ -35,12 +35,11 @@ const SignUp = () => {
     setIsSubmitting(true);
 
     try{
-      const response = await registerUser(form.email, form.password)
-      if (response) {
+      const responseStatus = await registerUser(form.email, form.password)
+      if (responseStatus == 200) {
         Alert.alert('Account created successfully! You can now log in.')
         router.replace('/sign-in');
       }
-      Alert.alert('Error', 'An error occured.')
     }
     catch (error: any) {
       Alert.alert('Error', error.message)
