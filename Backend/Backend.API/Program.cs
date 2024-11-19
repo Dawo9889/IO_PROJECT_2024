@@ -6,6 +6,21 @@ using Backend.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var env = Environment.GetEnvironmentVariable("DATABASE_IP");
+
+var dockerConnection = builder.Configuration["ConnectionStrings:DockerConnection"];
+
+if (!string.IsNullOrEmpty(env))
+{
+    dockerConnection = dockerConnection.Replace("{DATABASE_IP}", env);
+}
+else
+{
+    dockerConnection = dockerConnection.Replace("{DATABASE_IP}", "localhost");
+}
+
+builder.Configuration["ConnectionStrings:DockerConnection"] = dockerConnection;
+
 // Add services to the container.
 builder.AddPresentation();
 builder.Services.AddInfrastructure(builder.Configuration);
