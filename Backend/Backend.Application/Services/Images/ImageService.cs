@@ -14,6 +14,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using Microsoft.Extensions.Configuration;
 
 namespace Backend.Application.Services.Images
 {
@@ -24,8 +25,9 @@ namespace Backend.Application.Services.Images
         private readonly IWeddingRepository _weddingRepository;
         private readonly IMapper _mapper;
         private readonly string _photosBasePath;
+        private readonly string _baseBackendUrl;
 
-        public ImageService(InterfaceImageRepository imageRepository, IWeddingRepository weddingRepository, IMapper mapper)
+        public ImageService(InterfaceImageRepository imageRepository, IWeddingRepository weddingRepository, IMapper mapper, IConfiguration configuration)
         {
             _imageRepository = imageRepository;
             _weddingRepository = weddingRepository;
@@ -33,6 +35,8 @@ namespace Backend.Application.Services.Images
 
             _photosBasePath = Environment.GetEnvironmentVariable("PHOTOS_PATH")
                           ?? Path.Combine(Directory.GetCurrentDirectory(), "zdjecia");
+
+            _baseBackendUrl = configuration["BaseBackendUrl"] ?? "https://localhost:7017";
         }
 
 
@@ -65,7 +69,6 @@ namespace Backend.Application.Services.Images
         }
 
 
-
         public async Task<bool> IsSessionValid(Guid sessionToken)
         {
             var wedding = await _weddingRepository.ValidateSessionKeyAsync(sessionToken);
@@ -77,13 +80,6 @@ namespace Backend.Application.Services.Images
             return true;
 
         }
-
-
-
-
-
-
-
 
         // Metoda do zapisywania pliku na dysku
         public async Task<(string originalPath, string thumbnailPath)> SaveImageFileAsync(CreateImageDTO imageDTO, Guid weddingId, string author)
@@ -163,7 +159,29 @@ namespace Backend.Application.Services.Images
             return thumbnailStream;
         }
 
+        public async Task<List<ImageData>> GetImagesForWeddingAsync(Guid weddingId, string userId)
+        {
+            if (!await _weddingRepository.IsUserOwnerOfWedding(weddingId, userId))
+            {
+                return null;
+            }
 
+            var imageDatas = await _imageRepository.GetAllImagesFromWeddingAsync(weddingId);
+            foreach (var image in imageDatas)
+            {
+                image.FilePath = ConvertFilePathToUrl(image.FilePath);
+                image.ThumbnailPath = ConvertFilePathToUrl(image.ThumbnailPath);
+            }
+
+            return imageDatas;
+        }
+        private string ConvertFilePathToUrl(string filePath)
+        {
+            
+            
+            var relativePath = Path.GetRelativePath(_photosBasePath, filePath).Replace("\\", "/"); 
+            return $"{_baseBackendUrl}/image/{relativePath}";
+        }
 
     }
 }
