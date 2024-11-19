@@ -12,6 +12,7 @@ import { router } from 'expo-router';
 import { checkIfTokenValid, uploadPicture } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
 import { storePartyToken } from '@/constants/storage';
+import IconButton from '@/components/navigation/IconButton';
 
 
 export default function Camera() {
@@ -19,6 +20,7 @@ export default function Camera() {
   const isFocused = useIsFocused();
   const cameraRef = useRef<CameraView>(null);
   const [facing, setFacing] = useState<CameraType>('back');
+  const [torchEnabled, setTorchEnabled] = useState(false);
   const [camPermission, requestCamPermission] = useCameraPermissions();
   const [QRfound, setQRfound] = useState(false);
 
@@ -88,13 +90,21 @@ export default function Camera() {
             ref={cameraRef}
             facing={facing}
             mirror={false}
+            enableTorch={torchEnabled}
             style={{ flex: 1 }}
           >
+          <IconButton
+              containerStyle={'absolute top-10 left-2'}
+              onPress={() => setTorchEnabled(t => !t)}
+              iconName={torchEnabled ? 'flash-off-outline' : 'flash-outline'}
+              iconSize={40}
+              disabled={facing === 'front'}
+            />
 
           <BottomCamActions
               handleTakePicture={() => handleTakePicture()}
               toggleCameraFacing={() => toggleCameraFacing()}
-              joinParty={() => router.push('/join-party')}
+              joinParty={() => router.replace('/join-party')}
               /> 
         </CameraView>
       </View>
