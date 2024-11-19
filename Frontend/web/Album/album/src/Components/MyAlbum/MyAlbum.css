@@ -1,182 +1,9 @@
-/* Stylizacja albumu */
-.album-web {
-    background: rgb(255, 251, 251);
-    text-align: center;
+/* Główne style aplikacji */
+.app-container {
+    min-height: 100vh;
+    padding: 20px;
 }
 
-/* Stylizacja każdej strony albumu */
-.page {
-    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
-    padding: 20px 20px 40px; /* Ustawienie paddingu dla większej przestrzeni na stopkę */
-    max-width: 100%;
-    overflow: hidden; /* Zapobiega wyjściu strony poza kontener */
-    box-sizing: border-box;
-    background-color: whitesmoke;
-}
-
-/* Stylizacja nagłówka strony */
-.page-header {
-    font-size: 1.2em;
-    margin: 10px 0;
-    z-index: 1;
-    position: relative; /* Zapewnienie, że nagłówek będzie na wierzchu */
-}
-
-/* Kontener dla obrazów na stronie */
-.page .image-container {
-    display: flex;
-    flex-direction: column; /* Ustawienie zdjęć w kolumnie */
-    gap: 10px; /* Odstęp między zdjęciami */
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px; /* Odstęp od nagłówka */
-    height: calc(100% - 80px); /* Dopasowanie wysokości kontenera do wysokości strony (uwzględniając padding i numer strony) */
-}
-
-/* Stylizacja numeru strony na dole */
-.page-number {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 18px;
-    color: white;
-    padding: 5px;
-    z-index: 10;
-}
-
-/* Stylizacja dla okładki */
-.cover {
-    background-color: rgb(251, 225, 139);
-    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
-}
-
-/* Pola do przeciągania zdjęć */
-.drop-zone {
-    width: 100%;
-    height: 100%; /* Zwiększona wysokość pola do przeciągania */
-    border: 2px dashed gray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden; /* Ukrywa wszystko, co wyjdzie poza obszar kontenera */
-}
-
-    .drop-zone img {
-        width: 100%; /* Szerokość zdjęcia wypełnia 100% kontenera */
-        height: 100%; /* Wysokość zdjęcia wypełnia 100% kontenera */
-        object-fit: fill;
-    }
-
-    .drop-zone span {
-        color: gray;
-        text-align: center;
-        position: absolute;
-    }
-
-    /* Usuwanie obwodu po przeciągnięciu zdjęcia */
-    .drop-zone:has(img) {
-        text-indent: -9999px; /* Ukrywa tekst po dodaniu zdjęcia */
-    }
-
-
-/* Pole do wyboru zdjęcia */
-.upload-box {
-    width: 150px;
-    height: 200px;
-    border: 2px dashed gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    position: relative;
-}
-
-/* Stylizacja tekstu w polu wyboru zdjęcia */
-.upload-text {
-    color: gray;
-    text-align: center;
-    pointer-events: none;
-}
-
-/* Ukrywanie inputu dla wyboru pliku */
-.upload-box input[type="file"] {
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    cursor: pointer;
-}
-
-/* Stylizacja przycisków i pól formularza */
-.btn,
-.form-control {
-    padding: 0;
-    border: 0;
-    border-radius: 0;
-    color: inherit;
-    appearance: none;
-    font-size: 1em;
-    line-height: 1.2;
-    padding: 0.5em var(--padding-x);
-    border-width: 2px;
-    border-style: solid;
-}
-
-.btn {
-    background-color: aquamarine;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    --padding-x: 1.2em;
-    border-color: transparent;
-}
-
-.form-control {
-    --padding-x: 0.5em;
-}
-
-/* Centrowanie tekstu w polach input */
-input {
-    text-align: center;
-}
-
-/* Kontener dla formularza */
-.formContainer {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
-/* Stylizacja numeru strony na dole */
-.page-number {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    color: gray;
-}
-
-/* Kontener dla pól wyboru zdjęć po prawej stronie */
-.right-upload-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Stylizacja dla drugiego obrazu na stronie */
-.page-image-bottom {
-    width: 80%;
-    height: auto;
-    margin-top: 10px;
-}
-
-/* Kontener dla pól wyboru zdjęcia w kolumnie */
 .upload-box-container {
     display: flex;
     flex-direction: column;
@@ -184,19 +11,174 @@ input {
     margin-right: 20px;
 }
 
-/* Stylizacja dla wyboru strony */
-.page-select {
+.flipbook-container {
+    flex: 1;
+}
+
+/* Formularze i kontrolki */
+.form-container,
+.page-controls {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.formContainer {
+    display: flex;
+    justify-content: center; /* Wyśrodkowanie przycisków */
+    align-items: center; /* Wyrównanie przycisków w pionie */
+    gap: 5px; /* Odstęp między przyciskami */
     margin-top: 20px;
+}
+
+.page-select {
+    width: 120px;
     text-align: center;
 }
 
     .page-select label {
         font-size: 0.9em;
         color: gray;
-        margin-bottom: 5px;
-        display: block;
     }
 
+/* Przyciski i pola formularza */
+.btn,
+.form-control {
+    padding: 0.5em var(--padding-x);
+    border: 0;
+    border-radius: 0;
+    font-size: 1em;
+    line-height: 1.2;
+    --padding-x: 1.2em;
+}
+
+.btn {
+    padding: 0.5em 1.2em; /* Zmienione na bardziej proporcjonalne wypełnienie */
+    background-color: #F1ABB9;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #17255A;
+    border-radius: 5px; /* Dodanie zaokrąglenia przycisków */
+    font-size: 1em;
+    margin: 0; /* Usunięcie marginesów */
+}
+
+input {
+    text-align: center;
+}
+
+/* Album */
+.album-web {
+    background: rgb(255, 251, 251);
+    text-align: center;
+}
+
+.page {
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+    padding: 20px 20px 40px;
+    background-color: whitesmoke;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.page-header {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.page .image-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    height: calc(100% - 80px);
+}
+
+.page-number,
+.staticPageNumber {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 18px;
+    color: white;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+
+/* Okładki */
+.coverStart, .coverBack,
+.staticCoverStart, .staticCoverBack {
+    background-color: #ffed90;
+    width: 500px;
+    height: 750px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.coverStart, .coverBack {
+    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
+}
+.staticCoverStart, .staticCoverBack {
+    margin: 20px auto;
+}
+    /* Przeciąganie zdjęć */
+    .drop-zone {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+    .drop-zone img,
+    .staticPage img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .drop-zone span {
+        color: gray;
+        position: absolute;
+    }
+
+    .drop-zone:has(img) {
+        text-indent: -9999px;
+    }
+
+.upload-box {
+    width: 150px;
+    height: 200px;
+    border: 2px dashed gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+    .upload-box input[type="file"] {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+/* Galeria */
 .image-gallery {
     margin-top: 20px;
 }
@@ -204,7 +186,6 @@ input {
     .image-gallery h3 {
         text-align: center;
         color: gray;
-        margin-bottom: 10px;
     }
 
 .gallery-container {
@@ -216,12 +197,58 @@ input {
 
 .gallery-image {
     width: 100px;
-    height: auto;
+    transition: border-color 0.3s;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: border-color 0.3s;
 }
 
     .gallery-image:hover {
         border-color: aquamarine;
+    }
+
+/* Widok statyczny */
+.static-view {
+    text-align: center;
+}
+
+.static-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.staticPage {
+    width: 500px;
+    height: 750px;
+    margin: 20px auto;
+    background-color: whitesmoke;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+}
+
+    .staticPage img {
+        width: 100%; /* Ustaw pełną szerokość */
+        height: 100%; /* Ustaw pełną wysokość */
+        object-fit: fill; /* Dopasowanie obrazu tak jak w dynamicznym */
+        border-radius: 5px; /* Zaokrąglone rogi */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    }
+
+    .staticPage .staticDropZone {
+        display: flex; /* Wyśrodkowanie obrazu */
+        justify-content: center;
+        align-items: center;
+        width: 90%; /* Dopasowanie do dynamicznego wyglądu */
+        height: calc(100% - 20px); /* Zachowanie proporcji */
+        margin: 10px auto; /* Wycentrowanie w kontenerze */
+        overflow: hidden; /* Ukrywanie nadmiaru */
+        position: relative; /* Ustawienie dla obrazu */
     }
