@@ -16,7 +16,7 @@ import CreateWedding from "./Components/Weddings/createWedding";
 function App() {
     return (
      <Routes>
-         <Route path="/" element={<div className="h-screen flex flex-col bg-project-dark"><Layout /></div>}>
+         <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark"><Layout /></div>}>
           {/* public routes */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />

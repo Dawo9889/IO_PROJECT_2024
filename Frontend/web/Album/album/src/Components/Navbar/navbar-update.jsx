@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
   { name: 'Team', href: '/team', current: false },
-  { name: 'Projects', href: '#', current: false }
+  // { name: 'Projects', href: '#', current: false }
 ]
 
 function classNames(...classes) {

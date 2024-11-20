@@ -102,7 +102,7 @@ const Login = () => {
         <div className="flex justify-center">
             <button 
                 type="submit" 
-                className="w-full py-2 bg-project-blue text-white font-semibold rounded-lg hover:bg-project-blue-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons "
+                className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons "
             >
                 Sign In
             </button>
@@ -111,7 +111,7 @@ const Login = () => {
     <p className="mt-4 text-center text-sm text-white">
         Need an Account? <br />
         <span className="line">
-            <a href="/register" className="text-project-yellow hover:underline">Sign Up</a>
+            <a href="/register" className="text-project-blue hover:underline">Sign Up</a>
         </span>
     </p>
 </section>
