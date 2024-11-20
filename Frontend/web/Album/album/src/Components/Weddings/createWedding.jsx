@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
+import './style.css'
 
 const CreateWedding = () => {
 
@@ -7,6 +9,15 @@ const CreateWedding = () => {
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState('');
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    var curr = new Date();
+    curr.setDate(curr.getDate() + 3);
+    var inputDate = curr.toISOString().substring(0,10)
+
+    const openDatePicker = () => {
+      document.getElementById("date").showPicker(); // Wywołanie natywnego pickera
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,32 +47,52 @@ const CreateWedding = () => {
         }
     }
 
+    useEffect(() => {
+      if (name.trim() && date.trim() && description.trim()) {
+        setIsFormValid(true);
+        console.log('y')
+      } else {
+        setIsFormValid(false);
+        console.log('n')
+      }
+    }, [name, date, description]);
+
+    useEffect(() => {
+      // Pobieramy dzisiejszą datę w formacie yyyy-mm-dd
+      const today = new Date();
+      const formattedDate = today.toISOString().split('T')[0]; // Format: yyyy-mm-dd
+      setDate(formattedDate);
+    }, []);
+
   return (
-<div className='grid grid-cols-1 md:grid-cols-3  gap-4'>
+<div className='grid grid-cols-1 md:grid-cols-3 gap-4 p-4'>
 <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
-<a className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
-href='/admin'>
-<span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-    Back
-</span>
+
+<a 
+  className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4" 
+  href="/admin"
+>
+  <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
 </a>
+
+
   </div>
-<div className="order-2 md:order-2 w-full max-w-md mx-auto">
-<h1 className="text-2xl font-bold text-center mb-4">Create Wedding</h1>
-<form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
+<div className="order-2 md:order-2 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-4">
+<h1 className="text-2xl text-white font-bold text-center mb-4">Create Wedding</h1>
+<form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 " autocomplete="off">
   <div className="relative z-0 w-full mb-5 group">
   <input 
-    type="text" 
-    name="name" 
-    id="name" 
-    className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-    placeholder=" "
-    onChange={(e) => setName(e.target.value)}
-    value={name} 
-    required 
-  />
+        type="text" 
+        name="name" 
+        id="name" 
+        className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer"
+        placeholder=" "
+        onChange={(e) => setName(e.target.value)}
+        value={name} 
+        required 
+      />
   <label 
-    className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+    className="peer-focus:font-medium absolute text-sm text-project-blue duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-project-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
     Name
   </label>
 </div>
@@ -70,15 +101,18 @@ href='/admin'>
     type="date" 
     name="date" 
     id="date" 
-    className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
     onChange={(e) => setDate(e.target.value)}
-    value={date} 
-    placeholder=" " 
+    value={date}
     required 
+  />
+  <CalendarIcon 
+  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" 
+  onClick={openDatePicker}
   />
   <label 
     htmlFor="date"
-    className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+    className="peer-focus:font-medium absolute text-sm text-project-blue duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-project-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
     Date
   </label>
 </div>
@@ -87,46 +121,40 @@ href='/admin'>
     type="text" 
     name="floating_text" 
     id="floating_text" 
-    className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+    className="block py-2.5 px-0 w-full text-sm text-project-blue bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
     onChange={(e) => setDescription(e.target.value)}
     value={description} 
     placeholder=" " 
     required 
   />
   <label 
-    className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+    className="peer-focus:font-medium absolute text-sm text-project-blue duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-project-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
     Description
   </label>
 </div>
-    {/* <div className="grid md:grid-cols-2 md:gap-6">
-        <div className="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_first_name" id="floating_first_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-            <label for="floating_first_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First name</label>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_last_name" id="floating_last_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-            <label for="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Last name</label>
-        </div>
-    </div>
-    <div className="grid md:grid-cols-2 md:gap-6">
-        <div className="relative z-0 w-full mb-5 group">
-            <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" name="floating_phone" id="floating_phone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-            <label for="floating_phone" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Phone number (123-456-7890)</label>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_company" id="floating_company" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-            <label for="floating_company" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Company (Ex. Google)</label>
-        </div>
-    </div> */}
-    {message && <p className="m-4 text-center text-sm text-indigo-500">{message}</p>}
-            <button
-                type="submit"
-                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
-            >
-                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                Submit
-                </span>
-    </button>
+    {message && <p className="m-4 text-center text-sm text-project-yellow">{message}</p>}
+    {isFormValid ? (
+  <button
+      type="submit"
+      className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
+                 border-project-yellow bg-project-yellow text-dark group focus:outline-none focus:ring-2 
+                focus:ring-project-yellow"
+    >   <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
+    Submit
+  </span>
+</button>
+) : (
+  <button
+      type="submit"
+      className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
+                 border-project-yellow bg-project-dark text-white group focus:outline-none focus:ring-2 
+                focus:ring-project-yellow"
+    >   <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
+    Submit
+  </span>
+</button>
+)}
+
 </form>
 </div>
 <div className="order-3 md:order-3 w-full max-w-md"></div>

@@ -86,21 +86,21 @@ const Register = () => {
     return (
         <>
           { success ? (
-            <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-              <h1 className="text-2xl font-bold text-center mb-4">Success!</h1>
+            <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
+              <h1 className="text-2xl text-white font-bold text-center mb-4">Success!</h1>
               <p className="text-center">
-                <a href="/login" className="text-indigo-600 hover:underline">Sign In</a>
+                <a href="/login" className="text-project-blue hover:underline">Sign In</a>
               </p>
             </section>
           ) : (
-            <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-2xl">
               <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm" : "offscreen"} aria-live="assertive">
                 {errMsg}
               </p>
-              <h1 className="text-2xl font-bold text-center mb-4">Register</h1>
+              <h1 className="text-2xl text-white font-bold text-center mb-4">Register</h1>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="username" className="block text-sm font-medium text-gray-700">Email:</label>
+                  <label htmlFor="username" className="block text-sm font-medium text-white">Email:</label>
                   <div className="relative">
                     <input 
                       type="text"
@@ -113,7 +113,7 @@ const Register = () => {
                       aria-describedby="uidnote"
                       onFocus={() => setUserFocus(true)}
                       onBlur={() => setUserFocus(false)}
-                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
                     />
                     <span className={validName ? "absolute right-2 top-2 text-green-500" : "hidden"}>
                       <FontAwesomeIcon icon={faCheck} />
@@ -131,7 +131,7 @@ const Register = () => {
                 </div>
       
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+                  <label htmlFor="password" className="block text-sm font-medium text-white">Password:</label>
                   <div className="relative">
                     <input
                       type="password"
@@ -143,7 +143,7 @@ const Register = () => {
                       aria-describedby="pwdnote"
                       onFocus={() => setPwdFocus(true)}
                       onBlur={() => setPwdFocus(false)}
-                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
                     />
                     <span className={validPwd ? "absolute right-2 top-2 text-green-500" : "hidden"}>
                       <FontAwesomeIcon icon={faCheck} />
@@ -156,8 +156,8 @@ const Register = () => {
                     {/* <FontAwesomeIcon icon={faInfoCircle} />
                     8 to 24 characters.<br />
                     Must include uppercase and lowercase letters, a number and a special character.<br />
-                    Allowed special characters: <span aria-label="exclamation mark">!</span> */}
-                    {/* <span aria-label="at symbol">@</span>
+                    Allowed special characters: <span aria-label="exclamation mark">!</span>
+                    <span aria-label="at symbol">@</span>
                     <span aria-label="hashtag">#</span>
                     <span aria-label="dollar sign">$</span>
                     <span aria-label="percent">%</span> */}
@@ -165,7 +165,7 @@ const Register = () => {
                 </div>
       
                 <div>
-                  <label htmlFor="confirm_pwd" className="block text-sm font-medium text-gray-700">Confirm Password:</label>
+                  <label htmlFor="confirm_pwd" className="block text-sm font-medium text-white">Confirm Password:</label>
                   <div className="relative">
                     <input
                       type="password"
@@ -177,7 +177,7 @@ const Register = () => {
                       aria-describedby="confirmnote"
                       onFocus={() => setMatchFocus(true)}
                       onBlur={() => setMatchFocus(false)}
-                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
                     />
                     <span className={validMatch && matchPwd ? "absolute right-2 top-2 text-green-500" : "hidden"}>
                       <FontAwesomeIcon icon={faCheck} />
@@ -194,16 +194,16 @@ const Register = () => {
       
                 <button 
                   disabled={!validName || !validPwd || !validMatch}
-                  className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-yellow-buttons"
                 >
                   Sign Up
                 </button>
               </form>
       
-              <p className="mt-4 text-center text-sm text-gray-600">
+              <p className="mt-4 text-center text-sm text-white">
                 Already registered?<br />
                 <span className="line">
-                  <a href="/login" className="text-indigo-600 hover:underline">Sign In</a>
+                  <a href="/login" className="text-project-blue hover:underline">Sign In</a>
                 </span>
               </p>
             </section>
