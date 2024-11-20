@@ -112,8 +112,8 @@ namespace Backend.Application.Services.Images
             //save original files
             var imageExtension = Path.GetExtension(imageDTO.ImageFile.FileName);
 
-            var originalFileName = imageDTO.Id.ToString() + imageExtension;
-            var originalFilePath = Path.Combine(originalPhotoFolder, originalFileName);
+            var originalPhotoName = "originalPhoto" + imageExtension;
+            var originalFilePath = Path.Combine(originalPhotoFolder, originalPhotoName);
 
             using (var stream = new FileStream(originalFilePath, FileMode.Create))
             {
@@ -121,7 +121,7 @@ namespace Backend.Application.Services.Images
             }
 
             //save thumbnail files
-            var thumbnailFilePath = Path.Combine(thumbnailFolder, originalFileName);
+            var thumbnailFilePath = Path.Combine(thumbnailFolder, "thumbnail" + imageExtension);
 
             using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400)) // Rozmiar miniaturki
             {
