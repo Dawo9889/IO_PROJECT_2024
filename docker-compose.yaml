@@ -1,16 +1,16 @@
 version: "3.8"
 services:
+
   database:
    image: 'mcr.microsoft.com/mssql/server:2022-latest'
    environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Zaq12wsx
    volumes:
-      - /IO-PROJ-DATA/database/data:/var/opt/mssql/data
-      - /IO-PROJ-DATA/database/log:/var/opt/mssql/log
-      - /IO-PROJ-DATA/database/secrets:/var/opt/mssql/secrets
+      - /IO-PROJ-DATA/database/:/var/opt/mssql/
    ports:
     - 1433:1433
+
   backend:
     build: ./Backend
     environment:
@@ -20,6 +20,9 @@ services:
     volumes:
       - /IO-PROJ-DATA/backend/zdjecia:/app/zdjecia
     restart: always
+    depends_on:
+      - database
+
   frontend:
     build:
      context: ./Frontend/web/Album/album/
