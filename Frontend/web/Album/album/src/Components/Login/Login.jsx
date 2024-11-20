@@ -71,12 +71,12 @@ const Login = () => {
     }
 
   return (
-    <section className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
     <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm" : "offscreen"} aria-live="assertive">{errMsg}</p>
-    <h1 className="text-2xl font-bold text-center mb-4">Sign In</h1>
+    <h1 className="text-2xl text-white font-bold text-center mb-4">Sign In</h1>
     <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username:</label>
+            <label htmlFor="username" className="block text-sm font-medium text-white">Email:</label>
             <input 
                 type="text" 
                 id="username"
@@ -85,33 +85,33 @@ const Login = () => {
                 onChange={(e) => setUser(e.target.value)}
                 value={user}
                 required
-                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
             />
         </div>
         <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password:</label>
+            <label htmlFor="password" className="block text-sm font-medium text-white">Password:</label>
             <input 
                 type="password" 
                 id="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 required
-                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
             />
         </div>
         <div className="flex justify-center">
             <button 
                 type="submit" 
-                className="w-full py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full py-2 bg-project-blue text-white font-semibold rounded-lg hover:bg-project-blue-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons "
             >
                 Sign In
             </button>
         </div>
     </form>
-    <p className="mt-4 text-center text-sm text-gray-600">
+    <p className="mt-4 text-center text-sm text-white">
         Need an Account? <br />
         <span className="line">
-            <a href="/register" className="text-indigo-600 hover:underline">Sign Up</a>
+            <a href="/register" className="text-project-yellow hover:underline">Sign Up</a>
         </span>
     </p>
 </section>

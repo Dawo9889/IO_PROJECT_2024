@@ -16,7 +16,7 @@ import CreateWedding from "./Components/Weddings/createWedding";
 function App() {
     return (
      <Routes>
-         <Route path="/" element={<Layout />}>
+         <Route path="/" element={<div className="h-screen flex flex-col bg-project-dark"><Layout /></div>}>
           {/* public routes */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
@@ -25,7 +25,7 @@ function App() {
           <Route path="unauthorized" element={<Unauthorized />} />
   
           {/* we want to protect these routes */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<div className="p-4"><Home /></div>} />
             <Route path="album" element={<PrivateRoute element={<MyAlbum />} />} />
             <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
             <Route path="weddings" element={<PrivateRoute element={<Weddings />} />} />
