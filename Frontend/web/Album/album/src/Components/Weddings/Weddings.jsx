@@ -13,13 +13,14 @@ const Weddings = () => {
       >
       <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
       </a> <br /> <br />
-    <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-      
-
-      <WeddingList setSelectedWedding={setSelectedWedding} />
-
-      <WeddingDetails wedding={selectedWedding} />
-    </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 min-h-screen bg-project-dark">
+  <div className="min-h-[100px] bg-project-dark">
+    <WeddingList setSelectedWedding={setSelectedWedding} />
+  </div>
+  <div className="md:col-span-2 bg-project-dark">
+    <WeddingDetails wedding={selectedWedding} />
+  </div>
+</div>
     </>
   );
 };

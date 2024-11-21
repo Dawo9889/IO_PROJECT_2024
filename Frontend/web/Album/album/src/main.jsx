@@ -18,7 +18,7 @@ root.render(
       <NavbarUpdate />
       {/* <NavbarDefault /> */}
       <Routes>
-        <Route path='/*' element={<div className="h-full bg-project-dark"><App /></div>} />
+        <Route path='/*' element={<div className=" bg-project-dark"><App /></div>} />
       </Routes>
     </AuthProvider>
     </BrowserRouter>

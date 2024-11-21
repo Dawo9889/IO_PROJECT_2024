@@ -35,7 +35,7 @@ const WeddingDetails = ({ wedding }) => {
   }, [wedding]);
 
   return (
-    <div className="max-h-[400px] md:max-h-[500px] lg:max-h-[600px] md:col-span-2 p-8 bg-project-dark-bg rounded-lg shadow-lg mt-6">
+    <div className="h-[200px] lg:min-h-[600px] p-8 bg-project-dark-bg rounded-lg shadow-lg mt-6">
       {loading ? (
         <div className="flex items-center justify-center h-full">
           <svg
