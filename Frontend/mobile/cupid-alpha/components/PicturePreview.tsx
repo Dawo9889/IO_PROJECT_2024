@@ -29,10 +29,10 @@ const PicturePreview = ({picture, setPicture, savePicture}: PicturePreviewProps)
 
           {/* Top right controls */}
           <View className='w-[40px] h-[250px] absolute top-[40px] right-[15px]'>
-            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'crop-outline'} iconSize={40} />
-            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'text-outline'} iconSize={40} />
-            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'color-wand-outline'} iconSize={40} />
-            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'pencil-outline'} iconSize={40} />
+            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'crop-outline'} iconSize={40} disabled={true} />
+            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'text-outline'} iconSize={40} disabled={true} />
+            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'color-wand-outline'} iconSize={40} disabled={true} />
+            <IconButton containerStyle={'m-auto'} onPress={() => {}} iconName={'pencil-outline'} iconSize={40} disabled={true} />
           </View>
 
     </SafeAreaView>

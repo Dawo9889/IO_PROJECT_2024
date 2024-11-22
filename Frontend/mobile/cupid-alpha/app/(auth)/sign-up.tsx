@@ -10,23 +10,41 @@ import icons from '@/constants/icons'
 
 const SignUp = () => {
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   useEffect(() => {
     if (form.password == confirmPassword) setPasswordsMatch(true);
-    else setPasswordsMatch(false);
+    else if (confirmPassword) setPasswordsMatch(false);
   }, [confirmPassword, form.password])
+
+  useEffect(() => {
+    const result = PWD_REGEX.test(form.password);
+    setPasswordValid(result);
+  }, [form.password])
+
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(form.email);
+    setEmailValid(result);
+  }, [form.email])
 
   const submit = async () => {
     if (!form.email || !form.password || !confirmPassword){
       Alert.alert('Error', 'Please fill in all the fields');
       return
+    }
+    else if (emailValid) {
+
     }
     else if (!passwordsMatch){
       Alert.alert('Error', 'Passwords do not match');
@@ -66,6 +84,7 @@ const SignUp = () => {
                 handleChangeText={(e: string) => setForm({ ...form, email: e })}
                 otherStyles="mt-7"
                 keyboardType="email-address" placeholder=''
+                inputValid={emailValid}
               />
 
             <FormField
@@ -74,6 +93,7 @@ const SignUp = () => {
                 isPassword={true}
                 handleChangeText={(e: string) => setForm({ ...form, password: e })}
                 otherStyles="mt-5" placeholder='' keyboardType='default'
+                inputValid={passwordValid}
               />
 
             <FormField
@@ -82,13 +102,14 @@ const SignUp = () => {
                 isPassword={true}
                 handleChangeText={(e: string) => setConfirmPassword(p => e)}
                 otherStyles="mt-5" placeholder='' keyboardType='default'
+                inputValid={passwordsMatch && confirmPassword != ''}
               />
             <Text className='xs text-gray-100'>{passwordsMatch ? '' : `Passwords don't match`}</Text>
 
             <CustomButton 
               title="Sign up"
               handlePress={submit}
-              containerStyles='mt-7' textStyles={''} isLoading={isSubmitting}            />
+              containerStyles='mt-7' textStyles={''} disabled={isSubmitting || !(emailValid && passwordValid && passwordsMatch) } />
 
             <View className='justif-center pt-5 flex-row gap-2'>
               <Text className='text-lg text-gray-100 font-pregular'>

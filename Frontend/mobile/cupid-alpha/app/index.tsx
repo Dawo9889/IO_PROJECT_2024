@@ -27,12 +27,12 @@ const App = () => {
           <CustomButton
             title="Log in/Sign up"
             handlePress={() => router.push('/sign-in')}
-            containerStyles="w-full mt-7" textStyles={''} isLoading={false}
+            containerStyles="w-full mt-7" textStyles={''}
             />
           <CustomButton
             title='Continue as guest'
             handlePress={() => router.push('/home')}
-            containerStyles='w-full mt-3' textStyles='' isLoading={false}
+            containerStyles='w-full mt-3' textStyles=''
             />
             <Text className='mt-8 text-primary'>By continuing, you agree to <Text className='text-tertiary'>Terms of use</Text></Text>
         </View>     

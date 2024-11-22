@@ -96,7 +96,7 @@ const JoinParty = () => {
                 />
               </View>
               {scanned &&
-              <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[420px] w-[200px] m-[10px]'} textStyles={''} isLoading={false} />
+              <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[420px] w-[200px] m-[10px]'} textStyles={''} />
               }
               <View className='absolute top-[500px] w-full h-full'>
               {sameAsOld &&
@@ -113,7 +113,7 @@ const JoinParty = () => {
                 <View className='m-5 border-2 border-white rounded-lg p-[10px]'>
                   <Text className='text-3xl text-center font-bbold text-white'>{newPartyName}</Text>
                   <Text className='text-xl text-white font-bbold'>Do you really want to join this party?</Text>
-                  <CustomButton title={'Join'} handlePress={joinNewParty} containerStyles={'mt-5'} textStyles={''} isLoading={false} />
+                  <CustomButton title={'Join'} handlePress={joinNewParty} containerStyles={'mt-5'} textStyles={''} />
                 </View>
               }
               </View>

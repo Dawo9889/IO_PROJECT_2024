@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 export const storePartyToken = async (token: string) => {
     try {
@@ -73,5 +74,30 @@ export const removeNickname = async () => {
         await AsyncStorage.removeItem('Nickname');
     } catch (error) {
         console.error('Failed to remove Nickname: ', error);
+    }
+};
+
+export const storeLoggedUsername = async (loggedUsername: string) => {
+    try {
+        await AsyncStorage.setItem('LoggedUsername', loggedUsername);
+    } catch (error) {
+        console.error('Failed to store LoggedUsername: ', error);
+    }
+};
+
+export const getLoggedUsername = async () => {
+    try {
+        const loggedUsername = await AsyncStorage.getItem('LoggedUsername');
+        return loggedUsername;
+    } catch (error) {
+        return null;
+    }
+};
+
+export const removeLoggedUsername = async () => {
+    try {
+        await AsyncStorage.removeItem('LoggedUsername');
+    } catch (error) {
+        console.error('Failed to remove LoggedUsername: ', error);
     }
 };

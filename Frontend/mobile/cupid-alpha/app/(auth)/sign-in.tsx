@@ -1,7 +1,7 @@
 import { View, Text, Image, ScrollView, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormField from '@/components/FormField'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CustomButton from '@/components/CustomButton'
 import { Link, router } from 'expo-router'
 
@@ -10,6 +10,9 @@ import { loginUser } from '@/constants/api'
 
 const SignIn = () => {
 
+  const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [emailValid, setEmailValid] = useState(false);
+
   const [form, setForm] = useState({
     email: '',
     password: ''
@@ -17,6 +20,10 @@ const SignIn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(form.email);
+    setEmailValid(result);
+  }, [form.email])
 
   const submit = async () => {
     if (!form.email || !form.password){
@@ -55,19 +62,19 @@ const SignIn = () => {
               isPassword={false}
               handleChangeText={(e: string) => setForm({ ...form, email: e })}
               otherStyles="mt-7"
-              placeholder='' keyboardType='default'          />
+              placeholder='' keyboardType='default' inputValid={emailValid && form.email != ''}          />
               
             <FormField
               title="Password"
               value={form.password}
               isPassword={true}
               handleChangeText={(e: string) => setForm({ ...form, password: e })}
-              otherStyles="mt-5" placeholder='' keyboardType='default'       />
+              otherStyles="mt-5" placeholder='' keyboardType='default' inputValid={null}      />
 
             <CustomButton 
               title="Sign in"
               handlePress={submit}
-              containerStyles='mt-7' textStyles={''} isLoading={isSubmitting}            />
+              containerStyles='mt-7' textStyles={''} disabled={isSubmitting || (!emailValid && form.password !== '')}            />
 
             <View className='justif-center pt-5 flex-row gap-2'>
               <Text className='text-lg text-gray-100 font-pregular'>

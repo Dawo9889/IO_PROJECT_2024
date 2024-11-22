@@ -1,30 +1,8 @@
 import { Tabs } from 'expo-router';
 import { View, Image, Text } from 'react-native';
 import { icons } from '@/constants'
-
-
-interface TabIcon{
-  icon: number,
-  color: string,
-  name: string,
-  focused: boolean
-}
-
-const TabIcon = ({icon, color, name, focused}: TabIcon) => {
-    return(
-    <View className="items-center justify-center gap-1 w-[80px] mt-[25px]">
-      <Image
-      source={icon}
-      resizeMode='contain'
-      className={`${focused ? 'w-10 h-10' : 'w-6 h-6'}`}
-      tintColor={color}
-      />
-      <Text className={`${focused ? 'font-bbold' : 'font-bregular'} text-s`} style={{color: color}}>
-        {name}
-      </Text>
-    </View>
-  )
-}
+import { Ionicons } from '@expo/vector-icons';
+import TabIcon from '@/components/navigation/TabIcon';
 
 
 export default function TabLayout() {
@@ -39,7 +17,7 @@ export default function TabLayout() {
             backgroundColor: '#20211A',       // primarygray
             borderTopWidth: 1,
             borderTopColor: '#CDCDE0',        // is it too intense?
-            height: 70
+            height: 60
           }
         }}
       >
@@ -50,9 +28,8 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
               <TabIcon
-                icon={icons.home}
+                icon='home-outline'
                 color={color}
-                name={"Home"}
                 focused={focused}
                 />
             )
@@ -65,9 +42,8 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
               <TabIcon 
-                icon={icons.camera}
+                icon='camera-outline'
                 color={color}
-                name={"Camera"}
                 focused={focused}
                 />
             )
@@ -80,9 +56,8 @@ export default function TabLayout() {
             headerShown: false,
             tabBarIcon: ({color, focused}) => (
               <TabIcon 
-                icon={icons.profile}
+                icon='person-circle-outline'
                 color={color}
-                name={"Profile"}
                 focused={focused}
                 />
             )

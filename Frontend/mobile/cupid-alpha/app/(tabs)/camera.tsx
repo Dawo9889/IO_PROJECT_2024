@@ -1,6 +1,6 @@
 import { CameraView, CameraType, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
 import { StatusBar } from 'expo-status-bar';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,8 +11,9 @@ import { FlipType, manipulateAsync } from 'expo-image-manipulator';
 import { router } from 'expo-router';
 import { checkIfTokenValid, uploadPicture } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
-import { storePartyToken } from '@/constants/storage';
+import { getPartyToken, storePartyToken } from '@/constants/storage';
 import IconButton from '@/components/navigation/IconButton';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Camera() {
@@ -22,9 +23,32 @@ export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [camPermission, requestCamPermission] = useCameraPermissions();
-  const [QRfound, setQRfound] = useState(false);
-
   const [picture, setPicture] = useState<{uri: string} | null>(null);
+  const [tokenValid, setTokenValid] = useState(false);
+
+  // Check party token status
+  useEffect(() => {
+    const checkPartyTokenStatus = async () => {
+      try {
+        const partyToken = await getPartyToken();
+        if (partyToken) {
+          // Check if token is still valid
+          const checkValid = await checkIfTokenValid(partyToken);
+          if (checkValid) {
+            setTokenValid(true);
+          } else {
+            Alert.alert('Your party token is expired. Please scan new party QR.')
+            setTokenValid(false);
+          }
+          return;
+        }
+        setTokenValid(false);
+      } catch (error) {
+        console.error('Error checking token status:', error);
+      }
+    };
+    checkPartyTokenStatus();
+  }, []);
 
   if (!camPermission) {
     // Camera permissions are still loading.
@@ -101,11 +125,41 @@ export default function Camera() {
               disabled={facing === 'front'}
             />
 
-          <BottomCamActions
+          {/* <BottomCamActions
               handleTakePicture={() => handleTakePicture()}
               toggleCameraFacing={() => toggleCameraFacing()}
               joinParty={() => router.replace('/join-party')}
-              /> 
+              />  */}
+
+          <View className="flex-row mt-auto w-full h-[90px] items-center">
+
+          <IconButton
+              containerStyle='w-[50px] h-[50px] absolute left-[10px] bottom-[10px]'
+              onPress={toggleCameraFacing}
+              iconName={'sync-outline'}
+              iconSize={40}
+            />
+
+          {tokenValid ?
+          <IconButton
+              containerStyle='absolute left-1/2 transform -translate-x-1/2 w-[100px]'
+              onPress={handleTakePicture}
+              iconName={'ellipse-outline'}
+              iconSize={90}
+            /> :
+          <View className='flex-row absolute bottom-[20px] left-1/2 transform -translate-x-1/2 w-[230px]'>
+          <Text className='text-white text-3xl font-bbold mr-[20px] ml-[40px]'>JOIN PARTY</Text>
+          <Ionicons name='arrow-forward-outline' color='white' size={30}/>
+          </View>
+          }
+          <IconButton
+              containerStyle='w-[50px] h-[50px] absolute right-[10px] bottom-[10px]'
+              onPress={() => router.replace('/join-party')}
+              iconName={'qr-code-outline'}
+              iconSize={40}
+            />
+
+</View>
         </CameraView>
       </View>
     }

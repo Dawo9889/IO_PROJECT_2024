@@ -57,7 +57,7 @@ const Home = () => {
           <CustomButton
             title="Create CUPID account"
             handlePress={() => router.push('/sign-up')}
-            containerStyles="w-full mt-7" textStyles={''} isLoading={false}
+            containerStyles="w-full mt-7" textStyles={''}
             />
         </View>     
       </ScrollView>

@@ -1,8 +1,9 @@
 import axios, { AxiosError } from "axios";
-import { getAccessToken, getNickname, getPartyToken, storeAccessToken } from "./storage";
+import { getAccessToken, getNickname, getPartyToken, storeAccessToken, storeLoggedUsername } from "./storage";
 
 const API_AUTH_URL = 'https://api.cupid.pics/api/identity';
 const API_IMAGE_URL = 'https://api.cupid.pics/api/image/upload';
+const API_PARTY_URL = 'https://api.cupid.pics/api/wedding'
 
 
 
@@ -15,9 +16,10 @@ export const loginUser = async (email: string, password: string) => {
       { email, password },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    // console.log('Login successful:', response.data);
-    // console.log(response.status);
+    console.log('Login successful:', response.data);
+    console.log(response.data.accessToken);
     await storeAccessToken(response.data.accessToken);
+    await storeLoggedUsername(email.toLowerCase());
     return response.status;
   } catch (error: any) {
     throw error.response;
@@ -33,13 +35,13 @@ export const registerUser = async (email: string, password: string) => {
       { email, password },
       { headers: { 'Content-Type': 'application/json' } }
     );
-    console.log('Registration successful:', response.data);
-    console.log(response.status)
+    // console.log('Registration successful:', response.data);
+    // console.log(response.status)
     return response.status;
   } catch (err: any) {
     if (err.response) {
       const errorData = err.response.data;
-      console.error('Server Error:', errorData);
+      // console.error('Server Error:', errorData);
 
     // Handle invalid email
     if (errorData.errors && errorData.errors.InvalidEmail) {
@@ -82,6 +84,9 @@ export const registerUser = async (email: string, password: string) => {
 
 
 export const checkIfTokenValid = async (token: string) => {
+
+
+  
   // return '';
   return 'Jacek i Placek';
 };
@@ -108,10 +113,27 @@ export const uploadPicture = async (photo: any) => {
     return response;
   } catch (error: any) {
     console.log('Error Details:', error);
-    console.log('Error Response:', error.response); // Check if it's undefined
-    console.log('Error Request:', error.request);  // This might give you clues
+    console.log('Error Response:', error.response);
+    console.log('Error Request:', error.request);
     throw error.response || error;
 }
 };
 
 
+export const getUserParties = async () => {
+    const accessToken = await getAccessToken();
+    console.log('Fetching parties')
+    try {
+      const response = await axios.get(`${API_PARTY_URL}`, {
+        headers: {
+             Authorization: `Bearer ${accessToken}`
+          }
+        });
+        return response.data;
+      } catch(error: any) {
+          throw error.response;
+        }
+
+    
+    
+}

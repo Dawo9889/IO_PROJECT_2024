@@ -1,12 +1,22 @@
-import { View, Text, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, Touchable, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'react-native'
+import * as WebBrowser from 'expo-web-browser';
 
 import icons from '@/constants/icons'
 import { StatusBar } from 'expo-status-bar'
+import IconButton from '@/components/navigation/IconButton'
+import { Ionicons } from '@expo/vector-icons';
 
 const AboutUs = () => {
+  const [result, setResult] = useState<WebBrowser.WebBrowserResult | null>(null);
+
+  const _handlePressButtonAsync = async () => {
+    let result = await WebBrowser.openBrowserAsync('https://revolut.me/szantonik');
+    setResult(result);
+  };
+
   return (
     <SafeAreaView className='bg-primarygray h-full'>  
       <ScrollView contentContainerStyle={{
@@ -26,8 +36,16 @@ const AboutUs = () => {
               Cheers!
             </Text>
           </View>
-          
-        </View>     
+        </View>
+        <TouchableOpacity 
+            onPress={_handlePressButtonAsync} 
+            className='flex-row justify-center items-center p-4'
+          >
+            <Ionicons name={'beer-outline'} size={50} color={'white'} />
+            <Text className='mx-2 text-3xl font-bold text-white'>Buy us a beer</Text>
+            <Ionicons name={'beer-outline'} size={50} color={'white'} className='-scale-x-100' />
+        </TouchableOpacity>
+
       </ScrollView>
       <StatusBar translucent={true} />
     </SafeAreaView>
