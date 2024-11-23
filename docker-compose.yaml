@@ -15,6 +15,9 @@ services:
     build: ./Backend
     environment:
      - DATABASE_IP=<your-ip-address>
+     - ConnectionStrings__DbConnection=Server=<your-ip-address>,1433;Database=ProjectIO;User Id=sa;Password=Zaq12wsx;Encrypt=True;TrustServerCertificate=True;
+     - BaseBackendUrl=<your-ip-address>:8080 # If it's production ready, change to domain name
+
     ports:
       - 8080:8080
     volumes:
