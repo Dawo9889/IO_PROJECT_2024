@@ -1,30 +1,11 @@
 import axios, { AxiosError } from "axios";
-import { getAccessToken, getNickname, getPartyToken, storeAccessToken, storeLoggedUsername } from "./storage";
+import { getAccessToken, getNickname, getPartyToken, getRefreshToken, storeAccessToken, storeLoggedUsername, storeRefreshToken } from "./storage";
+import * as FileSystem from 'expo-file-system';
 
 const API_AUTH_URL = 'https://api.cupid.pics/api/identity';
 const API_IMAGE_URL = 'https://api.cupid.pics/api/image/upload';
 const API_PARTY_URL = 'https://api.cupid.pics/api/wedding'
 
-
-
-export const loginUser = async (email: string, password: string) => {
-  try {
-    const url = `${API_AUTH_URL}/login`;
-    console.log('Sending login request to:', url);
-    const response = await axios.post(
-      url,
-      { email, password },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
-    console.log('Login successful:', response.data);
-    console.log(response.data.accessToken);
-    await storeAccessToken(response.data.accessToken);
-    await storeLoggedUsername(email.toLowerCase());
-    return response.status;
-  } catch (error: any) {
-    throw error.response;
-  }
-};
 
 export const registerUser = async (email: string, password: string) => {
   try {
@@ -82,6 +63,90 @@ export const registerUser = async (email: string, password: string) => {
   }
 };
 
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const url = `${API_AUTH_URL}/login`;
+    console.log('Sending login request to:', url);
+    const response = await axios.post(
+      url,
+      { email, password },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+    console.log('Login successful:', response.data);
+    console.log(response.data.accessToken);
+    await storeAccessToken(response.data.accessToken);
+    await storeRefreshToken(response.data.refreshToken);
+    await storeLoggedUsername(email.toLowerCase());
+    setTokenExpiryHandler(response.data.expiresIn)
+    return response.status;
+  } catch (error: any) {
+    if (error.response?.status === 401) {
+      const errorDetail = error.response?.data?.detail;
+
+      if (errorDetail === 'LockedOut') {
+        console.error('Account is locked. Please try again later.');
+        throw new Error('AccountLocked'); // Custom error for locked accounts
+      }
+
+      console.error('Unauthorized login attempt:', error.response?.data);
+      throw new Error('InvalidCredentials'); // Custom error for invalid credentials
+    }
+
+    console.error('Error during login:', error.response?.data || error.message);
+    throw error.response || error;
+  }
+};
+
+const refreshAccessToken = async () => {
+  try {
+    const refreshToken = await getRefreshToken();
+    const url = `${API_AUTH_URL}/refresh`;
+    console.log('Sending refreshToken request to:', url);
+
+    const response = await axios.post(
+      url,
+      { refreshToken },
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+
+    // Extract new tokens from the response
+    const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+    console.log('Successfully refreshed access token:', accessToken);
+
+    // Save the new tokens securely
+    await storeAccessToken(accessToken);
+    if (newRefreshToken) {
+      await storeRefreshToken(newRefreshToken);
+      console.log('Updated refresh token saved securely.');
+    }
+
+    // Return the new access token
+    return accessToken;
+  } catch (err: any) {
+    console.error('Error refreshing access token:', err.response?.data || err.message);
+    return null; // Return null if refreshing failed
+  }
+      
+};
+const setTokenExpiryHandler = (expiresIn: number) => {
+  console.log('Token will expire in:', expiresIn, 'seconds');
+  setTimeout(async () => {
+    const refreshToken = await getRefreshToken();
+    if (refreshToken) {
+      console.log('Refreshing access token...');
+      const newAccessToken = await refreshAccessToken();
+      if (newAccessToken) {
+        console.log('New access token retrieved:', newAccessToken);
+      } else {
+        console.error('Failed to refresh access token.');
+      }
+    } else {
+      console.error('No refresh token available.');
+    }
+  }, expiresIn * 1000);
+};
+
 
 export const checkIfTokenValid = async (token: string) => {
 
@@ -95,8 +160,17 @@ export const checkIfTokenValid = async (token: string) => {
 export const uploadPicture = async (photo: any) => {
   try {
     const partyToken = await getPartyToken();
+    // check if valid
+    if (partyToken) {
+      const tokenValid = await checkIfTokenValid(partyToken);
+    } else throw new Error("Party token not found.");
+    
+
     const author = await getNickname() || 'anonymous';
     const formData = new FormData();
+    if (!photo || !photo.uri) {
+      throw new Error('Invalid photo object');
+    }
     // Append file with explicit Content-Type
     formData.append('ImageFile', {
       uri: photo.uri, // The file URI (e.g., 'file:///...')
@@ -108,15 +182,24 @@ export const uploadPicture = async (photo: any) => {
     const response = await axios.post(
       url,
       formData,
-      { headers: { 'Content-Type': 'multipart/form-data', } },
+      { headers: { 'Content-Type': 'multipart/form-data', },
+        timeout: 10000 },
     );
     return response;
   } catch (error: any) {
-    console.log('Error Details:', error);
-    console.log('Error Response:', error.response);
-    console.log('Error Request:', error.request);
-    throw error.response || error;
-}
+    if (error.response) {
+      // Server responded with a status code outside the 2xx range
+      console.log('Error Response:', error.response.data);
+      console.log('Status Code:', error.response.status);
+    } else if (error.request) {
+      // Request was made but no response received
+      console.log('Error Request:', error.request);
+    } else {
+      // Something else caused the error
+      console.log('Error Message:', error.message);
+    }
+    throw error; // Rethrow the error to handle it at a higher level
+  }
 };
 
 
@@ -131,9 +214,56 @@ export const getUserParties = async () => {
         });
         return response.data;
       } catch(error: any) {
+          console.log(error);
           throw error.response;
         }
+}
 
-    
-    
+export const getPartyQR = async (id: string) => {
+  const accessToken = await getAccessToken();
+  console.log('Fetching QR code');
+  try {
+    const response = await axios.get(`${API_PARTY_URL}/token-qr?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      responseType: 'arraybuffer', // Ensure the response is binary data
+    });
+
+    // Convert the binary data to Base64 string
+    const base64 = `data:image/png;base64,${arrayBufferToBase64(response.data)}`;
+    return base64;
+  } catch (error: any) {
+    console.error('Error fetching QR code:', error);
+    throw error.response || error;
+  }
+};
+// Helper function to convert ArrayBuffer to Base64
+const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+  const uint8Array = new Uint8Array(buffer);
+  let binary = '';
+  uint8Array.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary); // Convert binary to Base64
+};
+
+export const getPartyDetails = async (id: string) => {
+  const accessToken = await getAccessToken();
+  console.log('Fetching Party details');
+  try {
+    const response = await axios.get(`${API_PARTY_URL}/details?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('Error fetching party details:', error);
+    throw error.response || error;
+  }
+}
+
+export const editPartyToken = async (hours: number) => {
+
 }

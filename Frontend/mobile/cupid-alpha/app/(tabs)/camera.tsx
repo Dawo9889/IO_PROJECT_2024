@@ -31,6 +31,7 @@ export default function Camera() {
     const checkPartyTokenStatus = async () => {
       try {
         const partyToken = await getPartyToken();
+        console.log(partyToken);
         if (partyToken) {
           // Check if token is still valid
           const checkValid = await checkIfTokenValid(partyToken);
@@ -92,13 +93,12 @@ export default function Camera() {
   }
 
   const savePicture = async () => {
-    await storePartyToken('c2c75eee-024f-4ce6-9ec4-f44119919253');
     try{
       const result = await uploadPicture(picture);
       setPicture(null);
       if (result) Alert.alert('Picture uploaded!');
     } catch (error: any) {
-      Alert.alert('Error', 'Your party token might be expired.');
+      Alert.alert('Error', 'Somenthing went wrong. Please try again.');
     }
     
   }

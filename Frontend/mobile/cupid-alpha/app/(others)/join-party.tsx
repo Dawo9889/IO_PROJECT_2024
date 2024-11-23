@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Button, Alert } from 'react-native'
+import { View, Text, ScrollView, Button, Alert, Modal, TextInput, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image } from 'react-native'
@@ -10,7 +10,7 @@ import { BarcodeScanningResult, Camera, CameraView, useCameraPermissions } from 
 import { checkIfTokenValid } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
 import CustomButton from '@/components/CustomButton';
-import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
+import { getPartyToken, removePartyToken, storeNickname, storePartyToken } from '@/constants/storage';
 import IconButton from '@/components/navigation/IconButton';
 
 
@@ -21,6 +21,10 @@ const JoinParty = () => {
     const [tokenInvalid, setTokenInvalid] = useState(false);
     const [newPartyName, setNewPartyName] = useState('');
     const [newToken, setNewToken] = useState('');
+
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
     if (!camPermission) {
         // Camera permissions are still loading.
@@ -43,29 +47,29 @@ const JoinParty = () => {
         await storePartyToken('c2c75eee-024f-4ce6-9ec4-f44119919253');
 
         setScanned(true);
-        const newToken = scanningResult.data;
+        const token = scanningResult.data;
+        await setNewToken(token);
         const currentPartyToken = await getPartyToken();
-        if (currentPartyToken == newToken) setSameAsOld(true);
+        console.log(`${currentPartyToken} , ${token}`)
+        if (currentPartyToken == token) setSameAsOld(true);
         else {
-          const newValid = await checkIfTokenValid(newToken);
+          const newValid = await checkIfTokenValid(token);
           if (newValid) setNewPartyName(newValid);
           else {
             setTokenInvalid(true);
           }
-            
         }
-        
       };
 
       const joinNewParty = async () => {
         try {
+          await removePartyToken();
           await storePartyToken(newToken);
           Alert.alert('Welcome', `Welcome to ${newPartyName}`);
+          router.replace('/camera');
         } catch (error: any) {
           Alert.alert('Error', error);
         }
-        
-        
       }
 
       const resetScanner = () => {
@@ -84,6 +88,42 @@ const JoinParty = () => {
         }}>
             <View className='w-full items-center min-h-[85vh] px-4'>
             <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-6' resizeMode='contain' tintColor='#fff' />
+
+                <Modal
+                    visible={isModalVisible}
+                    transparent
+                    animationType="slide"
+                    onRequestClose={() => setModalVisible(false)}
+                  >
+                <View className='place-self-center mx-[30px] top-[300px] h-[200px] bg-primarygray border-2 border-white rounded-lg'>
+                  <Text className='text-white font-bold text-2xl m-3'>Enter your name:</Text>
+                  <View className={`border-2 w-3/4 mx-auto h-16 px-4 bg-black-100 rounded-2xl items-center flex-row ${isFocused ? 'border-primary' : 'border-black-200'}`}>
+                    <TextInput
+                      className='flex-1 text-white font-bsemibold text-base'
+                      placeholder="Type here"
+                      placeholderTextColor='#7b7b8b'
+                      value={inputValue}
+                      onChangeText={setInputValue}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    />
+                  </View>
+                    <View className='flex-row w-7/8 mt-5'>
+                      <TouchableOpacity
+                          className='border-2 w-2/5 mx-auto h-16 px-4 bg-red-800 rounded-2xl items-center border-red-950 justify-center'
+                          onPress={() => setModalVisible(false)}
+                       > 
+                        <Text className='text-white'>Cancel</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                          className='border-2 w-2/5 mx-auto h-16 px-4 bg-tertiary rounded-2xl items-center border-tertiary-200 justify-center'
+                          onPress={async () => {setModalVisible(false); await storeNickname(inputValue);joinNewParty();}}>
+                        <Text>Confirm</Text>
+                      </TouchableOpacity>
+                    </View>
+                </View>
+              </Modal>
+
               <Text className='absolute top-[130px] text-3xl text-center font-bbold text-white'>Scan party token</Text>
               <View className="absolute top-[170px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
                 <CameraView
@@ -109,11 +149,11 @@ const JoinParty = () => {
                   <Text className='text-3xl text-center font-bbold text-white'>Token is invalid or might be expired. Try again.</Text>
                 </View>
               }
-              {newPartyName &&
+              {newPartyName && !isModalVisible &&
                 <View className='m-5 border-2 border-white rounded-lg p-[10px]'>
                   <Text className='text-3xl text-center font-bbold text-white'>{newPartyName}</Text>
                   <Text className='text-xl text-white font-bbold'>Do you really want to join this party?</Text>
-                  <CustomButton title={'Join'} handlePress={joinNewParty} containerStyles={'mt-5'} textStyles={''} />
+                  <CustomButton title={'Join'} handlePress={() => setModalVisible(true)} containerStyles={'mt-5'} textStyles={''} />
                 </View>
               }
               </View>

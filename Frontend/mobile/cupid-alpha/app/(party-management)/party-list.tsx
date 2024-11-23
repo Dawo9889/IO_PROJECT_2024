@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar'
@@ -16,6 +16,7 @@ import { getUserParties } from '@/constants/api'
 const PartyList = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [parties, setParties] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Check login status & get weddings
   useEffect(() => {
@@ -31,7 +32,9 @@ const PartyList = () => {
           setIsLoggedIn(false);
         }
       } catch (error) {
-        console.error('Error checking login status:', error);
+        console.error('Error checking login status & fetching parties:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     checkLoginStatus();
@@ -49,40 +52,37 @@ const PartyList = () => {
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
           <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-5' resizeMode='contain' tintColor='#fff' />       
             <View className='absolute top-[150px] px-8 w-full bg-gray-700 border-2 border-white rounded-lg'>
-            {isLoggedIn ? (
-            <>
-              <View className="relative mt-5 ">
-              <Text className='text-primary text-3xl font-bbold'>Your parties:</Text>
+            {isLoading ? ( // Show the throbber if loading
+              <View className="mt-10 flex justify-center items-center">
+                <ActivityIndicator size="large" color="#fff" className='flex absolute top-[300px]'/>
+                <Text className="text-white mt-2">Loading parties...</Text>
               </View>
-
-              {parties.map((party: {id: string, eventDate: string, name: string, description: string}) => (
+            ) : isLoggedIn ? (
+              <>
+                <View className="relative mt-5 ">
+                  <Text className='text-primary text-3xl font-bbold'>Your parties:</Text>
+                </View>
+                {parties.map((party: { id: string, eventDate: string, name: string, description: string }) => (
                   <PartyComponent
-                  key={party.id}
-                  name={party.name}
-                  tokenSettings={function (): void {
-                    throw new Error('Function not implemented.')
-                  } }
-                  partySettings={function (): void {
-                    throw new Error('Function not implemented.')
-                  } }                  />
+                    key={party.id}
+                    name={party.name}
+                    tokenSettings={() => router.push({ pathname: '/party-qr', params: { id: party.id }})}
+                    partySettings={() => {}} />
                 ))}
-
-              
-            </>
-          ) : (
+              </>
+            ) : (
               <View className="relative mt-5 w-full">
                 <Text className="text-3xl text-primary text-center font-bold">
                   Please log in to gain access.
                 </Text>
-              
-              <CustomButton
-                title="Create account or Log in"
-                handlePress={() => router.push('/sign-up')}
-                containerStyles="mt-5"
-                textStyles=""
-              />
+                <CustomButton
+                  title="Create account or Log in"
+                  handlePress={() => router.push('/sign-up')}
+                  containerStyles="mt-5"
+                  textStyles=""
+                />
               </View>
-          )}
+            )}
             </View>
         </View>     
     </ScrollView>

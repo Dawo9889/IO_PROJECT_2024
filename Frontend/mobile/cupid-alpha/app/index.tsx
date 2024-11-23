@@ -5,8 +5,29 @@ import { StatusBar } from 'expo-status-bar'
 import CustomButton from '@/components/CustomButton'
 
 import icons from '@/constants/icons'
+import { useEffect, useState } from 'react'
+import { getLoggedUsername } from '@/constants/storage'
 
 const App = () => {
+
+  const [isLoggedIn, setisLoggedIn] = useState(false);
+
+  // Cfalseo;gin status
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const loggedUsername = await getLoggedUsername();
+        if (loggedUsername) {
+          router.replace('/home');
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+  if (isLoggedIn) return(<SafeAreaView className='bg-primarygray h-full' />);
 
   return (
     <SafeAreaView className='bg-primarygray h-full'>  
