@@ -1,26 +1,28 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const WeddingList = ({ setSelectedWedding }) => {
-  const [weddings, setWeddings] = useState([]);
+const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
+  // const [weddings, setWeddings] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const handleDelete = (weddingId) => {
     const authData = JSON.parse(localStorage.getItem("auth"));
     const accessToken = authData?.accessToken;
+
     axios
-      .get(`${import.meta.env.VITE_API_URL}/wedding`, {
+      .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${weddingId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      .then((response) => {
-        setWeddings(response.data);
+      .then(() => {
+        console.log("Wedding deleted successfully.");
+        fetchWeddings(); // Odśwież listę wesel po usunięciu
       })
-      .catch(() => {
-        setError('Error fetching weddings list');
+      .catch((err) => {
+        console.error("Error deleting wedding:", err);
       });
-  }, []);
+  };
 
   return (
     <div className="flex justify-start pt-6">
@@ -31,18 +33,21 @@ const WeddingList = ({ setSelectedWedding }) => {
         ) : (
           <div className="flex flex-col gap-6">
             {weddings.map((wedding) => (
-              <div
-                key={wedding.id}
-                className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border-2 border-project-blue cursor-pointer"
-                onClick={() => setSelectedWedding(wedding.id)}
+            <li
+              key={wedding.id}
+              className="p-4 bg-project-light-bg text-white rounded-lg shadow-md flex justify-between items-center"
+            >
+              <span onClick={() => setSelectedWedding(wedding.id)} className="cursor-pointer">
+                {wedding.name}
+              </span>
+              <button 
+                onClick={() => handleDelete(wedding.id)} 
+                className="text-red-500 hover:text-red-700"
               >
-                <div className="header">
-                  <h2 className="text-xl font-semibold text-center mb-2">{wedding.name}</h2>
-                  <p className="text-sm text-gray-500 text-center mb-2">Date: {wedding.eventDate}</p>
-                  <p className="text-sm text-gray-700">{wedding.description}</p>
-                </div>
-              </div>
-            ))}
+                Delete
+              </button>
+            </li>
+          ))}
           </div>
         )}
       </div>

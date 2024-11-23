@@ -1,9 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import WeddingList from './WeddingList';
 import WeddingDetails from './WeddingDetails';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import axios from 'axios'
 const Weddings = () => {
   const [selectedWedding, setSelectedWedding] = useState(null);
+  const [weddings, setWeddings] = useState([]);
+
+  const fetchWeddings = () => {
+    const authData = JSON.parse(localStorage.getItem("auth"));
+    const accessToken = authData?.accessToken;
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/wedding`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        setWeddings(response.data);
+      })
+      .catch((err) => {
+        console.error("Error fetching weddings:", err);
+      });
+  };
+
+  useEffect(() => {
+    fetchWeddings(); 
+  }, []);
 
   return (
     <>
@@ -15,10 +39,14 @@ const Weddings = () => {
       </a> <br /> <br />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 min-h-screen bg-project-dark">
   <div className="min-h-[100px] bg-project-dark">
-    <WeddingList setSelectedWedding={setSelectedWedding} />
+    <WeddingList 
+            weddings={weddings} 
+            setSelectedWedding={setSelectedWedding} 
+            fetchWeddings={fetchWeddings} 
+          />
   </div>
   <div className="md:col-span-2 bg-project-dark">
-    <WeddingDetails wedding={selectedWedding} />
+    <WeddingDetails weddingId={selectedWedding} />
   </div>
 </div>
     </>
