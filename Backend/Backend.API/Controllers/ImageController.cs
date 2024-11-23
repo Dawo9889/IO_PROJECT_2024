@@ -54,6 +54,21 @@ namespace Backend.API.Controllers
             return Ok(images);
         }
 
+        [HttpGet("{weddingId}/{imageId}/thumbnail/{thumbnailFileName}")]
+        public async Task<IActionResult> GetThumbnail(Guid weddingId, Guid imageId, string thumbnailFileName)
+        {
+            try
+            {
+                var thumbnailPath = Path.Combine(weddingId.ToString(), imageId.ToString(), "thumbnail", thumbnailFileName);
+                var (fileStream, mimeType) = await _imageService.GetThumbnail(thumbnailPath);
+                return new FileStreamResult(fileStream, mimeType);
+            }
+            catch (FileNotFoundException) 
+            {
+                return NotFound("Thumbnail not found.");
+            }
+
+        }
 
     }
 }

@@ -179,8 +179,34 @@ namespace Backend.Application.Services.Images
         {
   
             var relativePath = Path.GetRelativePath(_photosBasePath, filePath).Replace("\\", "/"); 
-            return $"{_baseBackendUrl}/image/{relativePath}";
+            return $"{_baseBackendUrl}/api/image/{relativePath}";
         }
 
+        public async Task<(Stream FileStream, string MimeType)> GetThumbnail(string path)
+        {
+            var thumbnailPath = Path.Combine(_photosBasePath, path);
+
+            var extension = Path.GetExtension(thumbnailPath).ToLowerInvariant();
+            string mimeType;
+
+            switch (extension)
+            {
+                case ".jpg":
+                case ".jpeg":
+                    mimeType = "image/jpeg";
+                    break;
+                case ".png":
+                    mimeType = "image/png";
+                    break;
+                default:
+                    mimeType = "application/octet-stream";
+                    break;
+            }
+
+            var fileStream = new FileStream(thumbnailPath, FileMode.Open, FileAccess.Read);
+
+            // Zwróć plik jako wynik HTTP
+            return (fileStream, mimeType);
+        }
     }
 }
