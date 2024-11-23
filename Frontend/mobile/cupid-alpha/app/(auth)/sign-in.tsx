@@ -74,7 +74,7 @@ const SignIn = () => {
             <CustomButton 
               title="Sign in"
               handlePress={submit}
-              containerStyles='mt-7' textStyles={''} disabled={isSubmitting || (!emailValid && form.password !== '')}            />
+              containerStyles='mt-7' textStyles={''} disabled={!emailValid || form.password == '' || isSubmitting}            />
 
             <View className='justif-center pt-5 flex-row gap-2'>
               <Text className='text-lg text-gray-100 font-pregular'>

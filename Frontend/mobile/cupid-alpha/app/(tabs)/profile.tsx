@@ -5,7 +5,7 @@ import icons from '@/constants/icons'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { getLoggedUsername, removeAccessToken, removeLoggedUsername } from '@/constants/storage'
+import { getLoggedUsername, removeAccessToken, removeLoggedUsername, removeRefreshToken } from '@/constants/storage'
 import { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import IconButton from '@/components/navigation/IconButton'
@@ -36,13 +36,14 @@ const Profile = () => {
   const logout = async () => {
     try {
       await removeAccessToken();
+      await removeRefreshToken();
       await removeLoggedUsername();
     } catch (error: any) {
       Alert.alert('Error', error);
       return;
     }
     Alert.alert('You have been logged out!');
-    router.replace('/sign-in');
+    router.replace('/');
   }
 
   const confirmLogout = () => {
