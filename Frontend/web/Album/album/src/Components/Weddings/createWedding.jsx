@@ -77,7 +77,7 @@ const CreateWedding = () => {
   </div>
 <div className="order-2 md:order-2 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-4">
 <h1 className="text-2xl text-white font-bold text-center mb-4">Create Wedding</h1>
-<form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 " autocomplete="off">
+<form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 " autoComplete="off">
   <div className="relative z-0 w-full mb-5 group">
   <input 
         type="text" 
@@ -95,10 +95,10 @@ const CreateWedding = () => {
   </label>
 </div>
 <div className="relative z-0 w-full mb-5 group">
-  <DatePicker 
+  <input 
+    type="date"
     name="date" 
     id="date" 
-    selected={date}
     className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
     onChange={(e) => setDate(e.target.value)}
     value={date}
