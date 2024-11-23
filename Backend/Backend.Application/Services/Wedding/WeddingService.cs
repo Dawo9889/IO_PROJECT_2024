@@ -4,6 +4,7 @@ using Backend.Domain.Interfaces;
 using Backend.Domain.Entities;
 using QRCoder;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Drawing;
 
 
 namespace Backend.Application.Services.Wedding
@@ -131,7 +132,7 @@ namespace Backend.Application.Services.Wedding
             }
             else
             {
-                // Eztend Token
+                // Extend Token
                 wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
             }
 
@@ -150,21 +151,54 @@ namespace Backend.Application.Services.Wedding
                 return null;
             }
 
-
             var wedding = await _weddingRepository.GetDetailsById(weddingId);
-            if (wedding.IsSessionKeyExpired || wedding.IsSessionKeyExpired )
+            if (wedding.IsSessionKeyExpired)
             {
                 return null;
             }
+
             var sessionToken = wedding.SessionKey.ToString();
 
-            //generating qr code
+            // Generating QR code with a logo
+            // https://github.com/codebude/QRCoder
             using (var qrGenerator = new QRCodeGenerator())
-            using (var qrCodeData = qrGenerator.CreateQrCode(sessionToken, QRCodeGenerator.ECCLevel.Q))
-            using (var qrCode = new PngByteQRCode(qrCodeData))
             {
-                byte[] qrCodeImage = qrCode.GetGraphic(20);
-                return qrCodeImage; // returning qr-code as byte image
+                var qrCodeData = qrGenerator.CreateQrCode(sessionToken, QRCodeGenerator.ECCLevel.Q);
+                byte[] logoPng = await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "cupid.png"));
+                using (var qrCode = new BitmapByteQRCode(qrCodeData))
+                {
+                    // Generating QR code as bitmap
+                    var qrCodeImage = qrCode.GetGraphic(20);
+
+                    using (var memoryStream = new MemoryStream(qrCodeImage))
+                    using (var qrBitmap = new Bitmap(memoryStream))
+                    using (var logoStream = new MemoryStream(logoPng))
+                    using (var logoBitmap = new Bitmap(logoStream))
+                    {
+                        // Calculate the size of one cell in the QR code
+                        int moduleSize = qrBitmap.Width / qrCodeData.ModuleMatrix.Count;  // Size of one module in pixels
+
+                        // Calculate the size of the logo 
+                        int logoSize = moduleSize * 11; // This will fit the logo in a 11x11 grid of QR module
+
+                        // Resizing logo to fit in calculated size
+                        var logo = new Bitmap(logoBitmap, new Size(logoSize, logoSize));
+                        var graphics = Graphics.FromImage(qrBitmap);
+
+                        // Position the logo at the center of the QR code
+                        int x = (qrBitmap.Width - logo.Width) / 2;
+                        int y = (qrBitmap.Height - logo.Height) / 2;
+
+                        graphics.DrawImage(logo, x, y, logo.Width, logo.Height);
+
+                        // Save QR code with logo into byte array
+                        using (var outputStream = new MemoryStream())
+                        {
+                            qrBitmap.Save(outputStream, System.Drawing.Imaging.ImageFormat.Png);
+                            return outputStream.ToArray();
+                        }
+                    }
+                }
             }
         }
 

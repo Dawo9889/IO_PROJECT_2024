@@ -20,6 +20,7 @@ namespace Backend.Application.Services.Wedding
 
         Task<byte[]> GetQrCode(Guid weddingId, string userId);
 
+
         Task<WeddingDTO> ValidateWeddingToken(Guid token);
 
 
