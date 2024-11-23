@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
+import DatePicker from 'react-datepicker'
 import './style.css'
 
 const CreateWedding = () => {
@@ -16,7 +17,7 @@ const CreateWedding = () => {
     var inputDate = curr.toISOString().substring(0,10)
 
     const openDatePicker = () => {
-      document.getElementById("date").showPicker(); // Wywołanie natywnego pickera
+      document.getElementById("date").showPicker();
     };
 
     const handleSubmit = async (e) => {
@@ -50,17 +51,14 @@ const CreateWedding = () => {
     useEffect(() => {
       if (name.trim() && date.trim() && description.trim()) {
         setIsFormValid(true);
-        console.log('y')
       } else {
         setIsFormValid(false);
-        console.log('n')
       }
     }, [name, date, description]);
 
     useEffect(() => {
-      // Pobieramy dzisiejszą datę w formacie yyyy-mm-dd
       const today = new Date();
-      const formattedDate = today.toISOString().split('T')[0]; // Format: yyyy-mm-dd
+      const formattedDate = today.toISOString().split('T')[0]; 
       setDate(formattedDate);
     }, []);
 
@@ -97,10 +95,10 @@ const CreateWedding = () => {
   </label>
 </div>
 <div className="relative z-0 w-full mb-5 group">
-  <input 
-    type="date" 
+  <DatePicker 
     name="date" 
     id="date" 
+    selected={date}
     className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
     onChange={(e) => setDate(e.target.value)}
     value={date}
