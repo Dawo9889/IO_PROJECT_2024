@@ -10,7 +10,7 @@ namespace Backend.Application.Services.Images
 {
     public interface InterfaceImageService
     {
-        Task AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
+        Task<bool> AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
         Task<bool> IsSessionValid(Guid sessionToken);
         Task<List<ImageData>> GetImagesForWeddingAsync(Guid weddingId, string userId);
         Task<(Stream FileStream, string MimeType)> GetThumbnail(string path);

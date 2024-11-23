@@ -35,9 +35,13 @@ namespace Backend.API.Controllers
             {
                 return BadRequest("Brak pliku w zapytaniu");
             }
-            await _imageService.AddImageAsync(createImageDTO, token);
+            var result = await _imageService.AddImageAsync(createImageDTO, token);
+            if (!result) { 
+                return BadRequest();
+            }
 
             return Ok("Photo saved");
+
         }
 
         [HttpGet("path")]

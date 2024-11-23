@@ -17,6 +17,7 @@ namespace Backend.Application.Extensions
         {
             services.AddScoped<IWeddingService, WeddingService>();
             services.AddScoped<InterfaceImageService, ImageService>();
+            
 
             //AutoMapper
             services.AddAutoMapper(typeof(WeddingMappingProfile));

@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Backend.Infrastructure\Backend.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="zdjecia\" />
+  </ItemGroup>
+
 </Project>
