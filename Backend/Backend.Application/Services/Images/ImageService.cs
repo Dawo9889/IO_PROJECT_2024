@@ -212,11 +212,11 @@ namespace Backend.Application.Services.Images
             return $"{_baseBackendUrl}/api/image/{relativePath}";
         }
 
-        public async Task<(Stream FileStream, string MimeType)> GetThumbnail(string path)
+        public async Task<(Stream FileStream, string MimeType)> GetPhotoThumbnailFile(string path)
         {
-            var thumbnailPath = Path.Combine(_photosBasePath, path);
+            var filePath = Path.Combine(_photosBasePath, path);
 
-            var extension = Path.GetExtension(thumbnailPath).ToLowerInvariant();
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
             string mimeType;
 
             switch (extension)
@@ -233,7 +233,7 @@ namespace Backend.Application.Services.Images
                     break;
             }
 
-            var fileStream = new FileStream(thumbnailPath, FileMode.Open, FileAccess.Read);
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
             
             return (fileStream, mimeType);

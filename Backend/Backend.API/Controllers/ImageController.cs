@@ -35,6 +35,12 @@ namespace Backend.API.Controllers
             {
                 return BadRequest("Brak pliku w zapytaniu");
             }
+
+            if (createImageDTO.ImageFile == null || createImageDTO.ImageFile.Length == 0)
+            {
+                return BadRequest("Należy przesłać dokładnie jeden plik.");
+            }
+
             var result = await _imageService.AddImageAsync(createImageDTO, token);
             if (!result) { 
                 return BadRequest();
@@ -52,7 +58,7 @@ namespace Backend.API.Controllers
             var images = await _imageService.GetImagesForWeddingAsync(weddingId, userId);
             if(images == null)
             {
-                return Forbid("User does not have access to this wedding.");
+                return Unauthorized("User does not have access to this wedding.");
             }
 
             return Ok(images);
@@ -64,12 +70,28 @@ namespace Backend.API.Controllers
             try
             {
                 var thumbnailPath = Path.Combine(weddingId.ToString(), imageId.ToString(), "thumbnail", thumbnailFileName);
-                var (fileStream, mimeType) = await _imageService.GetThumbnail(thumbnailPath);
+                var (fileStream, mimeType) = await _imageService.GetPhotoThumbnailFile(thumbnailPath);
                 return new FileStreamResult(fileStream, mimeType);
             }
             catch (FileNotFoundException) 
             {
                 return NotFound("Thumbnail not found.");
+            }
+
+        }
+
+        [HttpGet("{weddingId}/{imageId}/originalPhoto/{originalPhotoName}")]
+        public async Task<IActionResult> GetOriginalPhotot(Guid weddingId, Guid imageId, string originalPhotoName)
+        {
+            try
+            {
+                var originalPhotoPath = Path.Combine(weddingId.ToString(), imageId.ToString(), "originalPhoto", originalPhotoName);
+                var (fileStream, mimeType) = await _imageService.GetPhotoThumbnailFile(originalPhotoPath);
+                return new FileStreamResult(fileStream, mimeType);
+            }
+            catch (FileNotFoundException)
+            {
+                return NotFound("OriginalPhoto not found.");
             }
 
         }
