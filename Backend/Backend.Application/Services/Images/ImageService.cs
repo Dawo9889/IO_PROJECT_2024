@@ -189,7 +189,7 @@ namespace Backend.Application.Services.Images
             return thumbnailStream;
         }
 
-        public async Task<List<ImageData>> GetImagesForWeddingAsync(Guid weddingId, string userId)
+        public async Task<List<ImagesDataDTO>> GetImagesForWeddingAsync(Guid weddingId, string userId)
         {
             if (!await _weddingRepository.IsUserOwnerOfWedding(weddingId, userId))
             {
@@ -202,8 +202,8 @@ namespace Backend.Application.Services.Images
                 image.FilePath = ConvertFilePathToUrl(image.FilePath);
                 image.ThumbnailPath = ConvertFilePathToUrl(image.ThumbnailPath);
             }
-
-            return imageDatas;
+            var imagesDataDTO = _mapper.Map<List<ImagesDataDTO>>(imageDatas);
+            return imagesDataDTO;
         }
         private string ConvertFilePathToUrl(string filePath)
         {

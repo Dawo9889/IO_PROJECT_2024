@@ -15,7 +15,9 @@ namespace Backend.Application.Mappings
         {
             CreateMap<CreateImageDTO, ImageData>()
              .ForMember(dest => dest.FilePath, opt => opt.Ignore()) //reczne przypisanie
-             .ForMember(dest => dest.WeddingId, opt => opt.MapFrom(src => src.WeddingID)); 
+             .ForMember(dest => dest.WeddingId, opt => opt.MapFrom(src => src.WeddingID));
+
+            CreateMap<ImageData, ImagesDataDTO>();
         }
     }
 }
