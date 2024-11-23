@@ -177,8 +177,7 @@ namespace Backend.Application.Services.Images
         }
         private string ConvertFilePathToUrl(string filePath)
         {
-            
-            
+  
             var relativePath = Path.GetRelativePath(_photosBasePath, filePath).Replace("\\", "/"); 
             return $"{_baseBackendUrl}/image/{relativePath}";
         }

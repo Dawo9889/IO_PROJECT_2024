@@ -40,7 +40,7 @@ namespace Backend.API.Controllers
             return Ok("Photo saved");
         }
 
-        [HttpGet]
+        [HttpGet("path")]
         public async Task<IActionResult> GetImagesForWedding([FromQuery] Guid weddingId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
