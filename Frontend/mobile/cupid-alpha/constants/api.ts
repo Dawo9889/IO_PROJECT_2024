@@ -149,7 +149,20 @@ const setTokenExpiryHandler = (expiresIn: number) => {
 
 
 export const checkIfTokenValid = async (token: string) => {
-
+  // const accessToken = await getAccessToken();
+  //   console.log('Checking PartyToken')
+  //   try {
+  //     const response = await axios.get(`${API_PARTY_URL}/verifyToken?token=${token}`, {
+  //       headers: {
+  //            Authorization: `Bearer ${accessToken}`
+  //         }
+  //       });
+  //       return response.data;
+  //     } catch(error: any) {
+  //         if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
+  //         console.log(error);
+  //         throw error.response;
+  //       }
 
   
   // return '';
