@@ -11,5 +11,7 @@ namespace Backend.Domain.Interfaces
     {
         Task<bool> AddImageAsync(ImageData image);
         Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId);
+        Task<ImageData> GetImageFromWeddingAsync(Guid imageId);
+        Task<bool> UpdateImageAsync(ImageData imageData);
     }
 }

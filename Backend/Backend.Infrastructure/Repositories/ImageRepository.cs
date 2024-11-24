@@ -39,5 +39,27 @@ namespace Backend.Infrastructure.Repositories
             }
             return imagesDatas;
         }
+
+        public async Task<ImageData> GetImageFromWeddingAsync(Guid imageId)
+        {
+            var imageData = await _dbContext.ImageDatas.FirstOrDefaultAsync(x => x.Id == imageId);
+            if (imageData == null)
+            {
+                return null;
+            }
+            return imageData;
+        }
+
+        public async Task<bool> UpdateImageAsync(ImageData imageData)
+        {
+            var image = await _dbContext.ImageDatas.FindAsync(imageData.Id); 
+            if (image == null)
+            {
+                return false; 
+            }
+            _dbContext.ImageDatas.Update(imageData);
+            var rowsAffected = await _dbContext.SaveChangesAsync();
+            return rowsAffected > 0;
+        }
     }
 }

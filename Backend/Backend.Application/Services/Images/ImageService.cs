@@ -1,20 +1,11 @@
 ﻿using AutoMapper;
 using Backend.Application.DTO.ImageDTO;
-using Backend.Application.DTO.WeddingDTO;
 using Backend.Domain.Entities;
 using Backend.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.Extensions.Configuration;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
 namespace Backend.Application.Services.Images
 {
@@ -46,7 +37,7 @@ namespace Backend.Application.Services.Images
             var wedding = await _weddingRepository.ValidateSessionKeyAsync(sessionToken);
             if (wedding == null)
             {
-                
+
                 return false;
             }
 
@@ -69,7 +60,7 @@ namespace Backend.Application.Services.Images
             imageData.ThumbnailPath = thumbnailFilePath;
             imageData.WeddingId = wedding.Id;
 
-      
+
             await _imageRepository.AddImageAsync(imageData);
             return true;
         }
@@ -85,7 +76,7 @@ namespace Backend.Application.Services.Images
 
             try
             {
-                
+
                 using (var image = await Image.LoadAsync(fileStream))
                 {
                     return true;
@@ -93,8 +84,8 @@ namespace Backend.Application.Services.Images
             }
             catch (UnknownImageFormatException)
             {
-                
-                return false ;
+
+                return false;
             }
         }
 
@@ -111,7 +102,6 @@ namespace Backend.Application.Services.Images
 
         }
 
-        // Metoda do zapisywania pliku na dysku
         public async Task<(string originalPath, string thumbnailPath)> SaveImageFileAsync(CreateImageDTO imageDTO, Guid weddingId, string author)
         {
             // Ścieżka folderu, gdzie będą przechowywane zdjęcia
@@ -146,48 +136,53 @@ namespace Backend.Application.Services.Images
                 await imageDTO.ImageFile.CopyToAsync(stream);
             }
 
-            //save thumbnail files
+            
+            var originalPath = originalFilePath;
             var thumbnailFilePath = Path.Combine(thumbnailFolder, "thumbnail" + imageExtension);
+            // Generating thumbnail in background
+            _ = GenerateThumbnailInBackgroundAsync(imageDTO, originalFilePath, thumbnailFilePath);
 
-            using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400)) // Rozmiar miniaturki
+            return (originalPath, thumbnailFilePath);
+        }
+        private async Task GenerateThumbnailInBackgroundAsync(CreateImageDTO imageDTO, string originalFilePath, string thumbnailFilePath)
+        {
+            
+            using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400))
             {
                 using (var fileStream = new FileStream(thumbnailFilePath, FileMode.Create))
                 {
                     await thumbnailStream.CopyToAsync(fileStream);
                 }
             }
-
-            return (originalFilePath, thumbnailFilePath);
         }
-
 
         public async Task<Stream> GenerateThumbnailAsync(CreateImageDTO imageDTO, int width, int height)
         {
- 
-            using var originalStream = imageDTO.ImageFile.OpenReadStream();
+            using var originalStream = new MemoryStream();
+            await imageDTO.ImageFile.CopyToAsync(originalStream);
+            originalStream.Position = 0;
 
-  
             var thumbnailStream = new MemoryStream();
-
 
             using (var image = await Image.LoadAsync(originalStream))
             {
                 image.Mutate(x => x.Resize(new ResizeOptions
                 {
                     Size = new Size(width, height),
-                    Mode = ResizeMode.Max 
+                    Mode = ResizeMode.Max
                 }));
 
-
-                var encoder = new JpegEncoder { Quality = 75 }; 
+                var encoder = new JpegEncoder { Quality = 75 };
                 await image.SaveAsync(thumbnailStream, encoder);
             }
-
-
+            Console.WriteLine("Background thumbnail task ended");
             thumbnailStream.Position = 0;
-
             return thumbnailStream;
         }
+
+
+
+
 
         public async Task<List<ImagesDataDTO>> GetImagesForWeddingAsync(Guid weddingId, string userId)
         {
@@ -207,12 +202,16 @@ namespace Backend.Application.Services.Images
         }
         private string ConvertFilePathToUrl(string filePath)
         {
-  
-            var relativePath = Path.GetRelativePath(_photosBasePath, filePath).Replace("\\", "/"); 
+
+            var relativePath = Path.GetRelativePath(_photosBasePath, filePath).Replace("\\", "/");
             return $"{_baseBackendUrl}/api/image/{relativePath}";
         }
 
-        public async Task<(Stream FileStream, string MimeType)> GetPhotoThumbnailFile(string path)
+
+
+
+
+        public (Stream FileStream, string MimeType) GetPhotoThumbnailFile(string path)
         {
             var filePath = Path.Combine(_photosBasePath, path);
 
@@ -232,11 +231,29 @@ namespace Backend.Application.Services.Images
                     mimeType = "application/octet-stream";
                     break;
             }
+            try
+            {
+                // Otwórz plik do odczytu
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                return (fileStream, mimeType);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.Error.WriteLine($"File not found: {filePath}");
+                throw new FileNotFoundException($"Thumbnail file not found at path: {filePath}");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Console.Error.WriteLine($"Directory not found: {filePath}");
+                throw new FileNotFoundException($"Directory not found at path: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Error accessing file at {filePath}: {ex.Message}");
+                throw;
+            }
 
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
-            
-            return (fileStream, mimeType);
         }
     }
 }

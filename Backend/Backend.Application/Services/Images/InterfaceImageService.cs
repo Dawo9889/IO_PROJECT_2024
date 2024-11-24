@@ -13,6 +13,6 @@ namespace Backend.Application.Services.Images
         Task<bool> AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
         Task<bool> IsSessionValid(Guid sessionToken);
         Task<List<ImagesDataDTO>> GetImagesForWeddingAsync(Guid weddingId, string userId);
-        Task<(Stream FileStream, string MimeType)> GetPhotoThumbnailFile(string path);
+        (Stream FileStream, string MimeType) GetPhotoThumbnailFile(string path);
     }
 }

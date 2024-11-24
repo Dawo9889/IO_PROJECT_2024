@@ -70,7 +70,7 @@ namespace Backend.API.Controllers
             try
             {
                 var thumbnailPath = Path.Combine(weddingId.ToString(), imageId.ToString(), "thumbnail", thumbnailFileName);
-                var (fileStream, mimeType) = await _imageService.GetPhotoThumbnailFile(thumbnailPath);
+                var (fileStream, mimeType) =  _imageService.GetPhotoThumbnailFile(thumbnailPath);
                 return new FileStreamResult(fileStream, mimeType);
             }
             catch (FileNotFoundException) 
@@ -86,7 +86,7 @@ namespace Backend.API.Controllers
             try
             {
                 var originalPhotoPath = Path.Combine(weddingId.ToString(), imageId.ToString(), "originalPhoto", originalPhotoName);
-                var (fileStream, mimeType) = await _imageService.GetPhotoThumbnailFile(originalPhotoPath);
+                var (fileStream, mimeType) = _imageService.GetPhotoThumbnailFile(originalPhotoPath);
                 return new FileStreamResult(fileStream, mimeType);
             }
             catch (FileNotFoundException)
