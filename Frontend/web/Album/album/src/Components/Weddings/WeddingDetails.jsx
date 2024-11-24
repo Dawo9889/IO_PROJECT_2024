@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import WeddingPhotos from './WeddingPhotos';
 
 const WeddingDetails = ({ weddingId }) => {
   const [details, setDetails] = useState(null);
@@ -49,9 +50,9 @@ const WeddingDetails = ({ weddingId }) => {
          responseType: 'arraybuffer',
       })
       .then((response) => {
-        const binary = new Uint8Array(response.data); // Konwersja na tablicę binarną
-        const binaryString = binary.reduce((data, byte) => data + String.fromCharCode(byte), ''); // Tworzenie ciągu znaków
-        const base64QrCode = btoa(binaryString); // Konwersja na Base64
+        const binary = new Uint8Array(response.data);
+        const binaryString = binary.reduce((data, byte) => data + String.fromCharCode(byte), '');
+        const base64QrCode = btoa(binaryString);
         setQrCode(base64QrCode);
       })
       .catch((err) => {
@@ -67,39 +68,12 @@ const WeddingDetails = ({ weddingId }) => {
       });
   }, [weddingId]);
 
-  const DeleteWedding = (weddingId) => {
-    if (!weddingId) {
-      console.error('Wedding ID is required for deletion.');
-      return;
-    }
-    axios
-    .delete(`${import.meta.env.VITE_API_URL}/wedding?id=${weddingId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-    .then((response) => {
-      console.log('he')
-    })
-    .catch((err) => {
-      console.log(err)
-      if (err.response?.status === 404) {
-        setError('Wedding not found (404).');
-      } else {
-        setError('Error fetching wedding details.');
-      }
-    })
-    .finally(() => {
-      setLoading(false);
-    })
-  }
-
   return (
-    <div className="h-[200px] lg:min-h-[600px] p-8 bg-project-dark-bg rounded-lg shadow-lg mt-6">
+    <div className="max-w-6xl mx-auto p-6 h-[400px] lg:min-h-[400px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       {loading ? (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full col-span-2">
           <svg
-            className="animate-spin h-8 w-8 text-white"
+            className="animate-spin h-12 w-12 text-white"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -120,25 +94,44 @@ const WeddingDetails = ({ weddingId }) => {
           </svg>
         </div>
       ) : error ? (
-        <p className="text-red-500 text-center">{error}</p>
+        <p className="text-red-500 text-center col-span-2">{error}</p>
       ) : details ? (
-        <div>
-          <h1 className="text-2xl font-bold text-white mb-4">{details.name}</h1>
-          <p className="text-white">
+        <div className="text-white col-span-2 md:col-span-1">
+          <h1 className="text-3xl font-semibold mb-4">{details.name}</h1>
+          <p className="mb-2 text-lg">
             <strong>Date:</strong> {details.eventDate}
           </p>
-          <p className="text-white">
+          <p className="mb-4 text-lg">
             <strong>Description:</strong> {details.description}
           </p>
+
           {qrCode ? (
-            <img src={`data:image/png;base64,${qrCode}`} alt="Wedding QR Code" className="w-64 h-64" />
-            ) : (
-            <p>No QR code available.</p>
+            <div className="flex mb-4">
+              <img
+                src={`data:image/png;base64,${qrCode}`}
+                alt="Wedding QR Code"
+                className="w-48 h-48 border-4 border-project-blue rounded-lg shadow-xl"
+              />
+            </div>
+          ) : (
+            <p className="text-center">No QR code available.</p>
           )}
         </div>
       ) : (
-        <p className="text-gray-400 text-center">Click a wedding to see details</p>
+        <p className="text-gray-400 text-center col-span-2">
+          Click a wedding to see details
+        </p>
       )}
+
+      <div className="col-span-2 md:col-span-2">
+        <div className="flex justify-center items-center h-full">
+          {weddingId ? 
+            <WeddingPhotos weddingId={weddingId} />
+          :
+            <div></div>
+          }
+        </div>
+      </div>
     </div>
   );
 };

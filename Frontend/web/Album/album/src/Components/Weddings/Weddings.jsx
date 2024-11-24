@@ -31,24 +31,26 @@ const Weddings = () => {
 
   return (
     <>
-    <a 
-        className="absolute left-3 inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4" 
+      <a
+        className="absolute left-3 inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4"
         href="/admin"
       >
-      <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
-      </a> <br /> <br />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 min-h-screen bg-project-dark">
-  <div className="min-h-[100px] bg-project-dark">
-    <WeddingList 
+        <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
+      </a>
+      <br />
+      <br />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-project-dark">
+        <div className="min-h-[100px] bg-project-dark sm:col-span-2 md:col-span-1">
+          <WeddingList 
             weddings={weddings} 
             setSelectedWedding={setSelectedWedding} 
             fetchWeddings={fetchWeddings} 
           />
-  </div>
-  <div className="md:col-span-2 bg-project-dark">
-    <WeddingDetails weddingId={selectedWedding} />
-  </div>
-</div>
+        </div>
+        <div className="bg-project-dark sm:col-span-2 md:col-span-2">
+        <WeddingDetails weddingId={selectedWedding} />
+        </div>
+      </div>
     </>
   );
 };
