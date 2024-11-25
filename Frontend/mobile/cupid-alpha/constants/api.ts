@@ -97,7 +97,7 @@ export const loginUser = async (email: string, password: string) => {
   }
 };
 
-const refreshAccessToken = async () => {
+export const refreshAccessToken = async () => {
   try {
     const refreshToken = await getRefreshToken();
     const url = `${API_AUTH_URL}/refresh`;
@@ -110,7 +110,7 @@ const refreshAccessToken = async () => {
     );
 
     // Extract new tokens from the response
-    const { accessToken, refreshToken: newRefreshToken } = response.data;
+    const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data;
 
     console.log('Successfully refreshed access token:', accessToken);
 
@@ -121,6 +121,8 @@ const refreshAccessToken = async () => {
       console.log('Updated refresh token saved securely.');
     }
 
+    setTokenExpiryHandler(expiresIn);
+
     // Return the new access token
     return accessToken;
   } catch (err: any) {
@@ -129,9 +131,18 @@ const refreshAccessToken = async () => {
   }
       
 };
+let tokenExpiryTimer: NodeJS.Timeout | null = null;
+
 const setTokenExpiryHandler = (expiresIn: number) => {
   console.log('Token will expire in:', expiresIn, 'seconds');
-  setTimeout(async () => {
+
+  // Clear existing timer if one is already set
+  if (tokenExpiryTimer) {
+    clearTimeout(tokenExpiryTimer);
+  }
+
+  // Set a new timer
+  tokenExpiryTimer = setTimeout(async () => {
     const refreshToken = await getRefreshToken();
     if (refreshToken) {
       console.log('Refreshing access token...');
@@ -149,24 +160,23 @@ const setTokenExpiryHandler = (expiresIn: number) => {
 
 
 export const checkIfTokenValid = async (token: string) => {
-  // const accessToken = await getAccessToken();
-  //   console.log('Checking PartyToken')
-  //   try {
-  //     const response = await axios.get(`${API_PARTY_URL}/verifyToken?token=${token}`, {
-  //       headers: {
-  //            Authorization: `Bearer ${accessToken}`
-  //         }
-  //       });
-  //       return response.data;
-  //     } catch(error: any) {
-  //         if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
-  //         console.log(error);
-  //         throw error.response;
-  //       }
-
-  
-  // return '';
-  return 'Jacek i Placek';
+  const accessToken = await getAccessToken();
+    console.log('Checking PartyToken')
+    try {
+      const response = await axios.get(`${API_PARTY_URL}/verifyToken?token=${token}`, {
+        headers: {
+             Authorization: `Bearer ${accessToken}`
+          }
+        });
+        console.log(response.data);
+        return response.data;
+      } catch(error: any) {
+        console.log(error);
+        if (error.data.status == 404) throw new Error(`We can't recognize this token. Please scan new QR token or contact PartyManager.`);
+          if (error.code == 400) throw new Error(`We can't recognize this token. Please try again.`);
+          if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
+          throw error.response;
+        }
 };
 
 

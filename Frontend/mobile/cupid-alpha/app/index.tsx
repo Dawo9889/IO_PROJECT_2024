@@ -6,28 +6,47 @@ import CustomButton from '@/components/CustomButton'
 
 import icons from '@/constants/icons'
 import { useEffect, useState } from 'react'
-import { getLoggedUsername } from '@/constants/storage'
+import { getAccessToken, getLoggedUsername, getRefreshToken } from '@/constants/storage'
+import { refreshAccessToken } from '@/constants/api'
 
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start as loading
 
-  const [isLoggedIn, setisLoggedIn] = useState(false);
-
-  // Cfalseo;gin status
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const loggedUsername = await getLoggedUsername();
-        if (loggedUsername) {
-          router.replace('/home');
+        const accessToken = await getAccessToken();
+        const refreshToken = await getRefreshToken();
+
+        if (!loggedUsername || !accessToken || !refreshToken) {
+          setIsAuthenticated(false);
+        } else {
+          setIsAuthenticated(true);
+          await refreshAccessToken();
         }
       } catch (error) {
         console.error('Error checking login status:', error);
+      } finally {
+        setIsLoading(false); // End loading after the check
       }
     };
     checkLoginStatus();
   }, []);
 
-  if (isLoggedIn) return(<SafeAreaView className='bg-primarygray h-full' />);
+  useEffect(() => {
+    // Navigate once authentication state is determined
+    if (!isLoading && isAuthenticated) {
+      router.replace('/home');
+    }
+  }, [isLoading, isAuthenticated]);
+
+  // Show a loading screen while determining authentication state
+  if (isLoading) {
+    return <SafeAreaView className="bg-primarygray h-full" />;
+  }
+  
 
   return (
     <SafeAreaView className='bg-primarygray h-full'>  

@@ -11,12 +11,14 @@ import { FlipType, manipulateAsync } from 'expo-image-manipulator';
 import { router } from 'expo-router';
 import { checkIfTokenValid, uploadPicture } from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
-import { getPartyToken, storePartyToken } from '@/constants/storage';
+import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
 import IconButton from '@/components/navigation/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Camera() {
+
+  const [isLoading, setIsLoading] = useState(true); // Start as loading
 
   const isFocused = useIsFocused();
   const cameraRef = useRef<CameraView>(null);
@@ -25,10 +27,12 @@ export default function Camera() {
   const [camPermission, requestCamPermission] = useCameraPermissions();
   const [picture, setPicture] = useState<{uri: string} | null>(null);
   const [tokenValid, setTokenValid] = useState(false);
+  const [partyName, setPartyName] = useState('');
 
   // Check party token status
   useEffect(() => {
     const checkPartyTokenStatus = async () => {
+      setIsLoading(true);
       try {
         const partyToken = await getPartyToken();
         console.log(partyToken);
@@ -36,20 +40,32 @@ export default function Camera() {
           // Check if token is still valid
           const checkValid = await checkIfTokenValid(partyToken);
           if (checkValid) {
+            setPartyName(checkValid.name);
             setTokenValid(true);
           } else {
             Alert.alert('Your party token is expired. Please scan new party QR.')
+            setPartyName('');
             setTokenValid(false);
           }
+          setIsLoading(false);
           return;
         }
         setTokenValid(false);
-      } catch (error) {
+      } catch (error: any) {
+        Alert.alert('Error', error);
+        await removePartyToken();
+        setPartyName('');
         console.error('Error checking token status:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     checkPartyTokenStatus();
   }, []);
+
+  if (isLoading) {
+    return <SafeAreaView className="bg-primarygray h-full" />;
+  }
 
   if (!camPermission) {
     // Camera permissions are still loading.
@@ -117,6 +133,9 @@ export default function Camera() {
             enableTorch={torchEnabled}
             style={{ flex: 1 }}
           >
+            {partyName &&
+            <Text className='absolute top-10 w-full text-center text-white font-bbold text-2xl'>Party: {partyName}</Text>
+            }
           <IconButton
               containerStyle={'absolute top-10 left-2'}
               onPress={() => setTorchEnabled(t => !t)}

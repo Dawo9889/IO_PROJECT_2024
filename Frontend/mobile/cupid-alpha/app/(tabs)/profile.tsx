@@ -103,12 +103,12 @@ const Profile = () => {
                   Please log in to gain access.
                 </Text>
               
-              <CustomButton
-                title="Create account or Log in"
-                handlePress={() => router.push('/sign-up')}
-                containerStyles="mt-5"
-                textStyles=""
-              />
+                <CustomButton
+                  title="Create account or Log in"
+                  handlePress={() => router.push('/sign-up')}
+                  containerStyles="mt-5"
+                  textStyles=""
+                />
               </View>
           )}
             </View>

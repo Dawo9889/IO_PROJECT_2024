@@ -7,11 +7,34 @@ import { router, useFocusEffect } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 
 import icons from '@/constants/icons'
+import { getAccessToken, getLoggedUsername } from '@/constants/storage'
 
 const Home = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start as loading
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const loggedUsername = await getLoggedUsername();
+        const accessToken = await getAccessToken();
+
+        if (!loggedUsername || !accessToken) {
+          setIsAuthenticated(false);
+          return;
+        }
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      } finally {
+        setIsLoading(false); // End loading after the check
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
 
   const [counter, setCounter] = useState(0);
-
   useEffect(() => {
     if (counter >= 7) {
       router.push('/about-us');
@@ -54,11 +77,13 @@ const Home = () => {
           <Text className='text-sm text-tertiary font-pregular mt-7 text-center'>
             Something else here
           </Text>
+          { !isAuthenticated &&
           <CustomButton
             title="Create CUPID account"
             handlePress={() => router.push('/sign-up')}
             containerStyles="w-full mt-7" textStyles={''}
             />
+          }
         </View>     
       </ScrollView>
       <StatusBar translucent={true} />
