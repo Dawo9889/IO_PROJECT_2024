@@ -175,7 +175,7 @@ namespace Backend.Application.Services.Wedding
                 using (var logoImage = Image.Load<Rgba32>(logoPng))
                 {
                     int moduleSize = qrImage.Width / qrCodeData.ModuleMatrix.Count;
-                    int logoSize = moduleSize * 13;
+                    int logoSize = moduleSize * 9;
 
                     logoImage.Mutate(x => x.Resize(logoSize, logoSize));
 
