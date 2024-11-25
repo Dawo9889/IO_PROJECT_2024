@@ -30,8 +30,4 @@ RUN dotnet publish "./Backend.API.csproj" -c $BUILD_CONFIGURATION -o /app/publis
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Copy cupid.png to /app in the container
-COPY ["Backend.API/cupid.png", "/app/cupid.png"]
-
 ENTRYPOINT ["dotnet", "Backend.API.dll"]
