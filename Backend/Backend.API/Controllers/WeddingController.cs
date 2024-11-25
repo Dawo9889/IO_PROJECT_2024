@@ -41,6 +41,7 @@ namespace Backend.API.Controllers
         }
 
         [HttpGet("verifyToken")]
+        [AllowAnonymous]
         public async Task<ActionResult<WeddingDTO>> VerifyWeddingToken([FromQuery] Guid token)
         {
             var weddingDTO = await _weddingService.ValidateWeddingToken(token);
