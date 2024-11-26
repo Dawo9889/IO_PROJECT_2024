@@ -92,13 +92,17 @@ const WeddingPhotos = ({ weddingId }) => {
         {thumbnails.length > 0 ? (
           <div className="grid grid-cols-3 gap-4">
             {thumbnails.map((thumbnail, index) => (
-              <img
-                key={index}
-                src={thumbnail}
-                alt={`Thumbnail ${index + 1}`}
-                className="w-full rounded-lg shadow-lg transition-opacity duration-200 hover:opacity-50 cursor-pointer"
-                onClick={() => openSlider(index)}
-              />
+            <div
+            key={index}
+            className="w-full h-40 lg:h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer"
+            onClick={() => openSlider(index)}
+            >
+            <img
+              src={thumbnail}
+              alt={`Thumbnail ${index + 1}`}
+              className="w-full h-full object-contain transition-opacity rounded-lg shadow-lg duration-200 hover:opacity-50"
+            />
+            </div>
             ))}
           </div>
         ) : (
