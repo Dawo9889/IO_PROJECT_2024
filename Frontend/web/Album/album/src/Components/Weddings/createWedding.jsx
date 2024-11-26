@@ -72,9 +72,7 @@ const CreateWedding = () => {
 >
   <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
 </a>
-
-
-  </div>
+</div>
 <div className="order-2 md:order-2 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-4">
 <h1 className="text-2xl text-white font-bold text-center mb-4">Create Wedding</h1>
 <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 " autoComplete="off">

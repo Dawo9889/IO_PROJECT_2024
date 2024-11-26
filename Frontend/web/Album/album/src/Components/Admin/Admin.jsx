@@ -22,19 +22,19 @@ const Admin = () => {
             </div>
         </section>
         <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold text-white text-center mb-4">User Page</h1>
+        <h1 className="text-2xl font-bold text-white text-center mb-4">User Page in progress</h1>
         <br />
         <div className="flexGrow">
-            <Link to="/" className="text-project-blue hover:underline">Home</Link>
+            <Link to="/" className="text-project-blue hover:underline">Lorem ipsum</Link>
         </div>
         <div className="flexGrow">
-            <Link to="/album" className="text-project-blue hover:underline">Album Creator</Link>
+            <Link to="/" className="text-project-blue hover:underline">Lorem ipsum</Link>
         </div>
         <div className="flexGrow">
-            <Link to="/linkpage" className="text-project-blue hover:underline">Link page</Link>
+            <Link to="/" className="text-project-blue hover:underline">Lorem ipsum</Link>
         </div>
         <div className="flexGrow">
-            <Link to="/weddings" className="text-project-blue hover:underline">Weddings managment</Link>
+            <Link to="/" className="text-project-blue hover:underline">Lorem ipsum</Link>
         </div>
         </section>
     </div>

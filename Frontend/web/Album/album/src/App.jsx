@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 import MyAlbum from "./Components/MyAlbum/MyAlbum"
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
@@ -14,17 +15,17 @@ import PrivateRoute from './Components/AuthMechanizm/PrivateRoute'
 import CreateWedding from "./Components/Weddings/createWedding";
 import WeddingsGallery from "./Components/Weddings/WeddingsGallery";
 function App() {
+
     return (
      <Routes>
          <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark"><Layout /></div>}>
-          {/* public routes */}
+
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="team" element={<Team />} />
           <Route path="linkpage" element={<LinkPage />} />
           <Route path="unauthorized" element={<Unauthorized />} />
   
-          {/* we want to protect these routes */}
             <Route path="/" element={<div className="p-4"><Home /></div>} />
             <Route path="album" element={<PrivateRoute element={<MyAlbum />} />} />
             <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
@@ -32,7 +33,6 @@ function App() {
             <Route path="createWedding" element={<PrivateRoute element={<CreateWedding />} />} />
             <Route path="weddingsGallery" element={<PrivateRoute element={<WeddingsGallery />} />} />
   
-          {/* catch all */}
           <Route path="*" element={<Missing />} />
         </Route>
      </Routes>

@@ -75,7 +75,7 @@ const WeddingPhotoSlider = ({weddingId, index, onClose}) => {
                 }
               })
             );
-            console.log(authorizedPhotos)
+            // console.log(authorizedPhotos)
             setPhotos(authorizedPhotos.filter((photo) => photo !== null));
           } catch (err) {
             console.error("Błąd podczas pobierania miniatur:", err);
@@ -85,7 +85,7 @@ const WeddingPhotoSlider = ({weddingId, index, onClose}) => {
           }
         };
         fetchPhotos();
-        console.log(photos)
+        // console.log(photos)
       }, [weddingId]);
 
   return (

@@ -56,10 +56,8 @@ const WeddingsGallery = () => {
         </select>
       </div>
 
-      {/* Przerwa */}
       <div className="my-4" />
 
-      {/* Sekcja zdjęć */}
       <div className="p-4 bg-project-dark">
         <div className="min-h-[100px]">
           {selectedWedding ? (
