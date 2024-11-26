@@ -126,7 +126,8 @@ const WeddingDetails = ({ weddingId }) => {
       <div className="col-span-2 md:col-span-2">
         <div className="flex justify-center items-center h-full">
           {weddingId ? 
-            <WeddingPhotos weddingId={weddingId} />
+            // <WeddingPhotos weddingId={weddingId} />
+            <div></div>
           :
             <div></div>
           }

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+
 const Admin = () => {
     return (
         <>
@@ -17,7 +18,7 @@ const Admin = () => {
                 <Link to="/weddings" className="text-project-blue hover:underline">Weddings managment</Link>
             </div>
             <div className="flexGrow">
-                <Link to="/weddings" className="text-project-blue hover:underline">Weddings Gallery</Link>
+                <Link to="/weddingsGallery" className="text-project-blue hover:underline">Weddings Gallery</Link>
             </div>
         </section>
         <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">

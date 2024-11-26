@@ -12,7 +12,7 @@ import LinkPage from './Components/Dashboard/LinkPage';
 import Weddings from "./Components/Weddings/Weddings";
 import PrivateRoute from './Components/AuthMechanizm/PrivateRoute'
 import CreateWedding from "./Components/Weddings/createWedding";
-
+import WeddingsGallery from "./Components/Weddings/WeddingsGallery";
 function App() {
     return (
      <Routes>
@@ -30,6 +30,7 @@ function App() {
             <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
             <Route path="weddings" element={<PrivateRoute element={<Weddings />} />} />
             <Route path="createWedding" element={<PrivateRoute element={<CreateWedding />} />} />
+            <Route path="weddingsGallery" element={<PrivateRoute element={<WeddingsGallery />} />} />
   
           {/* catch all */}
           <Route path="*" element={<Missing />} />
