@@ -6,7 +6,7 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Zaq12wsx
    volumes:
-      - /IO-PROJ-DATA/database/:/var/opt/mssql/
+      - /docker_github/data/database/:/var/opt/mssql/
    ports:
     - 1433:1433
 
@@ -20,7 +20,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - /IO-PROJ-DATA/backend/zdjecia:/app/zdjecia
+      - /docker_github/data/backend/zdjecia:/app/zdjecia
     restart: always
     depends_on:
       - database
