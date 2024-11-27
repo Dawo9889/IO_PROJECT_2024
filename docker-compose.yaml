@@ -1,4 +1,3 @@
-version: "3.8"
 services:
 
   database:
@@ -7,7 +6,7 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Zaq12wsx
    volumes:
-      - /IO-PROJ-DATA/database/:/var/opt/mssql/
+      - /docker_github/data/database/:/var/opt/mssql/
    ports:
     - 1433:1433
 
@@ -16,12 +15,12 @@ services:
     environment:
      - DATABASE_IP=<your-ip-address>
      - ConnectionStrings__DbConnection=Server=<your-ip-address>,1433;Database=ProjectIO;User Id=sa;Password=Zaq12wsx;Encrypt=True;TrustServerCertificate=True;
-     - BaseBackendUrl=<your-ip-address>:8080 # If it's production ready, change to domain name
+     - BaseBackendUrl=http://<your-ip-address>:8080 # If it's production ready, change to domain name
 
     ports:
       - 8080:8080
     volumes:
-      - /IO-PROJ-DATA/backend/zdjecia:/app/zdjecia
+      - /docker_github/data/backend/zdjecia:/app/zdjecia
     restart: always
     depends_on:
       - database
