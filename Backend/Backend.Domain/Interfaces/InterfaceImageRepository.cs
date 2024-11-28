@@ -10,6 +10,6 @@ namespace Backend.Domain.Interfaces
     public interface InterfaceImageRepository
     {
         Task<bool> AddImageAsync(ImageData image);
-        Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId);
+        Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId, int pageNumber);
     }
 }

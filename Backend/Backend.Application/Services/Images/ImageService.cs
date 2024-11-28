@@ -189,14 +189,14 @@ namespace Backend.Application.Services.Images
             return thumbnailStream;
         }
 
-        public async Task<List<ImagesDataDTO>> GetImagesForWeddingAsync(Guid weddingId, string userId)
+        public async Task<List<ImagesDataDTO>> GetImagesDataForWeddingAsync(Guid weddingId, string userId, int pageNumber)
         {
             if (!await _weddingRepository.IsUserOwnerOfWedding(weddingId, userId))
             {
                 return null;
             }
 
-            var imageDatas = await _imageRepository.GetAllImagesFromWeddingAsync(weddingId);
+            var imageDatas = await _imageRepository.GetAllImagesFromWeddingAsync(weddingId, pageNumber);
             foreach (var image in imageDatas)
             {
                 image.FilePath = ConvertFilePathToUrl(image.FilePath);

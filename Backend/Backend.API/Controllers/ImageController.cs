@@ -51,11 +51,11 @@ namespace Backend.API.Controllers
         }
 
         [HttpGet("path")]
-        public async Task<IActionResult> GetImagesForWedding([FromQuery] Guid weddingId)
+        public async Task<IActionResult> GetImagesForWedding([FromQuery] Guid weddingId, int pageNumber)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var images = await _imageService.GetImagesForWeddingAsync(weddingId, userId);
+            var images = await _imageService.GetImagesDataForWeddingAsync(weddingId, userId, pageNumber);
             if(images == null)
             {
                 return Unauthorized("User does not have access to this wedding.");
