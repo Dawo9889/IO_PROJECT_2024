@@ -31,6 +31,7 @@ namespace Backend.Infrastructure.Repositories
         {
             var imagesDatas = await _dbContext.ImageDatas
                 .Where(image => image.WeddingId == weddingId)
+                .OrderBy(image => image.CreatedAt)
                 .ToListAsync();
 
             if(imagesDatas == null)
