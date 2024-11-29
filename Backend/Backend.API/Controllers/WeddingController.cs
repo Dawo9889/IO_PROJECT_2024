@@ -86,7 +86,14 @@ namespace Backend.API.Controllers
 
             if (result)
             {
-                return NoContent();
+                
+                var folderDeleted = _weddingService.DeleteAllWeddingsImageOnPath(id);
+
+                if (folderDeleted)
+                {
+                    return Ok("Wedding and all of its data deleted");
+                }
+                return BadRequest("cannot delete wedding data from disk");
             }
 
             return NotFound("Wedding not found");

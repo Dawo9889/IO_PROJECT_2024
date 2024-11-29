@@ -203,6 +203,15 @@ namespace Backend.Application.Services.Wedding
            var weddingDTO = _mapper.Map<WeddingDTO>(wedding);
            return weddingDTO;
         }
-
+        public bool DeleteAllWeddingsImageOnPath(Guid weddingId)
+        {
+            var weddingFolderPath = Path.Combine(_photosBasePath, weddingId.ToString());
+            if (!Directory.Exists(weddingFolderPath))
+            {
+                return true;
+            }
+            Directory.Delete(weddingFolderPath, recursive: true);
+            return true;
+        }
     }
 }
