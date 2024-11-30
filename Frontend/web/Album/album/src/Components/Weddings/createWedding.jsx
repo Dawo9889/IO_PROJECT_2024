@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
 import DatePicker from 'react-datepicker'
 import './style.css'
+import { useNavigate } from 'react-router-dom';
 
 const CreateWedding = () => {
 
@@ -11,6 +12,7 @@ const CreateWedding = () => {
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+    const navigate = useNavigate();
 
     var curr = new Date();
     curr.setDate(curr.getDate() + 3);
@@ -41,6 +43,10 @@ const CreateWedding = () => {
                 }
             );
             setMessage('Wedding created successfully!');
+            setTimeout(() => {
+              navigate(-1);
+            }, 1000);
+
         }
         catch(err) {
             console.error(err);
