@@ -1,18 +1,35 @@
-import { View, Text , Image, ImageSourcePropType} from 'react-native'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { View, Text , Image, ImageSourcePropType, Alert} from 'react-native'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from 'expo-router'
+import { router, useNavigation } from 'expo-router'
 
 import IconButton from './navigation/IconButton'
+import { uploadPicture } from '@/constants/api'
 
 interface PicturePreviewProps {
     picture: any,
-    setPicture: any,
-    savePicture: any
+    setPicture: any
 }
 
-const PicturePreview = ({picture, setPicture, savePicture}: PicturePreviewProps) => {
+const PicturePreview = ({picture, setPicture}: PicturePreviewProps) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const savePicture = async () => {
+    setIsLoading(true);
+    try{
+      const result = await uploadPicture(picture);
+      setPicture(null);
+      if (result) Alert.alert('Picture uploaded!');
+      router.replace('/camera');
+    } catch (error: any) {
+      Alert.alert('Error', 'Somenthing went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+    
+  }
 
   return (
     <SafeAreaView className="flex-1 h-full" edges={['left', 'right']}>
@@ -24,7 +41,7 @@ const PicturePreview = ({picture, setPicture, savePicture}: PicturePreviewProps)
                   onPress={() => setPicture('')} iconSize={50} iconName={'close-outline'}
               />
           <IconButton containerStyle={'absolute bottom-[15px] right-[15px] w-[50px] h-[50px]'}
-                  onPress={() => savePicture()} iconSize={50} iconName={'checkmark-done-outline'}
+                  onPress={() => savePicture()} iconSize={50} iconName={'checkmark-done-outline'} disabled={isLoading}
               />
 
           {/* Top right controls */}

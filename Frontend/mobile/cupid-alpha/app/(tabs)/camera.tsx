@@ -35,7 +35,7 @@ export default function Camera() {
       setIsLoading(true);
       try {
         const partyToken = await getPartyToken();
-        console.log(partyToken);
+        console.log(`Camera page: ${partyToken}`);
         if (partyToken) {
           // Check if token is still valid
           const checkValid = await checkIfTokenValid(partyToken);
@@ -60,8 +60,8 @@ export default function Camera() {
         setIsLoading(false);
       }
     };
-    checkPartyTokenStatus();
-  }, []);
+    if (isFocused) checkPartyTokenStatus();
+  }, [isFocused]);
 
   if (isLoading) {
     return <SafeAreaView className="bg-primarygray h-full" />;
@@ -108,18 +108,7 @@ export default function Camera() {
     }
   }
 
-  const savePicture = async () => {
-    try{
-      const result = await uploadPicture(picture);
-      setPicture(null);
-      if (result) Alert.alert('Picture uploaded!');
-    } catch (error: any) {
-      Alert.alert('Error', 'Somenthing went wrong. Please try again.');
-    }
-    
-  }
-
-  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} savePicture={savePicture} />;
+  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} />;
 
   return (
     <SafeAreaView className="flex-1 bg-black h-full" edges={['left', 'right']}>

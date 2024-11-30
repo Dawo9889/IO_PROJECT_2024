@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { getAccessToken, getNickname, getPartyToken, getRefreshToken, storeAccessToken, storeLoggedUsername, storeRefreshToken } from "./storage";
 import * as FileSystem from 'expo-file-system';
+import { dateToString } from "./helpers";
 
 const API_AUTH_URL = 'https://api.cupid.pics/api/identity';
 const API_IMAGE_URL = 'https://api.cupid.pics/api/image/upload';
@@ -172,7 +173,7 @@ export const checkIfTokenValid = async (token: string) => {
         return response.data;
       } catch(error: any) {
         console.log(error);
-        if (error.data.status == 404) throw new Error(`We can't recognize this token. Please scan new QR token or contact PartyManager.`);
+        // if (error.data.status == 404) throw new Error(`We can't recognize this token. Please scan new QR token or contact PartyManager.`);
           if (error.code == 400) throw new Error(`We can't recognize this token. Please try again.`);
           if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
           throw error.response;
@@ -258,6 +259,7 @@ export const getPartyQR = async (id: string) => {
     return base64;
   } catch (error: any) {
     console.error('Error fetching QR code:', error);
+    return null;
     throw error.response || error;
   }
 };
@@ -287,6 +289,78 @@ export const getPartyDetails = async (id: string) => {
   }
 }
 
-export const editPartyToken = async (hours: number) => {
+export const editPartyToken = async (partyID: string, hours: number) => {
+  const accessToken = await getAccessToken();
+  console.log('Updating party token by ',hours, 'hours');
+  try {
+    const response = await axios.put(`${API_PARTY_URL}/updateToken?id=${partyID}&hours=${hours}`,{},
+      {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    });
+    return response;
+  } catch (error: any) {
+    console.error('Error editing party QR:', error);
+    throw error.response || error;
+  }
+}
 
+export const createParty = async (name: string, date: Date, description: string) => {
+  const accessToken = await getAccessToken();
+  console.log('Creating Party');
+  const strdate = dateToString(date);
+  try {
+    const response = await axios.post(`${API_PARTY_URL}`, {
+      name: name,
+      eventDate: strdate,
+      description: description,
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    console.error('Error creating party:', error);
+    throw error.response || error;
+  }
+}
+
+export const editParty = async (partyID: string, name: string, date: Date, description: string) => {
+  const accessToken = await getAccessToken();
+  console.log('Editing Party');
+  const strdate = dateToString(date);
+  try {
+    const response = await axios.put(`${API_PARTY_URL}`, {
+      id: partyID,
+      name: name,
+      eventDate: strdate,
+      description: description,
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    console.error('Error editing party:', error);
+    throw error.response || error;
+  }
+}
+
+export const deleteParty = async (partyID: string) => {
+  const accessToken = await getAccessToken();
+  console.log('Deleting Party');
+  try {
+    const response = await axios.delete(`${API_PARTY_URL}?id=${partyID}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response;
+  } catch (error: any) {
+    console.error('Error deleting party:', error);
+    throw error.response || error;
+  }
 }

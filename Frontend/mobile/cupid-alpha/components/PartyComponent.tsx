@@ -10,11 +10,11 @@ interface PartyComponentProps {
 
 const PartyComponent = ({ name, tokenSettings, partySettings }: PartyComponentProps) => {
   return (
-    <View className='w-full flex-row items-center m-3'>
+    <View className='flex-row items-center m-2 border-2 border-white rounded-lg p-3'>
       <Text className='text-primary text-2xl font-bbolditalic'>{name}</Text>
       <View className='ml-auto flex-row'>
-        <IconButton containerStyle={'w-[50px] h-[50px]'} onPress={partySettings} iconName={'settings-outline'} iconSize={40} iconColor={'black'} />
-        <IconButton containerStyle={'w-[50px] h-[50px]'} onPress={tokenSettings} iconName={'qr-code-outline'} iconSize={40} iconColor={'black'} />
+        <IconButton containerStyle={'w-[50px] h-[50px]'} onPress={partySettings} iconName={'settings-outline'} iconSize={40} iconColor={'white'} />
+        <IconButton containerStyle={'w-[50px] h-[50px]'} onPress={tokenSettings} iconName={'qr-code-outline'} iconSize={40} iconColor={'white'} />
       </View>
     </View>
   )

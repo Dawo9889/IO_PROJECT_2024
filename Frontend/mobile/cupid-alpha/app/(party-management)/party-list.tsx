@@ -12,8 +12,10 @@ import { router } from 'expo-router'
 import CustomButton from '@/components/CustomButton'
 import PartyComponent from '@/components/PartyComponent'
 import { getUserParties } from '@/constants/api'
+import { useIsFocused } from '@react-navigation/native'
 
 const PartyList = () => {
+  const isFocused = useIsFocused();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [parties, setParties] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +40,7 @@ const PartyList = () => {
       }
     };
     checkLoginStatus();
-  }, []);
+  }, [isFocused]);
 
   
 
@@ -51,7 +53,7 @@ const PartyList = () => {
       >
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
           <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-5' resizeMode='contain' tintColor='#fff' />       
-            <View className='absolute top-[150px] px-8 w-full bg-gray-700 border-2 border-white rounded-lg'>
+            <View className='absolute top-[150px] w-full'>
             {isLoading ? ( // Show the throbber if loading
               <View className="mt-10 flex justify-center items-center">
                 <ActivityIndicator size="large" color="#fff" className='flex absolute top-[300px]'/>
@@ -60,15 +62,22 @@ const PartyList = () => {
             ) : isLoggedIn ? (
               <>
                 <View className="relative mt-5 ">
-                  <Text className='text-primary text-3xl font-bbold'>Your parties:</Text>
+                  <Text className='text-white text-3xl font-bbold'>{parties.length ? 'Your parties:' : `You don't have parties yet.`}</Text>
                 </View>
                 {parties.map((party: { id: string, eventDate: string, name: string, description: string }) => (
                   <PartyComponent
                     key={party.id}
                     name={party.name}
                     tokenSettings={() => router.push({ pathname: '/party-qr', params: { id: party.id }})}
-                    partySettings={() => {}} />
+                    partySettings={() => router.push({ pathname: '/edit-party', params: { id: party.id }})} />
                 ))}
+                <View className='m-2 border-2 border-white rounded-lg p-3 items-center'>
+                  <IconButton 
+                    containerStyle="w-full"
+                    onPress={() => router.push('/edit-party')} 
+                    iconName="add-circle-outline" 
+                    iconSize={50} />
+                </View>
               </>
             ) : (
               <View className="relative mt-5 w-full">

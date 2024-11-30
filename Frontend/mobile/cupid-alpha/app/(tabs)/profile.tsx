@@ -67,21 +67,27 @@ const Profile = () => {
       >
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
           <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-10' resizeMode='contain' tintColor='#fff' />       
-            <View className='relative mt-5'>
+            <View className='relative mt-5 w-3/4 items-center'>
             {isLoggedIn ? (
             <>
-              <View className="relative mt-5">
-                <Ionicons name='person-outline' size={100} color='#C4E6E9' className='mx-auto' />
-                <View className='flex-row items-center'>
+              <View className="mt-5 flex items-center justify-center">
+                <Ionicons name="person-outline" size={100} color="#C4E6E9" />
+                <View className="flex-row items-center justify-center">
                   <Text className="text-2xl text-primary text-center font-bold">
                     {username}
                   </Text>
-                  <IconButton containerStyle={'w-[40px] h-[40px] ml-2'} onPress={confirmLogout} iconName={'log-out-outline'} iconSize={35} iconColor={'#b11f30'} />
+                  <IconButton
+                    containerStyle="w-[40px] h-[40px] ml-2"
+                    onPress={confirmLogout}
+                    iconName="log-out-outline"
+                    iconSize={35}
+                    iconColor="#b11f30"
+                  />
                 </View>
               </View>
 
               {/* Controls */}
-              <View className='mt-8'>
+              <View className='mt-8 w-full'>
                 <ProfileButton
                   title="Edit Profile"
                   handlePress={() => {}}
