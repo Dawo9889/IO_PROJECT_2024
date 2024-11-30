@@ -137,7 +137,7 @@ namespace Backend.Application.Services.Wedding
             else
             {
                 // Extend Token
-                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
+                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration).ToUniversalTime();
             }
 
             await _weddingRepository.Update(wedding);
@@ -156,10 +156,10 @@ namespace Backend.Application.Services.Wedding
             }
 
             var wedding = await _weddingRepository.GetDetailsById(weddingId);
-            if (wedding.IsSessionKeyExpired)
-            {
-                return null;
-            }
+            //if (wedding.IsSessionKeyExpired)
+            //{
+            //    return null;
+            //}
 
             var sessionToken = wedding.SessionKey.ToString();
 
