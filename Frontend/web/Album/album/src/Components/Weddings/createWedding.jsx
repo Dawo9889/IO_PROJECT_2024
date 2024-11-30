@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
-import DatePicker from 'react-datepicker'
 import './style.css'
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CreateWedding = () => {
 
@@ -42,7 +44,8 @@ const CreateWedding = () => {
                     }
                 }
             );
-            setMessage('Wedding created successfully!');
+            // setMessage('Wedding created successfully!');
+            toast.success('Wedding created successfully!');
             setTimeout(() => {
               navigate(-1);
             }, 1000);
@@ -50,7 +53,8 @@ const CreateWedding = () => {
         }
         catch(err) {
             console.error(err);
-            setMessage('An error occurred while creating the wedding.');
+            toast.error('An error occurred while creating the wedding.')
+            // setMessage('An error occurred while creating the wedding.');
         }
     }
 

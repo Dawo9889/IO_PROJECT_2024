@@ -93,7 +93,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
             const blob = new Blob([res.data], { type: 'image/jpeg' });
             return URL.createObjectURL(blob);
           } catch (err) {
-            console.error(`Błąd autoryzacji dla zdjęcia ${photo}:`, err.message);
+            console.error(`Błąd autoryzacji dla zdjęcia ${photo}:`, err);
             return null;
           }
         })
@@ -113,6 +113,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
   }, [currentIndex, photos]);
 
   const currentPhoto = bufferedPhotos.find((photo) => photo.index === currentIndex)?.src;
+  console.log("Current photo "+currentPhoto)
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"

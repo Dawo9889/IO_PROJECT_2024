@@ -14,9 +14,12 @@ import Weddings from "./Components/Weddings/Weddings";
 import PrivateRoute from './Components/AuthMechanizm/PrivateRoute'
 import CreateWedding from "./Components/Weddings/createWedding";
 import WeddingsGallery from "./Components/Weddings/WeddingsGallery";
+import { ToastContainer } from "react-toastify";
 function App() {
 
     return (
+      <>
+    <ToastContainer />
      <Routes>
          <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark"><Layout /></div>}>
 
@@ -36,6 +39,7 @@ function App() {
           <Route path="*" element={<Missing />} />
         </Route>
      </Routes>
+     </>
     );
   }
 export default App;

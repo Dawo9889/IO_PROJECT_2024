@@ -37,6 +37,7 @@
     "react-notifications": "^1.7.4",
     "react-pageflip": "^2.0.3",
     "react-router-dom": "^6.28.0",
+    "react-toastify": "^10.0.6",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
