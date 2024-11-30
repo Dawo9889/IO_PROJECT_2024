@@ -58,7 +58,8 @@ namespace Backend.API.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var weddingDetailsDto = await _weddingService.GetWeddingDetailsById(id, userId);
-            if(weddingDetailsDto == null)
+            weddingDetailsDto.SessionKeyExpirationDate = weddingDetailsDto.SessionKeyExpirationDate.ToUniversalTime();
+            if (weddingDetailsDto == null)
             {
                 return NotFound("Wedding not found");
             }
@@ -86,7 +87,14 @@ namespace Backend.API.Controllers
 
             if (result)
             {
-                return NoContent();
+                
+                var folderDeleted = _weddingService.DeleteAllWeddingsImageOnPath(id);
+
+                if (folderDeleted)
+                {
+                    return Ok("Wedding and all of its data deleted");
+                }
+                return BadRequest("cannot delete wedding data from disk");
             }
 
             return NotFound("Wedding not found");
@@ -134,7 +142,7 @@ namespace Backend.API.Controllers
             var qrCode = await _weddingService.GetQrCode(id, userId);
             if(qrCode == null)
             {
-                return NotFound("Something went wrong, token might be expired");
+                return NotFound("Something went wrong");
             }
             return File(qrCode, "image/png");
         }

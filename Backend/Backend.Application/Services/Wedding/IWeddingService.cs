@@ -23,7 +23,7 @@ namespace Backend.Application.Services.Wedding
 
         Task<WeddingDTO> ValidateWeddingToken(Guid token);
 
-
+        bool DeleteAllWeddingsImageOnPath(Guid weddingId);
 
 
     }

@@ -27,6 +27,13 @@ namespace Backend.Infrastructure.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ImageData>()
+                .HasOne(i => i.Wedding)
+                .WithMany(w => w.ImageDatas)
+                .HasForeignKey(i => i.WeddingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
 
             modelBuilder.Entity<WeddingUser>()
                 .HasKey(wc => new { wc.WeddingId, wc.UserId });
@@ -34,7 +41,8 @@ namespace Backend.Infrastructure.Persistance
             modelBuilder.Entity<WeddingUser>()
                 .HasOne(wc => wc.Wedding)
                 .WithMany(w => w.WeddingUser)
-                .HasForeignKey(wc => wc.WeddingId);
+                .HasForeignKey(wc => wc.WeddingId)
+                .OnDelete(DeleteBehavior.Cascade); 
 
             modelBuilder.Entity<WeddingUser>()
                 .HasOne(wc => wc.User)

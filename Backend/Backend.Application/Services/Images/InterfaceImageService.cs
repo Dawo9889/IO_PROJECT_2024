@@ -12,7 +12,8 @@ namespace Backend.Application.Services.Images
     {
         Task<bool> AddImageAsync(CreateImageDTO createImageDTO, Guid sessionToken);
         Task<bool> IsSessionValid(Guid sessionToken);
-        Task<List<ImagesDataDTO>> GetImagesForWeddingAsync(Guid weddingId, string userId);
+        Task<List<ImagesDataDTO>> GetImagesDataForWeddingAsync(Guid weddingId, string userId, int pageNumber);
         Task<(Stream FileStream, string MimeType)> GetPhotoThumbnailFile(string path);
+        
     }
 }

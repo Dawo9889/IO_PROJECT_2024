@@ -27,10 +27,18 @@ namespace Backend.Infrastructure.Repositories
             return result > 0;
         }
 
-        public async Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId)
+        public async Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId, int pageNumber)
         {
+            int pageSize = 20;
+            if(pageNumber <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageNumber));
+            }
             var imagesDatas = await _dbContext.ImageDatas
                 .Where(image => image.WeddingId == weddingId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .OrderBy(image => image.CreatedAt)
                 .ToListAsync();
 
             if(imagesDatas == null)

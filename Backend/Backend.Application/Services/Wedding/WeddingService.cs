@@ -137,7 +137,7 @@ namespace Backend.Application.Services.Wedding
             else
             {
                 // Extend Token
-                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
+                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration).ToUniversalTime();
             }
 
             await _weddingRepository.Update(wedding);
@@ -156,10 +156,10 @@ namespace Backend.Application.Services.Wedding
             }
 
             var wedding = await _weddingRepository.GetDetailsById(weddingId);
-            if (wedding.IsSessionKeyExpired)
-            {
-                return null;
-            }
+            //if (wedding.IsSessionKeyExpired)
+            //{
+            //    return null;
+            //}
 
             var sessionToken = wedding.SessionKey.ToString();
 
@@ -203,6 +203,15 @@ namespace Backend.Application.Services.Wedding
            var weddingDTO = _mapper.Map<WeddingDTO>(wedding);
            return weddingDTO;
         }
-
+        public bool DeleteAllWeddingsImageOnPath(Guid weddingId)
+        {
+            var weddingFolderPath = Path.Combine(_photosBasePath, weddingId.ToString());
+            if (!Directory.Exists(weddingFolderPath))
+            {
+                return true;
+            }
+            Directory.Delete(weddingFolderPath, recursive: true);
+            return true;
+        }
     }
 }

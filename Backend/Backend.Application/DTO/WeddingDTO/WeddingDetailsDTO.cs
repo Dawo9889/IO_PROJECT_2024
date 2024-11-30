@@ -12,7 +12,7 @@ namespace Backend.Application.DTO.WeddingDTO
         public string Name { get; set; } = default!;
         public DateOnly EventDate { get; set; } = default!;
         public string Description { get; set; } = default!;
-        public DateTime SessionKeyExpirationDate { get; set; } = DateTime.UtcNow.AddHours(48);
+        public DateTime SessionKeyExpirationDate { get; set; } 
         public int ImagesCount { get; set; }
         public Guid SessionKey { get; set; }
     }
