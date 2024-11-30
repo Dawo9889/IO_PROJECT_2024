@@ -56,7 +56,7 @@ const WeddingDetails = ({ weddingId }) => {
         setQrCode(base64QrCode);
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
         if (err.response?.status === 404) {
           setError('Wedding not found (404).');
         } else {
