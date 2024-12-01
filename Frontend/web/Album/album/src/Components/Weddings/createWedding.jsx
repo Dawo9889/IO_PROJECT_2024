@@ -3,7 +3,7 @@ import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
 import './style.css'
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
