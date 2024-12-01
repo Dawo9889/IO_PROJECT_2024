@@ -49,7 +49,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
     queryKey: ['weddingPhotos', weddingId],
     queryFn: async () => {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}`,
+        `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=1`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
