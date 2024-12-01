@@ -18,7 +18,7 @@ const WeddingPhotos = ({ weddingId }) => {
   };
 
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     const fetchThumbnails = async () => {
       try {
         const response = await axios.get(
@@ -29,8 +29,12 @@ const WeddingPhotos = ({ weddingId }) => {
             },
           }
         );
-
-        const thumbnailLinks = response.data.map((item) => item.thumbnailPath);
+  
+        const sortedData = response.data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+  
+        const thumbnailLinks = sortedData.map((item) => item.thumbnailPath);
         const authorizedThumbnails = await Promise.all(
           thumbnailLinks.map(async (thumbnail) => {
             try {
@@ -41,25 +45,28 @@ const WeddingPhotos = ({ weddingId }) => {
                 responseType: "arraybuffer",
               });
               const blob = new Blob([res.data], { type: "image/jpeg" });
-              const imageUrl = URL.createObjectURL(blob);
-              return imageUrl;
+              const image = URL.createObjectURL(blob);
+              return image;
             } catch (err) {
-              console.error(`Błąd autoryzacji dla miniatury ${thumbnail}:`, err);
-              return null; 
+              // console.error(`Błąd autoryzacji dla miniatury ${thumbnail}:`, err);
+              return null;
             }
           })
         );
-        setThumbnails(authorizedThumbnails.filter((thumbnail) => thumbnail !== null));
+  
+        setThumbnails(
+          authorizedThumbnails.filter((thumbnail) => thumbnail !== null)
+        );
       } catch (err) {
-        console.error("Błąd podczas pobierania miniatur:", err);
-      }
-      finally {
-        setLoading(false)
+        // console.error("Błąd podczas pobierania miniatur:", err);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     fetchThumbnails();
   }, [weddingId]);
+  
 
 
   return (
@@ -106,7 +113,10 @@ const WeddingPhotos = ({ weddingId }) => {
             ))}
           </div>
         ) : (
-          <p>Brak miniatur</p>
+          <div className="flex items-center justify-center w-full h-full text-center text-white text-2xl">
+            Brak miniatur
+          </div>
+
         )}
       </div> }
       

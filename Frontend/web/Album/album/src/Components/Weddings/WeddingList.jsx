@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
   // const [weddings, setWeddings] = useState([]);
@@ -16,7 +17,7 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
         },
       })
       .then(() => {
-        console.log("Wedding deleted successfully.");
+        toast.success('Wedding delete successfully!');
         fetchWeddings();
       })
       .catch((err) => {
@@ -26,7 +27,7 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
 
   return (
     <div className="flex justify-start pt-6">
-      <div className="h-[200px] lg:min-h-[700px] overflow-y-auto w-full p-6 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
+      <div className="h-[200px] lg:min-h-[500px] overflow-y-auto w-full p-6 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-white text-center mb-6">Weddings List</h1>
         {error ? (
           <p className="text-red-500 text-center">{error}</p>

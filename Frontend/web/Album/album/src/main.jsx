@@ -5,14 +5,17 @@ import React from "react";
 import App from "./App";
 import { AuthProvider } from "./Components/context/AuthProvider";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NavbarDefault from './Components/Navbar/NavbarDefault'
 import NavbarUpdate from "./Components/Navbar/navbar-update";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 root.render(
     <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <AuthProvider>
       <NavbarUpdate />
@@ -22,5 +25,6 @@ root.render(
       </Routes>
     </AuthProvider>
     </BrowserRouter>
+    </QueryClientProvider>
     </StrictMode>
 );

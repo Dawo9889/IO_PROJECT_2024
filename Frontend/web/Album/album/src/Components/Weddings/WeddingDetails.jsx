@@ -69,7 +69,7 @@ const WeddingDetails = ({ weddingId }) => {
   }, [weddingId]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 h-[700px] lg:min-h-[700px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="max-w-6xl mx-auto p-6 h-[400px] lg:min-h-[500px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
       {loading ? (
         <div className="flex items-center justify-center h-full col-span-2">
           <svg

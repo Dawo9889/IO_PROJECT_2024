@@ -28,6 +28,7 @@ const Weddings = () => {
   useEffect(() => {
     fetchWeddings(); 
   }, []);
+  
 
   return (
     <>
