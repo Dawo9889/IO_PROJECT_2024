@@ -29,7 +29,7 @@ namespace Backend.Infrastructure.Repositories
 
         public async Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId, int pageNumber)
         {
-            int pageSize = 20;
+            int pageSize = 24;
             if(pageNumber <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(pageNumber));
