@@ -22,7 +22,7 @@ const WeddingPhotos = ({ weddingId }) => {
     const fetchThumbnails = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}`,
+          `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=1`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
