@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
-const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
+const WeddingPhotoSlider = ({ weddingId,pageCount, index, onClose }) => {
   const [photos, setPhotos] = useState([]);
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -43,28 +43,33 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
   useEffect(() => {
     const fetchPhotos = async () => {
       setLoading(true);
+      const allPhotos = [];
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=1`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const sortedData = response.data.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        );
-        setPhotos(sortedData);
+        for (let i = 1; i <= pageCount; i++) {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${i}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          const sortedData = response.data.sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+          );
+          allPhotos.push(...sortedData); // Dodaj zdjęcia z tej strony
+        }
+        console.log(allPhotos)
+        setPhotos(allPhotos); // Ustaw wszystkie zdjęcia w stanie
       } catch (err) {
         console.error('Błąd podczas pobierania zdjęć:', err);
       } finally {
         setLoading(false);
       }
     };
-
     fetchPhotos();
   }, [weddingId]);
+  
 
   useEffect(() => {
     const loadPhoto = async () => {
@@ -109,7 +114,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
       onClick={closeSlider}
     >
       {loading || !currentPhoto ? (
-        <div>
+        <div className="min-h-[500px] flex justify-center items-center">
           <svg
             className="animate-spin h-12 w-12 text-white"
             xmlns="http://www.w3.org/2000/svg"
@@ -151,20 +156,22 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
                 &larr;
               </button>
             )}
-
-            <motion.div key={currentIndex}>
+        <div className='min-h-[600px]'>
+            <motion.div key={currentIndex} className="flex justify-center">
               <LazyLoadImage
                 src={currentPhoto?.photoSrc}
                 placeholderSrc={currentPhoto?.thumbnailSrc}
                 effect="blur"
                 alt={`Photo ${currentIndex + 1}`}
                 className={`mx-auto rounded-lg ${
-                  isVertical ? 'max-h-[90vh] max-w-[70vw]' : 'max-w-full max-h-screen'
+                  isVertical
+                    ? 'max-h-[90vh] max-w-[70vw]'
+                    : 'max-w-full max-h-screen'
                 } object-contain`}
                 onLoad={handleImageLoad}
               />
             </motion.div>
-
+        </div>
             {currentIndex < photos.length - 1 && (
               <button
                 onClick={goToNext}
@@ -174,7 +181,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
               </button>
             )}
           </div>
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-4 mb-4">
             <p className="text-white text-lg">
               {currentIndex + 1} / {photos.length}
             </p>
@@ -183,6 +190,7 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
       )}
     </div>
   );
+  
 };
 
 export default WeddingPhotoSlider;

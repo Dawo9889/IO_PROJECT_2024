@@ -57,8 +57,8 @@ const WeddingsGallery = () => {
       </div>
 
       <div className="my-4" />
-
-      <div className="p-4 bg-project-dark">
+      <div className="h-[400px] lg:min-h-[600px] overflow-y-auto m-4 p-4 bg-project-dark border border-project-blue rounded-lg shadow-lg">
+      {/* <div className="p-4 bg-project-dark"> */}
         <div className="min-h-[100px]">
           {selectedWedding ? (
             <WeddingPhotos weddingId={selectedWedding} />
