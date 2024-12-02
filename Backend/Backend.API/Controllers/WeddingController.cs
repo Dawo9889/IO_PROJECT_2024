@@ -63,7 +63,7 @@ namespace Backend.API.Controllers
             {
                 return NotFound("Wedding not found");
             }
-            weddingDetailsDto.SessionKeyExpirationDate = weddingDetailsDto.SessionKeyExpirationDate.AddHours(1).ToUniversalTime();
+            weddingDetailsDto.SessionKeyExpirationDate = weddingDetailsDto.SessionKeyExpirationDate.ToUniversalTime();
             return Ok(weddingDetailsDto);
 
         }
