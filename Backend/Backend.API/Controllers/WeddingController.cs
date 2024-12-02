@@ -58,9 +58,10 @@ namespace Backend.API.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var weddingDetailsDto = await _weddingService.GetWeddingDetailsById(id, userId);
-            weddingDetailsDto.SessionKeyExpirationDate = weddingDetailsDto.SessionKeyExpirationDate.ToUniversalTime();
+            
             if (weddingDetailsDto == null)
             {
+                
                 return NotFound("Wedding not found");
             }
             return Ok(weddingDetailsDto);
@@ -123,6 +124,11 @@ namespace Backend.API.Controllers
         [HttpPut("updateToken")]
         public async Task<IActionResult> UpdateSession([FromQuery] Guid id, [FromQuery] int hours)
         {
+            if (hours < 0)
+            {
+                return BadRequest("Hours cannot be negative.");
+            }
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var extended = await _weddingService.UpdateSessionKeyExpiration(id, TimeSpan.FromHours(hours), userId);

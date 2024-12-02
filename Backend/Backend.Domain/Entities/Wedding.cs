@@ -24,7 +24,7 @@ namespace Backend.Domain.Entities
         public Guid SessionKey { get; set; } = Guid.NewGuid();
 
         // Data wygaśnięcia klucza sesji
-        public DateTime SessionKeyExpirationDate { get; set; } = DateTime.UtcNow.AddHours(48).ToUniversalTime();
+        public DateTime SessionKeyExpirationDate { get; set; } = DateTime.UtcNow.AddHours(48);
 
         // Relacja: Jedno wesele ma wiele zdjęć
         public ICollection<ImageData>? ImageDatas { get; set; }
@@ -36,7 +36,7 @@ namespace Backend.Domain.Entities
 
         //--------------------------------------------------------------------------------------
         // Właściwość obliczeniowa do sprawdzania, czy klucz wygasł
-        public bool IsSessionKeyExpired => DateTime.UtcNow.ToUniversalTime() >= SessionKeyExpirationDate;
+        public bool IsSessionKeyExpired => DateTime.Now.ToUniversalTime() >= SessionKeyExpirationDate;
 
     }
 }

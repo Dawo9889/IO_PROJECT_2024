@@ -14,7 +14,7 @@ namespace Backend.Domain.Entities
         public Guid Id { get; set; }
 
         public string FilePath { get; set; } = default!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToUniversalTime();
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ThumbnailPath { get; set; } = default!;
 
         public string? Author { get; set; }
