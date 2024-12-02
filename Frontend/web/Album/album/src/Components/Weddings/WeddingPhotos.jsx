@@ -97,7 +97,7 @@ const WeddingPhotos = ({ weddingId }) => {
       :
       <div className="h-[300px] lg:min-h-[700px] overflow-y-auto w-full p-6 bg-project-dark border border-project-blue rounded-lg shadow-lg">
         {thumbnails.length > 0 ? (
-          <div className="grid grid-cols-6 gap-3">
+          <div className="grid grid-cols-10 gap-3">
             {thumbnails.map((thumbnail, index) => (
             <div
             key={index}

@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import { motion } from "framer-motion";
-import { useQuery } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
+  const [photos, setPhotos] = useState([]);
+  const [currentPhoto, setCurrentPhoto] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [isVertical, setIsVertical] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(index);
-  const [loading, setLoading] = useState(true);
-  const [photos, setPhotos] = useState([]);
-  const [bufferedPhotos, setBufferedPhotos] = useState([]);
-  
-  const authData = JSON.parse(localStorage.getItem("auth"));
+
+  const authData = JSON.parse(localStorage.getItem('auth'));
   const accessToken = authData?.accessToken;
-  
-  const closeSlider = () => {
-    onClose();
-  };
+
+  const closeSlider = () => onClose();
 
   const handleImageLoad = (e) => {
     const { naturalWidth, naturalHeight } = e.target;
@@ -34,82 +33,82 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
     }
   };
 
-  const handleImageClick = (e) => {
-    e.stopPropagation();
-  };
-
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, []);
 
-  const { data: fetchedPhotos, isLoading, isError, error } = useQuery({
-    queryKey: ['weddingPhotos', weddingId],
-    queryFn: async () => {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=1`,
-        {
+  useEffect(() => {
+    const fetchPhotos = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=1`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const sortedData = response.data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+        setPhotos(sortedData);
+      } catch (err) {
+        console.error('Błąd podczas pobierania zdjęć:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPhotos();
+  }, [weddingId]);
+
+  useEffect(() => {
+    const loadPhoto = async () => {
+      if (!photos[currentIndex]) return;
+      setLoading(true);
+      try {
+        const photoRes = await axios.get(photos[currentIndex].filePath, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
-      );
-      
-      const sortedData = response.data.sort(
-        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-      );
-      
-      const photosLinks = sortedData.map((item) => item.filePath);
-  
-      // Pobieramy zdjęcia i konwertujemy je na BLOB
-      const authorizedPhotos = await Promise.all(
-        photosLinks.map(async (photo) => {
-          try {
-            const res = await axios.get(photo, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-              responseType: "arraybuffer",
-            });
-            const blob = new Blob([res.data], { type: "image/jpeg" });
-            return URL.createObjectURL(blob); // Tworzymy URL dla obiektu BLOB
-          } catch (err) {
-            console.error(`Błąd autoryzacji dla miniatury ${photo}:`, err);
-            return null; // Jeśli wystąpi błąd, zwracamy null
-          }
-        })
-      );
-      return authorizedPhotos.filter((photo) => photo !== null); // Filtrowanie pustych elementów
-    },
-    enabled: !!weddingId, // Query będzie wykonane tylko jeśli weddingId jest dostępne
-    staleTime: 1000 * 60 * 10, // Czas, po którym dane są uważane za "nieaktualne" (10 minut)
-    refetchInterval: 1000 * 60 * 5, // Odświeżanie danych co 5 minut w tle
-    cacheTime: 1000 * 60 * 30, // Przechowywanie danych w cache przez 30 minut
-  });
+          responseType: 'arraybuffer',
+        });
 
-  useEffect(() => {
-    console.log("buforuje")
-    if (!isLoading && !isError && fetchedPhotos) {
-      setPhotos(fetchedPhotos);
-      setLoading(false);
-      // Zbuforuj zdjęcia do przodu i wstecz
-      setBufferedPhotos([
-        fetchedPhotos[currentIndex - 2] || null,
-        fetchedPhotos[currentIndex - 1] || null,
-        fetchedPhotos[currentIndex],
-        fetchedPhotos[currentIndex + 1] || null,
-        fetchedPhotos[currentIndex + 2] || null,
-      ]);
-    }
-  }, [fetchedPhotos, currentIndex, isLoading, isError]);
+        const thumbnailRes = await axios.get(photos[currentIndex].thumbnailPath, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'arraybuffer',
+        });
+
+        const photoBlob = new Blob([photoRes.data], { type: 'image/jpeg' });
+        const thumbnailBlob = new Blob([thumbnailRes.data], { type: 'image/jpeg' });
+
+        setCurrentPhoto({
+          photoSrc: URL.createObjectURL(photoBlob),
+          thumbnailSrc: URL.createObjectURL(thumbnailBlob),
+        });
+      } catch (err) {
+        console.error(`Błąd podczas ładowania zdjęcia:`, err);
+        setCurrentPhoto(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPhoto();
+  }, [currentIndex, photos]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 overscroll-y-none"
-         onClick={closeSlider}
+    <div
+      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+      onClick={closeSlider}
     >
-      {loading ? 
+      {loading || !currentPhoto ? (
         <div>
           <svg
             className="animate-spin h-12 w-12 text-white"
@@ -132,55 +131,58 @@ const WeddingPhotoSlider = ({ weddingId, index, onClose }) => {
             ></path>
           </svg>
         </div>
-      :
-      <div className='flex flex-col'>
-        <div className="max-w-4xl flex items-center m-4" onClick={handleImageClick}>
-          <button
-            className="absolute top-4 right-4 text-white text-3xl"
-            onClick={closeSlider}
+      ) : (
+        <div className="flex flex-col">
+          <div
+            className="max-w-4xl flex items-center m-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            &times;
-          </button>
-          
-          {currentIndex > 0 && 
             <button
-              onClick={goToPrevious}
-              className="absolute left-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
+              className="absolute top-4 right-4 text-white text-3xl"
+              onClick={closeSlider}
             >
-              &larr;
+              &times;
             </button>
-          }
+            {currentIndex > 0 && (
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
+              >
+                &larr;
+              </button>
+            )}
 
-          <motion.img
-            key={currentIndex}
-            src={bufferedPhotos[2]} // Używamy zbuforowanego zdjęcia
-            alt={`Photo ${currentIndex + 1}`}
-            initial={{ opacity: 0, x: 0 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className={`mx-auto rounded-lg ${isVertical ? "max-h-[90vh] max-w-[70vw]" : "max-w-full max-h-screen"} object-contain`}
-          />
+            <motion.div key={currentIndex}>
+              <LazyLoadImage
+                src={currentPhoto?.photoSrc}
+                placeholderSrc={currentPhoto?.thumbnailSrc}
+                effect="blur"
+                alt={`Photo ${currentIndex + 1}`}
+                className={`mx-auto rounded-lg ${
+                  isVertical ? 'max-h-[90vh] max-w-[70vw]' : 'max-w-full max-h-screen'
+                } object-contain`}
+                onLoad={handleImageLoad}
+              />
+            </motion.div>
 
-          {currentIndex < photos.length - 1 &&
-            <button
-              onClick={goToNext}
-              className="absolute right-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
-            >
-              &rarr;
-            </button>
-          }
+            {currentIndex < photos.length - 1 && (
+              <button
+                onClick={goToNext}
+                className="absolute right-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
+              >
+                &rarr;
+              </button>
+            )}
+          </div>
+          <div className="flex justify-center mt-4">
+            <p className="text-white text-lg">
+              {currentIndex + 1} / {photos.length}
+            </p>
+          </div>
         </div>
-        
-        <div className="flex justify-center mt-4" onClick={handleImageClick}>
-          <p className="text-white text-lg">
-            {currentIndex + 1} / {photos.length}
-          </p>
-        </div>
-      </div>
-}
+      )}
     </div>
   );
-}
+};
 
 export default WeddingPhotoSlider;
