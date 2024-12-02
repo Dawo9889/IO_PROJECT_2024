@@ -61,9 +61,9 @@ namespace Backend.API.Controllers
             
             if (weddingDetailsDto == null)
             {
-                
                 return NotFound("Wedding not found");
             }
+            weddingDetailsDto.SessionKeyExpirationDate = weddingDetailsDto.SessionKeyExpirationDate.AddHours(1).ToUniversalTime();
             return Ok(weddingDetailsDto);
 
         }
