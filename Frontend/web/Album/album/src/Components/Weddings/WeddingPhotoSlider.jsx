@@ -156,7 +156,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index, onClose }) => {
                 &larr;
               </button>
             )}
-        <div className='min-h-[600px]'>
+        <div className='min-h-[250px] lg:min-h-[600px]'>
             <motion.div key={currentIndex} className="flex justify-center">
               <LazyLoadImage
                 src={currentPhoto?.photoSrc}

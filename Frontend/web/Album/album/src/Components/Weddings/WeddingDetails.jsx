@@ -24,6 +24,7 @@ const WeddingDetails = ({ weddingId }) => {
       })
       .then((response) => {
         setDetails(response.data);
+        console.log(response.data)
       })
       .catch((err) => {
         if (err.response?.status === 404) {
@@ -69,7 +70,7 @@ const WeddingDetails = ({ weddingId }) => {
   }, [weddingId]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 h-[400px] lg:min-h-[500px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="max-w-6xl mx-auto p-6 h-[600px] lg:min-h-[500px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {loading ? (
         <div className="flex items-center justify-center h-full col-span-2">
           <svg
@@ -94,9 +95,9 @@ const WeddingDetails = ({ weddingId }) => {
           </svg>
         </div>
       ) : error ? (
-        <p className="text-red-500 text-center col-span-2">{error}</p>
+        <p className="text-red-500 text-center col-span-1">{error}</p>
       ) : details ? (
-        <div className="text-white col-span-2 md:col-span-1">
+        <div className="text-white col-span-1 md:col-span-1">
           <h1 className="text-3xl font-semibold mb-4">{details.name}</h1>
           <p className="mb-2 text-lg">
             <strong>Date:</strong> {details.eventDate}
@@ -104,33 +105,36 @@ const WeddingDetails = ({ weddingId }) => {
           <p className="mb-4 text-lg">
             <strong>Description:</strong> {details.description}
           </p>
-
-          {qrCode ? (
-            <div className="flex mb-4">
-              <img
-                src={`data:image/png;base64,${qrCode}`}
-                alt="Wedding QR Code"
-                className="w-48 h-48 border-4 border-project-blue rounded-lg shadow-xl"
-              />
-            </div>
-          ) : (
-            <p className="text-center">No QR code available.</p>
-          )}
+          <p className="mb-4 text-lg">
+            <strong>Session key:</strong> {details.sessionKey}
+          </p>
+          <p className="mb-4 text-lg">
+            <strong>Session Key Expiration Date:</strong> {details.sessionKeyExpirationDate}
+          </p>
+          <p className="mb-4 text-lg">
+            <strong>Iamges count:</strong> {details.imagesCount}
+          </p>
         </div>
+        
       ) : (
         <p className="text-gray-400 text-center col-span-2">
           Click a wedding to see details
         </p>
       )}
 
-      <div className="col-span-2 md:col-span-2">
+      <div className="col-span-1 md:col-span-1">
         <div className="flex justify-center items-center h-full">
-          {weddingId ? 
-            // <WeddingPhotos weddingId={weddingId} />
-            <div></div>
-          :
-            <div></div>
-          }
+        {qrCode ? (
+            <div className="flex mb-4">
+              <img
+                src={`data:image/png;base64,${qrCode}`}
+                alt="Wedding QR Code"
+                className="w-64 h-64 border-4 border-project-blue rounded-lg shadow-xl"
+              />
+            </div>
+          ) : (
+            <p className="text-center"></p>
+          )}
         </div>
       </div>
     </div>

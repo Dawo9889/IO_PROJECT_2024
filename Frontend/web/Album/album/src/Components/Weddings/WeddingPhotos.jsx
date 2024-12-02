@@ -134,7 +134,7 @@ fetchWeddingInfo()
           </svg>
         </div>
       ) : (
-        <div className="flex justify-start flex-col w-full"> {/* Kontener dla zdjęć */}
+        <div className="flex justify-start flex-col w-full"> 
             <div className="flex justify-between items-center min-h-[50px] w-full">
     {pageIndex > 1 && (
       <button
