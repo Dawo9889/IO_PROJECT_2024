@@ -115,7 +115,7 @@ const CreateWedding = () => {
   <CalendarIcon 
   className="absolute right-2 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white" 
   onClick={openDatePicker}
-  />
+  /> 
   <label 
     htmlFor="date"
     className="peer-focus:font-medium absolute text-sm text-project-blue duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-project-blue peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
