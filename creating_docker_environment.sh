@@ -83,13 +83,8 @@ fi
 
 cd "$FOLDER_PATH" || exit 1
 
-# Check if the data folder exists, create it with subfolders if not
-if [[ ! -d "$DATA_FOLDER_PATH" ]]; then
-    echo "Creating 'data' directory with subfolders backend and database..."
-    mkdir -p "$DATA_FOLDER_PATH/backend" "$DATA_FOLDER_PATH/database"
-else
-  echo "Data folder already exists: $DATA_FOLDER_PATH"
-fi
+echo "Creating 'data': $DATA_FOLDER_PATH  directory with subfolders backend and database..."
+sudo mkdir -p "$DATA_FOLDER_PATH/backend" "$DATA_FOLDER_PATH/database"
 
 # Change permissions for the backend and database folders
 echo "Changing permissions for backend and database folders"
