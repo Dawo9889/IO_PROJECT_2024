@@ -84,8 +84,7 @@ fi
 cd "$FOLDER_PATH" || exit 1
 
 echo "Creating 'data': $DATA_FOLDER_PATH  directory with subfolders backend and database..."
-sudo mkdir -p "$DATA_FOLDER_PATH/backend" "$DATA_FOLDER_PATH/database"
-
+sudo mkdir -p "$DATA_FOLDER_PATH/backend/zdjecia" "$DATA_FOLDER_PATH/database"
 # Change permissions for the backend and database folders
 echo "Changing permissions for backend and database folders"
 sudo chmod -R 777 "$DATA_FOLDER_PATH/backend"
