@@ -1,27 +1,45 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import DeleteWedding from './DeleteWedding';
 
 const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
-  // const [weddings, setWeddings] = useState([]);
   const [error, setError] = useState(null);
+  const [isDeleteWindowIsOpen, setIsDeleteWindowIsOpen] = useState(false);
+  const [weddingId, setWeddingId] = useState(null);
+  const [weddingName, setWeddingName] = useState('');
 
-  const handleDelete = (weddingId) => {
-    const authData = JSON.parse(localStorage.getItem("auth"));
+  const openDeleteWindow = (id, name) => {
+    setWeddingId(id);
+    setWeddingName(name);
+    setIsDeleteWindowIsOpen(true);
+  };
+
+  const closeDeleteWindow = () => {
+    setIsDeleteWindowIsOpen(false);
+    setWeddingId(null);
+    setWeddingName('');
+  };
+
+  const confirmDelete = (id) => {
+    const authData = JSON.parse(localStorage.getItem('auth'));
     const accessToken = authData?.accessToken;
 
     axios
-      .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${weddingId}`, {
+      .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then(() => {
-        toast.success('Wedding delete successfully!');
         fetchWeddings();
+        closeDeleteWindow();
+        toast.success('Wedding deleted successfully!');
+        // window.location.reload();
       })
       .catch((err) => {
-        console.error("Error deleting wedding:", err);
+        console.error('Error deleting wedding:', err);
+        closeDeleteWindow();
       });
   };
 
@@ -42,10 +60,7 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
                   {wedding.name}
                 </ul>
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(wedding.id);
-                  }}
+                  onClick={() => openDeleteWindow(wedding.id, wedding.name)}
                   className="text-red-500 hover:text-red-700"
                 >
                   Delete
@@ -55,8 +70,16 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
           </div>
         )}
       </div>
+      {isDeleteWindowIsOpen && (
+        <DeleteWedding
+          weddingId={weddingId}
+          weddingName={weddingName}
+          onClose={closeDeleteWindow}
+          onConfirm={confirmDelete}
+        />
+      )}
     </div>
-  );  
+  );
 };
 
 export default WeddingList;

@@ -153,7 +153,10 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index, onClose }) => {
                 onClick={goToPrevious}
                 className="absolute left-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
               >
-                &larr;
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+</svg>
+
               </button>
             )}
         <div className='min-h-[250px] lg:min-h-[600px]'>
@@ -177,7 +180,10 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index, onClose }) => {
                 onClick={goToNext}
                 className="absolute right-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
               >
-                &rarr;
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+</svg>
+
               </button>
             )}
           </div>

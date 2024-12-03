@@ -109,7 +109,7 @@ fetchWeddingInfo()
   }, [weddingId,pageIndex]);
   
   return (
-    <div className="flex justify-start relative"> {/* Dodano relative dla kontenera zdjęć */}
+    <div className="flex justify-start relative">
       {loading ? (
         <div className="flex justify-center items-center h-1/2 w-full">
           <svg
