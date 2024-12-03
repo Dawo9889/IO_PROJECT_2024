@@ -116,34 +116,38 @@ namespace Backend.Application.Services.Wedding
 
         public async Task<bool> UpdateSessionKeyExpiration(Guid Id, TimeSpan extensionDuration, string userId)
         {
+     
+            if (extensionDuration < TimeSpan.Zero)
+            {
+                return false;
+            }
+
             if (!await _weddingRepository.IsUserOwnerOfWedding(Id, userId))
             {
                 return false;
             }
 
-
             var wedding = await _weddingRepository.GetDetailsById(Id);
 
             if (wedding == null)
             {
-                return false; 
+                return false;
             }
 
             if (extensionDuration == TimeSpan.Zero)
             {
-                // InvalidateToken
-                wedding.SessionKeyExpirationDate = new DateTime(1970, 1, 1);
+                wedding.SessionKeyExpirationDate = new DateTime(1970, 1, 1).ToUniversalTime();
             }
             else
             {
-                // Extend Token
-                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration).ToUniversalTime();
+                wedding.SessionKeyExpirationDate = DateTime.UtcNow.Add(extensionDuration);
             }
 
             await _weddingRepository.Update(wedding);
 
-            return true; 
+            return true;
         }
+
 
 
 

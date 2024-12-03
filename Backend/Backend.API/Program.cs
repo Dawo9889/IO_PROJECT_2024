@@ -18,7 +18,6 @@ else
 {
     dockerConnection = dockerConnection.Replace("{DATABASE_IP}", "localhost");
 }
-
 builder.Configuration["ConnectionStrings:DockerConnection"] = dockerConnection;
 
 // Add services to the container.
