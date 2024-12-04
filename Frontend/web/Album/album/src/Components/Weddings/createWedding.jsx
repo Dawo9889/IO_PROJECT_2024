@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
 import './style.css'
+import '../Spinner/Spinner.css'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 const CreateWedding = () => {
 
@@ -14,6 +14,7 @@ const CreateWedding = () => {
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     var curr = new Date();
@@ -28,7 +29,7 @@ const CreateWedding = () => {
         e.preventDefault();
         const authData = JSON.parse(localStorage.getItem("auth"));
         const accessToken = authData?.accessToken;
-        
+        setLoading(true)
         try {
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}/wedding`,
@@ -44,7 +45,7 @@ const CreateWedding = () => {
                     }
                 }
             );
-            // setMessage('Wedding created successfully!');
+            setLoading(false)
             toast.success('Wedding created successfully!');
             setTimeout(() => {
               navigate(-1);
@@ -54,7 +55,6 @@ const CreateWedding = () => {
         catch(err) {
             console.error(err);
             toast.error('An error occurred while creating the wedding.')
-            // setMessage('An error occurred while creating the wedding.');
         }
     }
 
@@ -138,28 +138,41 @@ const CreateWedding = () => {
     Description
   </label>
 </div>
-    {message && <p className="m-4 text-center text-sm text-project-yellow">{message}</p>}
-    {isFormValid ? (
-  <button
-      type="submit"
-      className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
-                 border-project-yellow bg-project-yellow text-dark group focus:outline-none focus:ring-2 
-                focus:ring-project-yellow"
-    >   <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
-    Submit
-  </span>
-</button>
+<div className="flex justify-center">
+{loading ? (
+  <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
 ) : (
-  <button
-      type="submit"
-      className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
-                 border-project-yellow bg-project-dark text-white group focus:outline-none focus:ring-2 
-                focus:ring-project-yellow"
-    >   <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
-    Submit
-  </span>
-</button>
+  <>
+    {message && (
+      <p className="m-4 text-center text-sm text-project-yellow">{message}</p>
+    )}
+    {isFormValid ? (
+      <button
+        type="submit"
+        className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
+                   border-project-yellow bg-project-yellow text-dark group focus:outline-none focus:ring-2 
+                   focus:ring-project-yellow"
+      >
+        <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
+          Submit
+        </span>
+      </button>
+    ) : (
+      <button
+        type="submit"
+        className="w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
+                   border-project-yellow bg-project-dark text-white group focus:outline-none focus:ring-2 
+                   focus:ring-project-yellow"
+        disabled
+      >
+        <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
+          Submit
+        </span>
+      </button>
+    )}
+  </>
 )}
+</div>
 
 </form>
 </div>

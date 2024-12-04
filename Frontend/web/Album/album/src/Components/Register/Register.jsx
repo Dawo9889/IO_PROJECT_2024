@@ -2,6 +2,7 @@ import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
+import '../Spinner/Spinner.css'
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
@@ -24,6 +25,7 @@ const Register = () => {
 
     const [errMsg, setErrMsg] = useState('')
     const [success, setSuccess] = useState(false)
+    const [loading,setLoading] = useState(false)
 
     useEffect(() => {
         userRef.current.focus();
@@ -36,8 +38,6 @@ const Register = () => {
 
     useEffect(() => {
         const result = PWD_REGEX.test(pwd);
-        // console.log(result)
-        // console.log(pwd)
         setValidPwd(result)
         const match = pwd === matchPwd;
         setValidMatch(match)
@@ -57,7 +57,7 @@ const Register = () => {
             setErrMsg("Invalid entry");
             return;
         }
-        // console.log(user,pwd)
+        setLoading(true);
         try {
             const response = await axios.post(RESGISTER_URL,
                 {
@@ -65,21 +65,54 @@ const Register = () => {
                     "password": pwd
                 }
             );
-            // console.log(response.data)
-            // console.log(response.accessToken)
-            // console.log(JSON.stringify(response))
             setSuccess(true)
-        } catch (err) {
-            if(!err?.response) {
-                setErrMsg('No server response')
-            }
-            else if(err.response?.status === 409){
-                setErrMsg('Username taken')
-            }
-            else {
-                setErrMsg('Registration Failed')
+          } catch (err) {
+            console.log(err);
+        
+            if (!err?.response) {
+                setErrMsg('No server response');
+            } else if (err.response?.status === 400) {
+                const errors = err.response.data.errors;
+        
+                if (errors?.DuplicateUserName) {
+                    setErrMsg(errors.DuplicateUserName[0]);
+                } else if (errors?.InvalidEmail) {
+                    setErrMsg(errors.InvalidEmail[0]);
+                } else if (errors?.PasswordTooShort ||
+                           errors?.PasswordRequiresNonAlphanumeric ||
+                           errors?.PasswordRequiresDigit ||
+                           errors?.PasswordRequiresLower ||
+                           errors?.PasswordRequiresUpper ||
+                           errors?.PasswordRequiresUniqueChars) {
+
+                    const passwordErrors = [];
+                    if (errors.PasswordTooShort) {
+                        passwordErrors.push(errors.PasswordTooShort[0]);
+                    }
+                    if (errors.PasswordRequiresNonAlphanumeric) {
+                        passwordErrors.push(errors.PasswordRequiresNonAlphanumeric[0]);
+                    }
+                    if (errors.PasswordRequiresDigit) {
+                        passwordErrors.push(errors.PasswordRequiresDigit[0]);
+                    }
+                    if (errors.PasswordRequiresLower) {
+                        passwordErrors.push(errors.PasswordRequiresLower[0]);
+                    }
+                    if (errors.PasswordRequiresUpper) {
+                        passwordErrors.push(errors.PasswordRequiresUpper[0]);
+                    }
+                    if (errors.PasswordRequiresUniqueChars) {
+                        passwordErrors.push(errors.PasswordRequiresUniqueChars[0]);
+                    }
+                    setErrMsg(passwordErrors.join(' '));
+                } else {
+                    setErrMsg('Invalid input data');
+                }
+            } else {
+                setErrMsg('Registration Failed');
             }
             errRef.current.focus();
+            setLoading(false)
         }
     }
 
@@ -94,7 +127,7 @@ const Register = () => {
             </section>
           ) : (
             <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-2xl">
-              <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm" : "offscreen"} aria-live="assertive">
+              <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">
                 {errMsg}
               </p>
               <h1 className="text-2xl text-white font-bold text-center mb-4">Register</h1>
@@ -122,12 +155,6 @@ const Register = () => {
                       <FontAwesomeIcon icon={faTimes} />
                     </span>
                   </div>
-                  {/* <p id="uidnote" className={userFocus && user && !validName ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    4 to 24 characters. <br />
-                    Must begin with a letter. <br />
-                    Letters, numbers, underscores, hyphens allowed.
-                  </p> */}
                 </div>
       
                 <div>
@@ -153,14 +180,6 @@ const Register = () => {
                     </span>
                   </div>
                   <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
-                    {/* <FontAwesomeIcon icon={faInfoCircle} />
-                    8 to 24 characters.<br />
-                    Must include uppercase and lowercase letters, a number and a special character.<br />
-                    Allowed special characters: <span aria-label="exclamation mark">!</span>
-                    <span aria-label="at symbol">@</span>
-                    <span aria-label="hashtag">#</span>
-                    <span aria-label="dollar sign">$</span>
-                    <span aria-label="percent">%</span> */}
                   </p>
                 </div>
       
@@ -186,19 +205,26 @@ const Register = () => {
                       <FontAwesomeIcon icon={faTimes} />
                     </span>
                   </div>
-                  {/* <p id="confirmnote" className={matchFocus && !validMatch ? "instructions text-sm text-gray-600 mt-2" : "offscreen"}>
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    Must match the first password input field.
-                  </p> */}
                 </div>
-      
-                <button 
-                  disabled={!validName || !validPwd || !validMatch}
-                  className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-yellow-buttons"
-                >
-                  Sign Up
-                </button>
-              </form>
+                <div className="flex justify-center">
+                  {loading ? (
+                  <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={!validName || !validPwd || !validMatch}
+                      className={`w-full relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
+                        ${validName && validPwd && validMatch 
+                          ? 'border-project-yellow bg-project-yellow text-dark group focus:ring-project-yellow' 
+                          : 'border-project-yellow bg-project-dark text-white group focus:ring-project-yellow'}`}
+                    >
+                      <span className="relative py-2.5 px-5 transition-all ease-in duration-200">
+                        Submit
+                      </span>
+                    </button>
+                )}
+                </div>
+            </form>
       
               <p className="mt-4 text-center text-sm text-white">
                 Already registered?<br />
