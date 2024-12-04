@@ -9,7 +9,6 @@ export const AuthProvider = ({children}) => {
         if (storedAuth) {
             const parsedAuth = JSON.parse(storedAuth);
             const currentTime = Date.now();
-            // console.log(parsedAuth.refreshToken)
             if (parsedAuth.expiryTime && currentTime < parsedAuth.expiryTime) {
                 return parsedAuth;
             } else {
@@ -22,8 +21,8 @@ export const AuthProvider = ({children}) => {
 
     const refreshAccessToken = async () => {
         try {
-            const response = await axios.post(import.meta.env.VITE_BASE_URL + "/identity/refresh", {
-                refreshToken: auth.refreshToken
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh`, {
+                "refreshToken": auth.refreshToken
             });
             
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
@@ -36,7 +35,6 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
         } catch (error) {
             console.error("Error refreshing token:", error);
-            // Wylogowanie użytkownika w przypadku błędu
             setAuth({});
             localStorage.removeItem("auth");
         }
@@ -48,7 +46,7 @@ export const AuthProvider = ({children}) => {
             if (auth.expiryTime && currentTime > auth.expiryTime - 60 * 1000) {
                 refreshAccessToken();
             }
-        }, 60 * 1000); // Sprawdzaj co minutę
+        }, 5 * 1000);
 
         return () => clearInterval(interval);
     }, [auth]);

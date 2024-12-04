@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react"
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import '../Spinner/Spinner.css'
 const LOGIN_URL = `${import.meta.env.VITE_API_URL}/identity/login`
 
 const Login = () => {
@@ -17,6 +18,7 @@ const Login = () => {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -27,6 +29,7 @@ const Login = () => {
     },[user,password])
 
     const handleSubmit = async (e) => {
+        setLoading(true);
         e.preventDefault();
         try {
             const response = await axios.post(LOGIN_URL, 
@@ -54,6 +57,7 @@ const Login = () => {
             navigate(0)
 
         } catch (err) {
+            console.log(err)
             if(!err?.response){
                 setErrMsg('No Server response')
             }
@@ -68,13 +72,14 @@ const Login = () => {
             }
             errRef.current.focus();
         }
+        setLoading(false)
     }
 
   return (
     <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-    <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm" : "offscreen"} aria-live="assertive">{errMsg}</p>
+    <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">{errMsg}</p>
     <h1 className="text-2xl text-white font-bold text-center mb-4">Sign In</h1>
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
             <label htmlFor="username" className="block text-sm font-medium text-white">Email:</label>
             <input 
@@ -100,12 +105,16 @@ const Login = () => {
             />
         </div>
         <div className="flex justify-center">
-            <button 
-                type="submit" 
-                className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons "
+          {loading ? (
+            <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
+          ) : (
+            <button
+              type="submit"
+              className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
             >
-                Sign In
+              Sign In
             </button>
+          )}
         </div>
     </form>
     <p className="mt-4 text-center text-sm text-white">

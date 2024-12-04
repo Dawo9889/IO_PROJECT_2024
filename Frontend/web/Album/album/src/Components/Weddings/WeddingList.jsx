@@ -24,7 +24,6 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
   const confirmDelete = (id) => {
     const authData = JSON.parse(localStorage.getItem('auth'));
     const accessToken = authData?.accessToken;
-
     axios
       .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${id}`, {
         headers: {
@@ -35,7 +34,12 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
         fetchWeddings();
         closeDeleteWindow();
         toast.success('Wedding deleted successfully!');
-        // window.location.reload();
+
+        setTimeout(() => {
+          if (!document.querySelector(`[data-wedding-id="${id}"]`)) {
+            window.location.reload();
+          }
+        }, 1000);
       })
       .catch((err) => {
         console.error('Error deleting wedding:', err);
