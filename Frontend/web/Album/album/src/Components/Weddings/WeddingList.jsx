@@ -24,7 +24,6 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
   const confirmDelete = (id) => {
     const authData = JSON.parse(localStorage.getItem('auth'));
     const accessToken = authData?.accessToken;
-    console.log("usuwam")
     axios
       .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${id}`, {
         headers: {

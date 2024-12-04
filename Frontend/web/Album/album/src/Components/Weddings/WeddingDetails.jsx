@@ -114,7 +114,6 @@ const WeddingDetails = ({ weddingId }) => {
   };
 
   const handleUpdate = (updatedDetails) => {
-    console.log(updatedDetails.eventDate)
     axios
       .put(`${import.meta.env.VITE_API_URL}/wedding`,
         {

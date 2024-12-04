@@ -20,7 +20,6 @@ export const AuthProvider = ({children}) => {
     });
 
     const refreshAccessToken = async () => {
-        console.log(auth.refreshToken)
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh`, {
                 "refreshToken": auth.refreshToken
@@ -32,7 +31,6 @@ export const AuthProvider = ({children}) => {
                 accessToken: response.data.accessToken,
                 expiryTime: newExpiryTime
             };
-            console.log("udalo sie")
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
         } catch (error) {

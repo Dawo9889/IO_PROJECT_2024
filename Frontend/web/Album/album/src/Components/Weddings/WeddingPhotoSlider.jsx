@@ -57,10 +57,9 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index, onClose }) => {
           const sortedData = response.data.sort(
             (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
           );
-          allPhotos.push(...sortedData); // Dodaj zdjęcia z tej strony
+          allPhotos.push(...sortedData);
         }
-        console.log(allPhotos)
-        setPhotos(allPhotos); // Ustaw wszystkie zdjęcia w stanie
+        setPhotos(allPhotos);
       } catch (err) {
         console.error('Błąd podczas pobierania zdjęć:', err);
       } finally {

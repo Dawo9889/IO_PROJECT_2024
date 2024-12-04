@@ -15,7 +15,6 @@ const WeddingPhotos = ({ weddingId }) => {
   const [pageIndex, setPageIndex] = useState(1);
 
   const openSlider = (index) => {
-    console.log("index "+index)
     setCurrentIndex(index);
     setIsSliderOpen(true);
   };
@@ -43,9 +42,7 @@ const WeddingPhotos = ({ weddingId }) => {
             },
           }
         );
-        console.log("image count " + response.data.imagesCount)
         const totalPages = Math.ceil(response.data.imagesCount / 24);
-        console.log(totalPages)
         setPageCount(totalPages);
 
         // const pageIndex = response.data.imagesCount % 20 === 0 ? 20 : response.data.imagesCount % 20;
@@ -59,7 +56,6 @@ fetchWeddingInfo()
 
   useEffect(() => {
     setLoading(true);
-    console.log(pageIndex)
     const fetchThumbnails = async () => {
       try {
         const response = await axios.get(
