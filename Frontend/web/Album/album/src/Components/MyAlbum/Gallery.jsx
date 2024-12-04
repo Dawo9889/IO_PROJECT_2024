@@ -139,7 +139,7 @@ const Gallery = ({ weddingId }) => {
                             </button>
                         )}
                     </div>
-                    <div className="flex w-full relative">
+                    <div className="flex w-full relative overflow-y-auto">
                         <div className="h-[400px] lg:min-h-[600px] w-full">
                             {thumbnails.length > 0 ? (
                                 <div className="grid grid-cols-2 gap-3">
