@@ -45,8 +45,6 @@ const WeddingPhotos = ({ weddingId }) => {
         const totalPages = Math.ceil(response.data.imagesCount / 24);
         setPageCount(totalPages);
 
-        // const pageIndex = response.data.imagesCount % 20 === 0 ? 20 : response.data.imagesCount % 20;
-        // setPageIndex(pageIndex);
   }catch (err) {
     // console.error("Błąd podczas pobierania miniatur:", err);
   };
@@ -140,7 +138,9 @@ fetchWeddingInfo()
         Previous Page
       </button>
     )}
-    <p className="text-white mx-auto">{pageIndex} / {pageCount}</p>
+    {pageCount > 0 && (
+      <p className="text-white mx-auto">{pageIndex} / {pageCount}</p>
+    )}
     {pageIndex < pageCount && (
       <button
         onClick={goToNext}
