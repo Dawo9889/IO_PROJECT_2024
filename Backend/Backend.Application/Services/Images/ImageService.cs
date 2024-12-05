@@ -239,6 +239,46 @@ namespace Backend.Application.Services.Images
             return (fileStream, mimeType);
         }
 
+        public async Task<bool> DeleteImageFromDbAndFile(Guid weddingId, string userId, Guid imageId)
+        {
+           if(! await _weddingRepository.IsUserOwnerOfWedding(weddingId, userId))
+           {
+                return false;
+           }
+           var deleteResult = await _imageRepository.DeleteImagesData(imageId);
+            if (deleteResult != null) 
+            {
+                try
+                {
+                    var weddingFolderPath = Path.Combine(_photosBasePath, weddingId.ToString());
+                    var imageFolderPath = Path.Combine(weddingFolderPath, imageId.ToString());
 
+                    if (Directory.Exists(imageFolderPath))
+                    {
+                        Directory.Delete(imageFolderPath, true); 
+                    }
+                }
+                catch (DirectoryNotFoundException ex)
+                {
+                    Console.WriteLine($"Directory not found: {ex.Message}");
+                    return false;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+
+                    Console.WriteLine($"Permission denied: {ex.Message}");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+
+        }
     }
 }
