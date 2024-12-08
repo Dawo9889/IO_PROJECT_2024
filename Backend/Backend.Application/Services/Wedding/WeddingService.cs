@@ -9,6 +9,9 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System.Drawing.Printing;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 namespace Backend.Application.Services.Wedding
@@ -35,7 +38,9 @@ namespace Backend.Application.Services.Wedding
 
         public async Task Create(WeddingDTO weddingDTO, string userId)
         {
-            // Mapowanie 
+            weddingDTO.Name = NormalizeString(weddingDTO.Name);
+            weddingDTO.Description = NormalizeString(weddingDTO.Description);
+
             var wedding = _mapper.Map<Domain.Entities.Wedding>(weddingDTO);
             var result = await _weddingRepository.Create(wedding, userId);
 
@@ -44,7 +49,6 @@ namespace Backend.Application.Services.Wedding
             if (result)
             {
                 
-                // Ścieżka do folderu, gdzie mają być przechowywane zdjęcia
                 var weddingFolderPath = Path.Combine(_photosBasePath, wedding.Id.ToString());
 
                 if (!Directory.Exists(weddingFolderPath))
@@ -99,7 +103,8 @@ namespace Backend.Application.Services.Wedding
 
         public async Task<bool> Update(WeddingDTO newWeddingDTO, string userId)
         {
-            
+            newWeddingDTO.Name = NormalizeString(newWeddingDTO.Name);
+            newWeddingDTO.Description = NormalizeString(newWeddingDTO.Description);
 
             var oldWedding = await _weddingRepository.GetDetailsById(newWeddingDTO.Id);
 
@@ -217,5 +222,18 @@ namespace Backend.Application.Services.Wedding
             Directory.Delete(weddingFolderPath, recursive: true);
             return true;
         }
+
+
+        private string NormalizeString(string Text)
+        {
+            
+            Text = Regex.Replace(Text, @"[^a-zA-Z0-9\s]", "");
+            Text = char.ToUpper(Text[0]) + Text.Substring(1).ToLower();
+            Text = Regex.Replace(Text, "<.*?>", "");
+            Text = Regex.Replace(Text, @"\s+", " ").Trim();
+            return Text;
+           
+        }
+
     }
 }
