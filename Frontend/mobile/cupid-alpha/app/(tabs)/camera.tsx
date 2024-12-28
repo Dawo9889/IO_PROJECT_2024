@@ -3,15 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as base64 from 'base64-js';
 
 import icons from '@/constants/icons'
 import BottomCamActions from '@/components/BottomCamActions';
 import PicturePreview from '@/components/PicturePreview';
 import { FlipType, manipulateAsync } from 'expo-image-manipulator';
 import { router } from 'expo-router';
-import { checkIfTokenValid, uploadPicture } from '@/constants/api';
+import { checkIfTokenValid} from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
-import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
+import { getPartyToken, removePartyToken} from '@/constants/storage';
 import IconButton from '@/components/navigation/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -101,6 +102,15 @@ export default function Camera() {
             : photo;
 
           setPicture({ uri: finalPhoto.uri });
+  
+          // Calculate the size of the picture in MB
+          if (photo.base64) {
+            const photoSizeInBytes = base64.toByteArray(photo.base64).length;
+            const photoSizeInMB = photoSizeInBytes / (1024 * 1024);
+            console.log(`Picture size: ${photoSizeInMB.toFixed(2)} MB`);
+          } else {
+            console.log("Base64 data is not available.");
+          }
         }
       } catch (error) {
         console.log("Error taking picture:", error);
@@ -132,13 +142,6 @@ export default function Camera() {
               iconSize={40}
               disabled={facing === 'front'}
             />
-
-          {/* <BottomCamActions
-              handleTakePicture={() => handleTakePicture()}
-              toggleCameraFacing={() => toggleCameraFacing()}
-              joinParty={() => router.replace('/join-party')}
-              />  */}
-
           <View className="flex-row mt-auto w-full h-[90px] items-center">
 
           <IconButton
