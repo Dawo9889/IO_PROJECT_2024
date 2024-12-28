@@ -14,6 +14,8 @@ namespace Backend.Application.Services.Images
         Task<bool> IsSessionValid(Guid sessionToken);
         Task<List<ImagesDataDTO>> GetImagesDataForWeddingAsync(Guid weddingId, string userId, int pageNumber);
         Task<(Stream FileStream, string MimeType)> GetPhotoThumbnailFile(string path);
+
+        Task<bool> DeleteImageFromDbAndFile(Guid weddingId, string userId, Guid imageId);
         
     }
 }

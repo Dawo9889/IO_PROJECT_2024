@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities;
+﻿using Backend.API.Override;
+using Backend.Domain.Entities;
 using Backend.Infrastructure.Persistance;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
@@ -37,6 +38,7 @@ namespace Backend.API.Extensions
             //identity
             builder.Services.AddIdentityApiEndpoints<User>(option => option.SignIn.RequireConfirmedEmail = false)
                 .AddDefaultTokenProviders()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 

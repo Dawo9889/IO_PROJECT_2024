@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
   { name: 'Team', href: '/team', current: false },
-  // { name: 'Projects', href: '#', current: false }
 ]
 
 function classNames(...classes) {
@@ -20,6 +19,7 @@ function NavbarUpdate() {
     const [isOpen, setIsOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
+    const authData = JSON.parse(localStorage.getItem("auth"));
   
     useEffect(() => {
       const storedAuth = localStorage.getItem("auth");
@@ -106,7 +106,7 @@ function NavbarUpdate() {
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    Your Profile
+                    {authData.user}
                   </a>
                 </MenuItem>
                 <MenuItem>
@@ -114,7 +114,15 @@ function NavbarUpdate() {
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    Settings
+                    Your Profile (In progress)
+                  </a>
+                </MenuItem>
+                <MenuItem>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                  >
+                    Settings (In progress)
                   </a>
                 </MenuItem>
                 <MenuItem>

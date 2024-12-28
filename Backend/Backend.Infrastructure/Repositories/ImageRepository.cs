@@ -27,9 +27,10 @@ namespace Backend.Infrastructure.Repositories
             return result > 0;
         }
 
+
         public async Task<List<ImageData>> GetAllImagesFromWeddingAsync(Guid weddingId, int pageNumber)
         {
-            int pageSize = 20;
+            int pageSize = 24;
             if(pageNumber <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(pageNumber));
@@ -47,5 +48,27 @@ namespace Backend.Infrastructure.Repositories
             }
             return imagesDatas;
         }
+
+        public async Task<bool> DeleteImagesData(Guid imageId)
+        {
+
+            var imagesData = await _dbContext.ImageDatas.FirstOrDefaultAsync(x => x.Id == imageId);
+
+            if (imagesData == null)
+            {
+                return false;
+            }
+
+
+            _dbContext.ImageDatas.Remove(imagesData);
+
+
+            var deleteResult = await _dbContext.SaveChangesAsync();
+
+
+            return deleteResult > 0;
+        }
+
+
     }
 }

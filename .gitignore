@@ -6,10 +6,6 @@
 *.log
 *.env
 /Backend/Backend.API/zdjecia/Perfect Wedding_25.08.2024
-/Backend/Backend.Infrastructure/Migrations/20241110150458_identity.cs
-/Backend/Backend.Infrastructure/Migrations/20241110150458_identity.Designer.cs
-/Backend/Backend.Infrastructure/Migrations/20241110212914_init.cs
-/Backend/Backend.Infrastructure/Migrations/20241110212914_init.Designer.cs
 /Frontend/web/Album/.vs/Album/v17/.suo
 /Frontend/web/Album/.vs/Album/FileContentIndex/11f26094-e065-43be-ab07-0620a4a107f7.vsidx
 /Frontend/web/Album/.vs/Album/FileContentIndex/3aa36e1c-3ee5-477b-91f5-924676ce3da9.vsidx
@@ -21,10 +17,6 @@
 /Frontend/web/Album/.vs/Album/FileContentIndex/e968f3b2-198a-4270-9547-d151ff4edeb2.vsidx
 /Frontend/web/Album/.vs/Album/FileContentIndex/f4ae860b-2527-4a0d-bdea-3ddebd2f5356.vsidx
 /Backend/Backend.API/zdjecia/Wesele Jarka i Jarki_11.09.2025
-/Backend/Backend.Infrastructure/Migrations/20241114220340_init.cs
-/Backend/Backend.Infrastructure/Migrations/20241114220340_init.Designer.cs
-/Backend/Backend.Infrastructure/Migrations/20241114205551_init.cs
-/Backend/Backend.Infrastructure/Migrations/20241114205551_init.Designer.cs
 /Frontend/web/Album/.vs/Album/FileContentIndex/1e5892ae-a1ac-4195-87de-f6610cddb34d.vsidx
 /Frontend/web/Album/.vs/Album/FileContentIndex/a9b9198f-aedd-4f6b-bbc6-58cc75150a4f.vsidx
 /Frontend/web/Album/album/obj/Debug/package.g.props
@@ -33,3 +25,9 @@
 /Frontend/web/Album/.vs/Album/v17/DocumentLayout.backup.json
 /Frontend/web/Album/.vs/Album/v17/DocumentLayout.json
 /Frontend/web/Album/.vs/Album/FileContentIndex/5fc60706-0bf8-492e-98e6-095fe811d3b1.vsidx
+/Backend/Backend.Infrastructure/Migrations/20241202211425_init.cs
+/Backend/Backend.Infrastructure/Migrations/20241202211425_init.Designer.cs
+/Frontend/web/Album/.vs/Album/FileContentIndex/ae212c59-e7d0-4633-a97a-0b59c8db1cae.vsidx
+/Frontend/web/Album/.vs/Album/v17/.wsuo
+/Frontend/web/Album/.vs/Album/FileContentIndex/354646d8-73d3-4ffd-9d3b-9e8e7239486a.vsidx
+/Frontend/web/Album/.vs/Album/FileContentIndex/c976c75e-532e-40fe-9220-12cb5cc957f2.vsidx

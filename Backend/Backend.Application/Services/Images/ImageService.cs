@@ -15,6 +15,7 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Backend.Application.Services.Images
 {
@@ -59,7 +60,7 @@ namespace Backend.Application.Services.Images
             }
             // Set author of the photo
             string author = string.IsNullOrEmpty(createImageDTO.Author) ? "anonymous" : createImageDTO.Author;
-
+            author = NormalizeString(author);
 
             var (originalFilePath, thumbnailFilePath) = await SaveImageFileAsync(createImageDTO, wedding.Id, author);
 
@@ -149,7 +150,7 @@ namespace Backend.Application.Services.Images
             //save thumbnail files
             var thumbnailFilePath = Path.Combine(thumbnailFolder, "thumbnail" + imageExtension);
 
-            using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400)) // Rozmiar miniaturki
+            using (var thumbnailStream = await GenerateThumbnailAsync(imageDTO, 400, 400)) 
             {
                 using (var fileStream = new FileStream(thumbnailFilePath, FileMode.Create))
                 {
@@ -239,6 +240,60 @@ namespace Backend.Application.Services.Images
             return (fileStream, mimeType);
         }
 
+        public async Task<bool> DeleteImageFromDbAndFile(Guid weddingId, string userId, Guid imageId)
+        {
+            if (!await _weddingRepository.IsUserOwnerOfWedding(weddingId, userId))
+            {
+                return false;
+            }
+            var deleteResult = await _imageRepository.DeleteImagesData(imageId);
+            if (deleteResult != null)
+            {
+                try
+                {
+                    var weddingFolderPath = Path.Combine(_photosBasePath, weddingId.ToString());
+                    var imageFolderPath = Path.Combine(weddingFolderPath, imageId.ToString());
 
+                    if (Directory.Exists(imageFolderPath))
+                    {
+                        Directory.Delete(imageFolderPath, true);
+                    }
+                }
+                catch (DirectoryNotFoundException ex)
+                {
+                    Console.WriteLine($"Directory not found: {ex.Message}");
+                    return false;
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+
+                    Console.WriteLine($"Permission denied: {ex.Message}");
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+
+        }
+        private string NormalizeString(string Text)
+        {
+
+            Text = Regex.Replace(Text, @"[^a-zA-Z0-9\s]", "");
+            Text = char.ToUpper(Text[0]) + Text.Substring(1).ToLower();
+            Text = Regex.Replace(Text, "<.*?>", "");
+            Text = Regex.Replace(Text, @"\s+", " ").Trim();
+            return Text;
+
+
+        }
     }
+
+
+
 }

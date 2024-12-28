@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
-
 namespace Backend.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
@@ -21,23 +20,20 @@ namespace Backend.Infrastructure.Extensions
         {
             var connectionString = configuration.GetConnectionString("DbConnection");
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-            
+
             //Dodanie scope'u dla seedu
             services.AddScoped<DatabaseSeeder>();
             //scope dla repozytoriów
             services.AddScoped<IWeddingRepository, WeddingRepository>();
             services.AddScoped<InterfaceImageRepository, ImageRepository>();
-
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 using (var scope = serviceProvider.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
                     context.Database.Migrate(); // Creating migration if doesnt exist on a database
                 }
             }
-
         }
     }
 }
