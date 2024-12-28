@@ -9,7 +9,6 @@ const Gallery = ({ weddingId }) => {
 
     const authData = JSON.parse(localStorage.getItem("auth"));
     const accessToken = authData?.accessToken;
-
     const goToPrevious = () => {
         if (pageIndex > 1) {
             setPageIndex((prev) => prev - 1);

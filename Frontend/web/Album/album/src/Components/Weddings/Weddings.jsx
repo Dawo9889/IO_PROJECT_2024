@@ -10,7 +10,6 @@ const Weddings = () => {
   const fetchWeddings = () => {
     const authData = JSON.parse(localStorage.getItem("auth"));
     const accessToken = authData?.accessToken;
-
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding`, {
         headers: {
