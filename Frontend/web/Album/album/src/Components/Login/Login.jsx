@@ -21,6 +21,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        console.clear()
         userRef.current.focus();
     }, [])
 
@@ -39,8 +40,8 @@ const Login = () => {
                 }
             );
 
+            // const expiryTime = Date.now() + 60 * 1000;
             const expiryTime = Date.now() + response.data.expiresIn * 1000;
-
             localStorage.setItem("auth", JSON.stringify({
                 user,
                 accessToken: response.data.accessToken,
@@ -48,7 +49,6 @@ const Login = () => {
                 refreshToken: response.data.refreshToken,
                 expiryTime
             }));
-
             localStorage.setItem('refreshToken', response.data.refreshToken);
             setAuth({ user, accessToken: response.data.accessToken, expiryTime });
             setUser('');

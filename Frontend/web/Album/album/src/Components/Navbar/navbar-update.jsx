@@ -27,7 +27,6 @@ function NavbarUpdate() {
     }, []);
   
     const handleLogout = () => {
-  
       localStorage.removeItem("auth");
       setIsAuthenticated(false);
       navigate("/login");
@@ -106,7 +105,7 @@ function NavbarUpdate() {
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    {authData.user}
+                    {isAuthenticated && authData && authData.user ? authData.user : ""}
                   </a>
                 </MenuItem>
                 <MenuItem>

@@ -46,7 +46,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
     axios
     .put(
       `${import.meta.env.VITE_API_URL}/wedding/updateToken?id=${weddingId}&hours=${tokenExpire}`,
-      {}, // Pusta treść ciała dla zapytania PUT
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -56,6 +56,9 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
     )
     .then(() => {
       toast.success('Expiration date extended!');
+
+      setTokenExpire('');
+
       if (onTokenUpdated) {
         onTokenUpdated();
       }
@@ -64,7 +67,6 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
       console.error('Error:', err.response?.data || err.message);
       toast.error('An error occurred while updating expiration time.');
     });
-  
   };
 
   if (qrCodeLoading) {
@@ -111,6 +113,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
         <div className="w-full flex flex-col md:flex-row items-center gap-4 mt-4">
         <input
           type="number"
+          id="tokenInput"
           min={0}
           value={tokenExpire}
           onChange={(e) => setTokenExpire(e.target.value)}

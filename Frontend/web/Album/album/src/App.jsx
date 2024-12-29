@@ -21,7 +21,7 @@ function App() {
       <>
     <ToastContainer />
      <Routes>
-         <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark"><Layout /></div>}>
+         <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark min-h-[600px]"><Layout /></div>}>
 
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
