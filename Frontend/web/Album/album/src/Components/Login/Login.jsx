@@ -40,6 +40,7 @@ const Login = () => {
                 }
             );
 
+            // const expiryTime = Date.now() + 60 * 1000;
             const expiryTime = Date.now() + response.data.expiresIn * 1000;
             localStorage.setItem("auth", JSON.stringify({
                 user,

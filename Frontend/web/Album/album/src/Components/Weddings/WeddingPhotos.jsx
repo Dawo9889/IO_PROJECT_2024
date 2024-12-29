@@ -31,6 +31,10 @@ const WeddingPhotos = ({ weddingId }) => {
     }
   };
 
+  const handlePhotoDeleted = () => {
+    fetchThumbnails();
+  };
+
   useEffect(() => {
     const fetchWeddingInfo = async () => {
       try {
@@ -52,9 +56,8 @@ const WeddingPhotos = ({ weddingId }) => {
 fetchWeddingInfo()
 },[weddingId])
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchThumbnails = async () => {
+const fetchThumbnails = async () => {
+  setLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${pageIndex}`,
@@ -98,7 +101,7 @@ fetchWeddingInfo()
         setLoading(false);
       }
     };
-  
+  useEffect(() => {
     fetchThumbnails();
   }, [weddingId,pageIndex]);
   
@@ -183,6 +186,7 @@ fetchWeddingInfo()
           weddingId={weddingId}
           pageCount={pageCount}
           index={currentIndex + (pageIndex - 1) * 24}
+          onPhotoDeleted={handlePhotoDeleted}
           onClose={() => setIsSliderOpen(false)}
         />
       )}

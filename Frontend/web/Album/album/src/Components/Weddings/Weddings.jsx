@@ -24,6 +24,9 @@ const Weddings = () => {
       });
   };
 
+  const refreshWeddings = () => {
+    fetchWeddings(); 
+  }
   useEffect(() => {
     fetchWeddings(); 
   }, []);
@@ -48,7 +51,9 @@ const Weddings = () => {
           />
         </div>
         <div className="bg-project-dark sm:col-span-2 md:col-span-2">
-        <WeddingDetails weddingId={selectedWedding} />
+        <WeddingDetails 
+          weddingId={selectedWedding}
+          onUpdate={refreshWeddings} />
         </div>
       </div>
     </>
