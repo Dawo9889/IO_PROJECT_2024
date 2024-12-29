@@ -50,7 +50,6 @@ const WeddingPhotos = ({ weddingId }) => {
         setPageCount(totalPages);
 
   }catch (err) {
-    // console.error("Błąd podczas pobierania miniatur:", err);
   };
 };
 fetchWeddingInfo()
@@ -86,7 +85,6 @@ const fetchThumbnails = async () => {
               const image = URL.createObjectURL(blob);
               return image;
             } catch (err) {
-              // console.error(`Błąd autoryzacji dla miniatury ${thumbnail}:`, err);
               return null;
             }
           })
@@ -96,7 +94,6 @@ const fetchThumbnails = async () => {
           authorizedThumbnails.filter((thumbnail) => thumbnail !== null)
         );
       } catch (err) {
-        // console.error("Błąd podczas pobierania miniatur:", err);
       } finally {
         setLoading(false);
       }
@@ -106,7 +103,7 @@ const fetchThumbnails = async () => {
   }, [weddingId,pageIndex]);
   
   return (
-    <div className="flex justify-start relative">
+    <div className="flex justify-start relative bg-project-dark">
       {loading ? (
         <div className="flex justify-center items-center h-1/2 w-full">
           <svg
@@ -154,9 +151,9 @@ const fetchThumbnails = async () => {
     )}
   </div>
           <div className="flex w-full relative">
-          <div className="h-[400px] lg:min-h-[600px] w-full">
+          <div className="sm:min-h-[600px] md:min-h-[500px] lg:min-h-[650px] w-full bg-project-dark">
             {thumbnails.length > 0 ? (
-              <div className="grid grid-cols-6 gap-3">
+              <div className="grid xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-3 gap-3">
                 {thumbnails.map((thumbnail, photoIndex) => (
                   <div
                     key={photoIndex}
@@ -173,7 +170,7 @@ const fetchThumbnails = async () => {
               </div>
             ) : (
               <div className="flex items-center justify-center w-full h-full text-center text-white text-2xl">
-                Brak miniatur
+                No images here
               </div>
             )}
           </div>

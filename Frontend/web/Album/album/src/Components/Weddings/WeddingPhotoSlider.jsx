@@ -109,6 +109,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
     const loadPhoto = async () => {
       if (!photos[currentIndex]) return;
       setLoading(true);
+      console.log(photos[currentIndex])
       try {
         const photoRes = await axios.get(photos[currentIndex].filePath, {
           headers: {
@@ -130,6 +131,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         setCurrentPhoto({
           photoSrc: URL.createObjectURL(photoBlob),
           thumbnailSrc: URL.createObjectURL(thumbnailBlob),
+          description: photos[currentIndex].description
         });
       } catch (err) {
         console.error(`Błąd podczas ładowania zdjęcia:`, err);
@@ -176,6 +178,9 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         </div>
       ) : (
         <div className="flex flex-col">
+          <div className='text-white text-2xl flex justify-center w-full'>
+              {currentPhoto?.description}
+          </div>
           <div
             className="max-w-4xl flex items-center m-4"
             onClick={(e) => e.stopPropagation()}
@@ -216,7 +221,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
                 </svg>
               </button>
             )}
-  
+
             <div className="min-h-[250px] lg:min-h-[600px]">
               <motion.div key={currentIndex} className="flex justify-center">
                 <LazyLoadImage
