@@ -25,7 +25,7 @@ const DeleteWedding = ({ weddingId, weddingName, onClose, onConfirm }) => {
       onClick={onClose}
     >
       <div
-        className="bg-project-dark p-6 rounded-lg shadow-md text-center"
+        className="bg-project-dark p-6 rounded-lg shadow-md text-center m-4"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg text-white font-bold mb-4">Confirm Deletion</h2>

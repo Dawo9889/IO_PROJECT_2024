@@ -15,7 +15,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function NavbarUpdate() {
+function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
@@ -162,4 +162,4 @@ function NavbarUpdate() {
   )
 }
 
-export default NavbarUpdate;
+export default Navbar;

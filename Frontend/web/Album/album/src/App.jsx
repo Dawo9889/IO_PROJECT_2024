@@ -19,26 +19,25 @@ function App() {
 
     return (
       <>
-    <ToastContainer />
-     <Routes>
-         <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark min-h-[600px]"><Layout /></div>}>
-
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="team" element={<Team />} />
-          <Route path="linkpage" element={<LinkPage />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
-  
+        <ToastContainer />
+          <Routes>
+            <Route path="/" element={<div className="h-dvh flex flex-col bg-project-dark"><Layout /></div>}>
+         
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="team" element={<Team />} />
+            <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="/" element={<div className="p-4"><Home /></div>} />
+         
             <Route path="album" element={<PrivateRoute element={<MyAlbum />} />} />
             <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
             <Route path="weddings" element={<PrivateRoute element={<Weddings />} />} />
             <Route path="createWedding" element={<PrivateRoute element={<CreateWedding />} />} />
             <Route path="weddingsGallery" element={<PrivateRoute element={<WeddingsGallery />} />} />
-  
-          <Route path="*" element={<Missing />} />
-        </Route>
-     </Routes>
+         
+            <Route path="*" element={<Missing />} />
+          </Route>
+          </Routes>
      </>
     );
   }

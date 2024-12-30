@@ -101,7 +101,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
   }
 
   return (
-    <div className="w-full flex items-center justify-center h-full col-span-1 space-y-4">
+    <div className="w-full flex items-center justify-center h-full col-span-1 space-y-4 p-4">
       <div className="flex flex-col items-center justify-center h-full">
         {qrCode ? (
             <>
@@ -121,7 +121,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
           className="w-full md:w-auto py-2 px-4 text-sm text-white bg-project-dark border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-project-blue focus:outline-none"
         />
         <button
-          className="px-6 py-2 text-sm font-medium bg-project-yellow text-black rounded-lg shadow hover:bg-yellow-400 focus:ring-2 focus:ring-offset-2 focus:ring-project-blue"
+          className="w-full px-6 py-2 text-sm font-medium bg-project-yellow text-black rounded-lg shadow hover:bg-yellow-400 focus:ring-2 focus:ring-offset-2 focus:ring-project-blue"
           onClick={updateToken}
         >
           Update Token
