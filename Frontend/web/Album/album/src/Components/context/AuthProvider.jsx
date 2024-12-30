@@ -33,8 +33,6 @@ export const AuthProvider = ({children}) => {
                 expiryTime: newExpiryTime,
                 refreshToken: response.data.refreshToken
             };
-            // console.log('elo')
-            // console.log(updatedAuth)
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
         } catch (error) {

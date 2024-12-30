@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import WeddingList from './WeddingList';
-import WeddingDetails from './WeddingDetails';
+import WeddingList from '../WeddingManagment/WeddingList';
+import WeddingDetails from '../WeddingManagment/WeddingDetails';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import axios from 'axios'
 const Weddings = () => {

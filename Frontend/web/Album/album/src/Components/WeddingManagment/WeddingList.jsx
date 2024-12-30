@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import DeleteWedding from './DeleteWedding';
+import DeleteWedding from '../Weddings/DeleteWedding';
 
 const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
   const [error, setError] = useState(null);

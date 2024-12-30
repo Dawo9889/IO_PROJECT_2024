@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import MyAlbum from "./Components/MyAlbum/MyAlbum"
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
@@ -9,11 +8,10 @@ import Admin from './Components/Admin/Admin';
 import Missing from './Components/Other/Missing';
 import Team from './Components/Other/Team';
 import Unauthorized from './Components/Other/Unauthorized';
-import LinkPage from './Components/Dashboard/LinkPage';
 import Weddings from "./Components/Weddings/Weddings";
 import PrivateRoute from './Components/AuthMechanizm/PrivateRoute'
 import CreateWedding from "./Components/Weddings/createWedding";
-import WeddingsGallery from "./Components/Weddings/WeddingsGallery";
+import WeddingsGallery from "./Components/WeddingGallery/WeddingsGallery";
 import { ToastContainer } from "react-toastify";
 function App() {
 

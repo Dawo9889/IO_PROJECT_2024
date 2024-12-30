@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 const Team = () => {
     return (
         <div className="w-full flex justify-center items-center"> 
