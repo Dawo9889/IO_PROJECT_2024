@@ -126,7 +126,7 @@ const Register = () => {
               </p>
             </section>
           ) : (
-            <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-2xl ml-4 mr-4">
+            <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-2xl">
               <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">
                 {errMsg}
               </p>
