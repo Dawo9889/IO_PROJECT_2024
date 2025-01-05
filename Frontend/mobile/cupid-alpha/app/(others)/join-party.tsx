@@ -43,9 +43,6 @@ const JoinParty = () => {
 
       const handleQRScanned = async (scanningResult: BarcodeScanningResult) => {
 
-        // DELETE THIS AFTER TOKEN VALIDATION
-        // await storePartyToken('c2c75eee-024f-4ce6-9ec4-f44119919253');
-
         setScanned(true);
         const token = scanningResult.data;
         setNewToken(token);
@@ -53,9 +50,11 @@ const JoinParty = () => {
         console.log(`${currentPartyToken} , ${token}`)
         if (currentPartyToken == token) setSameAsOld(true);
         else {
+          console.log('Checking if token is valid');
           const newValid = await checkIfTokenValid(token);
           if (newValid) setNewPartyName(newValid.name);
           else {
+            console.log('Token is invalid');
             setTokenInvalid(true);
           }
         }

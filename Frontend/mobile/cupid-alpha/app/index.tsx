@@ -26,8 +26,9 @@ const App = () => {
           setIsAuthenticated(true);
           await refreshAccessToken();
         }
-      } catch (error) {
-        console.error('Error checking login status:', error);
+      } catch (error: any) {
+          console.log('Access token expired. Redirecting to login page...');
+          setIsAuthenticated(false);
       } finally {
         setIsLoading(false); // End loading after the check
       }
@@ -62,7 +63,7 @@ const App = () => {
             </Text>
           </View>
           <Text className='text-lg text-primary font-bregular mt-7 text-center'>
-          Capture and create a unique, real-time event album right from your device! Snap photos directly in the app, add tags, text, or stickers in order to personalize each memory. The collaborative album builds throughout the event, capturing every special moment.
+          Capture and create a unique, real-time event album right from your device! Snap photos directly in the app and add comments in order to personalize each memory. The collaborative album builds throughout the event, capturing every special moment.
           </Text>
           <CustomButton
             title="Log in/Sign up"

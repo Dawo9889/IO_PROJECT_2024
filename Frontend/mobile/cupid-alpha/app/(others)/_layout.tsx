@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router'
+import React from 'react'
 
 const OthersLayout = () => {
   return (
@@ -6,6 +7,7 @@ const OthersLayout = () => {
       <Stack>
         <Stack.Screen name="about-us" options={{ headerShown: false }} />
         <Stack.Screen name="join-party" options={{ headerShown: false }} />
+        <Stack.Screen name="party-details" options={{ headerShown: false }} />
       </Stack>
     </>
   )
