@@ -78,6 +78,33 @@ public class UserController : ControllerBase
 
         return Ok("Email confirmed successfully.");
     }
+    [HttpPost("resend-confirmation-email")]
+    public async Task<IActionResult> ResendConfirmationEmail([FromBody] string email)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return NotFound("User not found");
+
+        if(await _userManager.IsEmailConfirmedAsync(user))
+        {
+            return BadRequest("Email is already confirmed");
+        }
+
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var confirmationLink = Url.Action(nameof(ConfirmEmail), "User",
+            new { userId = user.Id, token }, Request.Scheme);
+
+        await _emailService.SendEmailAsync(user.Email, "Resend Confirmation Email for Your Cupid App Account",
+            $"Please confirm your email by clicking this link: {confirmationLink}");
+
+        return Ok("Confirmation email has been resent. Please check your inbox.");
+    }
+
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
