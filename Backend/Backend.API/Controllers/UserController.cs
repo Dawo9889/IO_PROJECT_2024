@@ -79,12 +79,12 @@ public class UserController : ControllerBase
         return Ok("Email confirmed successfully.");
     }
     [HttpPost("resend-confirmation-email")]
-    public async Task<IActionResult> ResendConfirmationEmail([FromBody] string email)
+    public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest model)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = await _userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
             return NotFound("User not found");
 
