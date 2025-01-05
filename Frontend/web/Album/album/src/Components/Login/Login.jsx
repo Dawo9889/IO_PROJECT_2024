@@ -1,8 +1,9 @@
 import { useRef, useState, useEffect } from "react"
-import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import '../Spinner/Spinner.css'
+
 const LOGIN_URL = `${import.meta.env.VITE_API_URL}/identity/login`
 
 const Login = () => {
@@ -21,6 +22,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        console.clear()
         userRef.current.focus();
     }, [])
 
@@ -39,8 +41,8 @@ const Login = () => {
                 }
             );
 
+            // const expiryTime = Date.now() + 60 * 1000;
             const expiryTime = Date.now() + response.data.expiresIn * 1000;
-
             localStorage.setItem("auth", JSON.stringify({
                 user,
                 accessToken: response.data.accessToken,
@@ -48,7 +50,6 @@ const Login = () => {
                 refreshToken: response.data.refreshToken,
                 expiryTime
             }));
-
             localStorage.setItem('refreshToken', response.data.refreshToken);
             setAuth({ user, accessToken: response.data.accessToken, expiryTime });
             setUser('');

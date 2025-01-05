@@ -1,9 +1,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState, useEffect  } from "react";
 import logo from './cupidlogo-white.svg'
 import loginPhoto from './login-photo.jpg'
-import { Transition } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
 
 const navigation = [
@@ -15,8 +14,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function NavbarUpdate() {
-    const [isOpen, setIsOpen] = useState(false);
+function Navbar() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
     const authData = JSON.parse(localStorage.getItem("auth"));
@@ -27,7 +25,6 @@ function NavbarUpdate() {
     }, []);
   
     const handleLogout = () => {
-  
       localStorage.removeItem("auth");
       setIsAuthenticated(false);
       navigate("/login");
@@ -38,7 +35,7 @@ function NavbarUpdate() {
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            {/* Mobile menu button*/}
+            
             <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-project-pink-buttons hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
@@ -106,7 +103,7 @@ function NavbarUpdate() {
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    {authData.user}
+                    {isAuthenticated && authData && authData.user ? authData.user : ""}
                   </a>
                 </MenuItem>
                 <MenuItem>
@@ -163,4 +160,4 @@ function NavbarUpdate() {
   )
 }
 
-export default NavbarUpdate;
+export default Navbar;

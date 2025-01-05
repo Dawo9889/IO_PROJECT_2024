@@ -1,4 +1,5 @@
 import { useEffect, createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
 const AuthContext = createContext({});
@@ -18,18 +19,19 @@ export const AuthProvider = ({children}) => {
         }
         return {};
     });
+    const navigate = useNavigate();
 
     const refreshAccessToken = async () => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh`, {
                 "refreshToken": auth.refreshToken
             });
-            
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
             const updatedAuth = {
                 ...auth,
                 accessToken: response.data.accessToken,
-                expiryTime: newExpiryTime
+                expiryTime: newExpiryTime,
+                refreshToken: response.data.refreshToken
             };
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
@@ -39,7 +41,34 @@ export const AuthProvider = ({children}) => {
             localStorage.removeItem("auth");
         }
     };
-
+    const testBackend = async () => {
+        if (localStorage.getItem("auth") !== null) {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/wedding`, {
+                    headers: {
+                        Authorization: `Bearer ${auth.accessToken}`,
+                    },
+                });
+                return true; 
+            } catch (error) {
+                return false; 
+            }
+        }
+        return false;
+    };
+    
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const isBackendAvailable = await testBackend();
+            if (!isBackendAvailable && localStorage.getItem("auth") !== null) {
+                setAuth({})
+                localStorage.removeItem("auth");
+                navigate("/login")
+            }
+        }, 10 * 1000); 
+    
+        return () => clearInterval(interval);
+    }, [navigate]);
     useEffect(() => {
         const interval = setInterval(() => {
             const currentTime = Date.now();
@@ -50,9 +79,6 @@ export const AuthProvider = ({children}) => {
 
         return () => clearInterval(interval);
     }, [auth]);
-
-    // console.log("Current Auth:", auth);
-    // console.log("Stored Auth in LocalStorage:", localStorage.getItem("auth"));
 
     return (
         <AuthContext.Provider value={{auth, setAuth}}>

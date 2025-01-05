@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import DeleteWedding from './DeleteWedding';
+import DeleteWedding from '../Weddings/DeleteWedding';
 
 const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
   const [error, setError] = useState(null);
@@ -49,7 +49,7 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
 
   return (
     <div className="flex justify-start pt-6">
-      <div className="h-[200px] lg:min-h-[700px] overflow-y-auto w-full p-6 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
+      <div className="h-[200px] md:min-h-[700px] lg:min-h-[700px] overflow-y-auto w-full p-6 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
         <h1 className="text-2xl font-bold text-white text-center mb-6">Weddings List</h1>
         {error ? (
           <p className="text-red-500 text-center">{error}</p>
