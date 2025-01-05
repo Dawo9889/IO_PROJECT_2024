@@ -59,10 +59,10 @@ public class UserController : ControllerBase
         var confirmationLink = Url.Action(nameof(ConfirmEmail), "User",
             new { userId = user.Id, token }, Request.Scheme);
 
-        //await _emailService.SendEmailAsync(user.Email, "Confirm your email",            
-        //    $"Please confirm your email by clicking this link: {confirmationLink}"); 
+        await _emailService.SendEmailAsync(user.Email, "Confirm your email to your Cupid App Account",
+            $"Please confirm your email by clicking this link: {confirmationLink}");
 
-        return Ok($"Confirm you email: {confirmationLink}");
+        return Ok($"Confirm your email that we sent to your email address");
     }
 
     [HttpGet("confirm-email")]
