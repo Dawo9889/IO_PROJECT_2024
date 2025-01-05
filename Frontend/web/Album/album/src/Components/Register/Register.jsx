@@ -1,6 +1,7 @@
 import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toast } from 'react-toastify';
 import axios from "axios";
 import '../Spinner/Spinner.css'
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -70,48 +71,44 @@ const Register = () => {
             console.log(err);
         
             if (!err?.response) {
-                setErrMsg('No server response');
-            } else if (err.response?.status === 400) {
-                const errors = err.response.data.errors;
-        
-                if (errors?.DuplicateUserName) {
-                    setErrMsg(errors.DuplicateUserName[0]);
-                } else if (errors?.InvalidEmail) {
-                    setErrMsg(errors.InvalidEmail[0]);
-                } else if (errors?.PasswordTooShort ||
-                           errors?.PasswordRequiresNonAlphanumeric ||
-                           errors?.PasswordRequiresDigit ||
-                           errors?.PasswordRequiresLower ||
-                           errors?.PasswordRequiresUpper ||
-                           errors?.PasswordRequiresUniqueChars) {
-
-                    const passwordErrors = [];
-                    if (errors.PasswordTooShort) {
-                        passwordErrors.push(errors.PasswordTooShort[0]);
-                    }
-                    if (errors.PasswordRequiresNonAlphanumeric) {
-                        passwordErrors.push(errors.PasswordRequiresNonAlphanumeric[0]);
-                    }
-                    if (errors.PasswordRequiresDigit) {
-                        passwordErrors.push(errors.PasswordRequiresDigit[0]);
-                    }
-                    if (errors.PasswordRequiresLower) {
-                        passwordErrors.push(errors.PasswordRequiresLower[0]);
-                    }
-                    if (errors.PasswordRequiresUpper) {
-                        passwordErrors.push(errors.PasswordRequiresUpper[0]);
-                    }
-                    if (errors.PasswordRequiresUniqueChars) {
-                        passwordErrors.push(errors.PasswordRequiresUniqueChars[0]);
-                    }
-                    setErrMsg(passwordErrors.join(' '));
-                } else {
-                    setErrMsg('Invalid input data');
-                }
-            } else {
-                setErrMsg('Registration Failed');
-            }
+              toast.error('No server response');
+          } else if (err.response?.status === 400) {
+              const errors = err.response.data;
+          
+              if (Array.isArray(errors)) {
+                  const errorMessages = errors.map(error => {
+                      if (error.code === 'DuplicateUserName') {
+                          return error.description;
+                      } else if (error.code === 'InvalidEmail') {
+                          return error.description;
+                      } else if (
+                          error.code === 'PasswordTooShort' ||
+                          error.code === 'PasswordRequiresNonAlphanumeric' ||
+                          error.code === 'PasswordRequiresDigit' ||
+                          error.code === 'PasswordRequiresLower' ||
+                          error.code === 'PasswordRequiresUpper' ||
+                          error.code === 'PasswordRequiresUniqueChars'
+                      ) {
+                          return error.description;
+                      }
+                      return null;
+                  }).filter(msg => msg !== null);
+          
+                  if (errorMessages.length > 0) {
+                    toast.error(errorMessages.join(' '));
+                      // setErrMsg(errorMessages.join(' '));
+                  } else {
+                    toast.error('Invalid input data');
+                  }
+              } else {
+                toast.error('Invalid input data');
+              }
+          } else {
+            toast.error('Registration Failed');
+          }
             errRef.current.focus();
+          }
+        finally{
             setLoading(false)
         }
     }

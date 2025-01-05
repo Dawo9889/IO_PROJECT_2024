@@ -24,7 +24,7 @@ const Admin = () => {
             <h1 className="text-2xl font-bold text-white text-center mb-4">Weddings Managment</h1>
             <br />
             <div className="flexGrow">
-                <Link to="/weddings" className="text-project-blue hover:underline">Weddings managment</Link>
+                <Link to="/weddings" className="text-project-blue hover:underline">Weddings Managment</Link>
             </div>
         </section>
         <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
