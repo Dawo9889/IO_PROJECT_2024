@@ -6,6 +6,7 @@ import axios from "axios";
 import '../Spinner/Spinner.css'
 
 const LOGIN_URL = `${import.meta.env.VITE_API_URL}/identity/login`
+const RESEND_URL = `${import.meta.env.VITE_API_URL}/identity/resend-confirmation-email`
 
 const Login = () => {
     const {setAuth} = useAuth();
@@ -84,6 +85,19 @@ const Login = () => {
         }
     }
 
+    const resendMail = async () => {
+        try {
+            const response = await axios.post(RESEND_URL, 
+                {
+                    "email": user,
+                }
+            );
+            toast.success(response.data)
+        } catch (err) {
+            toast.error(err)
+        }
+    }
+
   return (
     <>
     <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
@@ -140,6 +154,7 @@ const Login = () => {
             Your account wasn't confirmed via e-mail
         </div>
         <button
+              onClick={() => resendMail()}
               type="submit"
               className="w-full py-2 bg-project-blue text-black font-semibold rounded-lg hover:bg-project-blue-buttons focus:outline-none focus:ring-2 focus:ring-project-blue-buttons"
             >

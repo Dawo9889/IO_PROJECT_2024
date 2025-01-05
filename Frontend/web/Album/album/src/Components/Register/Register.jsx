@@ -118,6 +118,7 @@ const Register = () => {
           { success ? (
             <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
               <h1 className="text-2xl text-white font-bold text-center mb-4">Success!</h1>
+              <h1 className="text-xl text-white font-bold text-center mb-4">Please check your mailbox to verify your account.</h1>
               <p className="text-center">
                 <a href="/login" className="text-project-blue hover:underline">Sign In</a>
               </p>

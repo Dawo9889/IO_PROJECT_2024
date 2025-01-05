@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios'
 
 const AuthContext = createContext({});
+const authData = JSON.parse(localStorage.getItem("auth"));
+const accessToken = authData?.accessToken;
 
 export const AuthProvider = ({children}) => {
     const [auth, setAuth] = useState(() => {
@@ -23,10 +25,15 @@ export const AuthProvider = ({children}) => {
 
     const refreshAccessToken = async () => {
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh`, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh-token`, {
                 "refreshToken": auth.refreshToken
+            },{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
             });
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
+            // const newExpiryTime = Date.now() + 60 * 1000;
             const updatedAuth = {
                 ...auth,
                 accessToken: response.data.accessToken,
@@ -35,6 +42,7 @@ export const AuthProvider = ({children}) => {
             };
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
+            console.log(localStorage.getItem("auth"))
         } catch (error) {
             console.error("Error refreshing token:", error);
             setAuth({});
