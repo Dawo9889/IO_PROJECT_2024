@@ -203,7 +203,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
             {currentIndex > 0 && (
               <button
                 onClick={goToPrevious}
-                className="absolute left-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
+                className="absolute left-4 text-white text-3xl bg-project-blue p-2 rounded-full hover:bg-project-blue-buttons opacity-50 hover:opacity-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +231,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
                   alt={`Photo ${currentIndex + 1}`}
                   className={`mx-auto rounded-lg ${
                     isVertical
-                      ? 'max-h-[90vh] max-w-[70vw]'
+                      ? 'max-h-[85vh] max-w-[70vw]'
                       : 'max-w-full max-h-screen'
                   } object-contain`}
                   onLoad={handleImageLoad}
@@ -242,7 +242,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
             {currentIndex < photos.length - 1 && (
               <button
                 onClick={goToNext}
-                className="absolute right-4 text-white text-3xl bg-gray-800 p-2 rounded-full hover:bg-gray-700 opacity-50 hover:opacity-100"
+                className="absolute right-4 text-white text-3xl bg-project-blue p-2 rounded-full hover:bg-project-blue-buttons opacity-50 hover:opacity-100"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

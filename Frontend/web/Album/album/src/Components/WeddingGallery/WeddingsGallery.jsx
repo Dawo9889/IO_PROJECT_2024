@@ -55,9 +55,8 @@ const WeddingsGallery = () => {
           ))}
         </select>
       </div>
-
-      <div className="my-4" />
-      <div className="sm:min-h-[600px] md:min-h-[500px] lg:min-h-[650px] overflow-y-auto mx-4 p-4 bg-project-dark border border-project-blue rounded-lg shadow-lg">
+      <div className="my-4"/>
+      <div className="sm:min-h-[600px] md:min-h-[500px] lg:min-h-[650px] overflow-y-auto mx-4 p-4 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
         <div className="min-h-[650px]">
           {selectedWedding ? (
             <WeddingPhotos weddingId={selectedWedding} />
