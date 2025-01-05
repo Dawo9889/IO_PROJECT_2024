@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import WeddingList from './WeddingList';
-import WeddingDetails from './WeddingDetails';
+import WeddingList from '../WeddingManagment/WeddingList';
+import WeddingDetails from '../WeddingManagment/WeddingDetails';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import axios from 'axios'
 const Weddings = () => {
@@ -10,7 +10,6 @@ const Weddings = () => {
   const fetchWeddings = () => {
     const authData = JSON.parse(localStorage.getItem("auth"));
     const accessToken = authData?.accessToken;
-
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding`, {
         headers: {
@@ -25,6 +24,9 @@ const Weddings = () => {
       });
   };
 
+  const refreshWeddings = () => {
+    fetchWeddings(); 
+  }
   useEffect(() => {
     fetchWeddings(); 
   }, []);
@@ -49,7 +51,9 @@ const Weddings = () => {
           />
         </div>
         <div className="bg-project-dark sm:col-span-2 md:col-span-2">
-        <WeddingDetails weddingId={selectedWedding} />
+        <WeddingDetails 
+          weddingId={selectedWedding}
+          onUpdate={refreshWeddings} />
         </div>
       </div>
     </>

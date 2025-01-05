@@ -12,11 +12,11 @@ const formatDate = (isoDate) => {
   const now = new Date();
 
   if (date.getTime() < now.getTime()) {
-    return 'Wedding is expired'; // Jeśli data jest starsza niż teraz.
+    return 'Wedding is expired';
   }
 
   const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Miesiące są zero-indeksowane
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -29,7 +29,7 @@ const openDatePicker = () => {
   document.getElementById("date").showPicker();
 };
 
-const WeddingDetails = ({ weddingId }) => {
+const WeddingDetails = ({ weddingId, onUpdate }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,7 +52,7 @@ const WeddingDetails = ({ weddingId }) => {
     };
   
     return (
-      <form onSubmit={handleSubmit} className="w-full flex flex-col justify-center text-white space-y-4">
+      <form onSubmit={handleSubmit} className="w-full flex flex-col  justify-center text-white space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
         <h1 className='text-2xl w-full text-center'>Update wedding</h1>
         <div>
           <label className="block text-sm font-medium">Name</label>
@@ -65,7 +65,7 @@ const WeddingDetails = ({ weddingId }) => {
           />
         </div>
         <div className="flex flex-col">
-          <label className="block text-sm font-medium mb-1">Event Date</label>
+          <label className="block text-sm font-medium">Event Date</label>
           <div className="flex items-center w-full">
             <input
               id="date"
@@ -94,17 +94,17 @@ const WeddingDetails = ({ weddingId }) => {
             className="w-full px-3 py-2 border border-2 rounded-lg bg-project-dark text-white"
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center">
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium bg-gray-600 hover:bg-gray-800 text-white rounded-lg"
+            className="px-6 py-2 mx-2 text-sm font-medium bg-gray-600 hover:bg-gray-800 text-white rounded-lg"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 text-sm font-medium bg-project-yellow hover:bg-project-yellow-buttons text-black rounded-lg"
+            className="px-4 py-2 mx-2 text-sm font-medium bg-project-yellow hover:bg-project-yellow-buttons text-black rounded-lg"
           >
             Save
           </button>
@@ -131,7 +131,8 @@ const WeddingDetails = ({ weddingId }) => {
         setDetails(response.data);
         setIsEditing(false);
         toast.success('Wedding updated successfully!');
-        fetchData()
+        fetchData();
+        onUpdate();
       })
       .catch((err) => {
         toast.error('Error updating wedding.');
@@ -172,7 +173,7 @@ const WeddingDetails = ({ weddingId }) => {
   }, [weddingId]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 h-[700px] lg:min-h-[500px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="max-w-6xl mx-auto p-6 sm:min-h-[800px] md:min-h-[700px] lg:min-h-[700px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {loading ? (
         <div className="flex items-center justify-center h-full col-span-2">
           <svg
@@ -207,7 +208,7 @@ const WeddingDetails = ({ weddingId }) => {
               onCancel={() => setIsEditing(false)}
             />
           ) : (
-            <div className="text-white flex items-center justify-center col-span-1 md:col-span-1">
+            <div className="text-white flex items-center justify-center col-span-1 md:col-span-2 lg:col-span-1">
               <div className="h-full flex flex-col justify-center">
                 <h1 className="text-3xl font-semibold mb-4 text-center">
                   {details.name}
@@ -243,12 +244,13 @@ const WeddingDetails = ({ weddingId }) => {
           Click a wedding to see details
         </p>
       )}
-  
+    <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
       <WeddingQRCode
         weddingId={weddingId}
         accessToken={accessToken}
-        onTokenUpdated={fetchData} // Przekazanie funkcji do komponentu podrzędnego
+        onTokenUpdated={fetchData}
       />
+      </div>
     </div>
   );
 }  
