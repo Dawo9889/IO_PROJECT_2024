@@ -8,11 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var env = Environment.GetEnvironmentVariable("DATABASE_IP");
 builder.Configuration.AddEnvironmentVariables();
+
 var dbConnectionString = builder.Configuration["ConnectionStrings__DbConnection"];
 if (!string.IsNullOrEmpty(dbConnectionString))
 {
     builder.Configuration["ConnectionStrings:DbConnection"] = dbConnectionString;
 }
+
 
 // Add services to the container.
 builder.AddPresentation();
