@@ -26,14 +26,14 @@ namespace Backend.Infrastructure.Extensions
             //scope dla repozytoriów
             services.AddScoped<IWeddingRepository, WeddingRepository>();
             services.AddScoped<InterfaceImageRepository, ImageRepository>();
-            //using (var serviceProvider = services.BuildServiceProvider())
-            //{
-            //    using (var scope = serviceProvider.CreateScope())
-            //    {
-            //        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            //        context.Database.Migrate(); // Creating migration if doesnt exist on a database
-            //    }
-            //}
+            using (var serviceProvider = services.BuildServiceProvider())
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    context.Database.Migrate(); // Creating migration if doesnt exist on a database
+                }
+            }
         }
     }
 }
