@@ -1,13 +1,9 @@
 ﻿using Backend.Application.Mappings;
+using Backend.Application.Services.Email;
 using Backend.Application.Services.Images;
 using Backend.Application.Services.Wedding;
 using Backend.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Backend.Application.Extensions
 {
@@ -17,7 +13,7 @@ namespace Backend.Application.Extensions
         {
             services.AddScoped<IWeddingService, WeddingService>();
             services.AddScoped<InterfaceImageService, ImageService>();
-            
+            services.AddScoped<IEmailService, EmailService>();
 
             //AutoMapper
             services.AddAutoMapper(typeof(WeddingMappingProfile));

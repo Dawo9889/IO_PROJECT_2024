@@ -54,7 +54,8 @@ seeder.Seed().Wait();
 
 
 //identity
-app.MapGroup("api/identity").MapIdentityApi<User>();
+//app.MapGroup("api/identity").MapIdentityApi<User>();
+
 //app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();
