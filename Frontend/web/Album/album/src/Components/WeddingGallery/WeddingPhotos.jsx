@@ -28,7 +28,6 @@ const WeddingPhotos = ({ weddingId }) => {
   const openSlider = (index) => {
     setCurrentIndex(index);
     setIsSliderOpen(true);
-    fetchWeddingInfo();
   };
 
   const goToPrevious = () => {
@@ -44,11 +43,7 @@ const WeddingPhotos = ({ weddingId }) => {
   };
 
   const handlePhotoDeleted = () => {
-    fetchWeddingInfo();
     fetchThumbnails();
-    console.log(pageCount)
-    console.log(pageIndex)
-    console.log("dłg "+thumbnails.length)
     if(thumbnails.length == 0){
       console.log("elo")
       setPageCount(pageCount - 1)
@@ -56,25 +51,24 @@ const WeddingPhotos = ({ weddingId }) => {
     }
   };
   
-  const fetchWeddingInfo = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const totalPages = Math.ceil(response.data.imagesCount / 24);
-      setPageCount(totalPages);
+  useEffect(() => {
+    const fetchWeddingInfo = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const totalPages = Math.ceil(response.data.imagesCount / 24);
+        setPageCount(totalPages);
 
-}catch (err) {
+  }catch (err) {
+  };
 };
-};
-
-useEffect(() => {
-  fetchWeddingInfo()
+fetchWeddingInfo()
 },[weddingId])
 
 const fetchThumbnails = async () => {
@@ -137,11 +131,11 @@ const fetchThumbnails = async () => {
         </div>
       ) : (
         <div className="flex flex-col w-full">
-          <div className="flex justify-between items-center min-h-[50px] w-full">
+          <div className="flex justify-between items-center min-h-[50px] w-full pr-2">
             {pageIndex > 1 && (
               <button
                 onClick={goToPrevious}
-                className="absolute left-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+                className="absolute left-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
                 Previous Page
               </button>
@@ -154,7 +148,7 @@ const fetchThumbnails = async () => {
             {pageIndex < pageCount && (
               <button
                 onClick={goToNext}
-                className="absolute right-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+                className="absolute right-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
                 Next Page
               </button>
