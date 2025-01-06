@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Spinner } from '@material-tailwind/react';
 import axios from 'axios'
 import './style.css'
-import '../Spinner/Spinner.css'
 import 'react-toastify/dist/ReactToastify.css';
 
 const CreateWedding = () => {
@@ -138,7 +138,7 @@ const CreateWedding = () => {
 </div>
 <div className="flex justify-center">
 {loading ? (
-  <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
+  <Spinner />
 ) : (
   <>
     {message && (

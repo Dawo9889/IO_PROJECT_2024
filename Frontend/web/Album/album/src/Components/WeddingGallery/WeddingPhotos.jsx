@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Spinner from "../Spinner/Spinner";
 import Masonry from "react-masonry-css";
 import WeddingPhotoSlider from "./WeddingPhotoSlider";
 import axios from "axios";
@@ -21,11 +22,13 @@ const WeddingPhotos = ({ weddingId }) => {
     1024: 4,
     768: 2,
     640: 2,
+    400: 1,
   };
 
   const openSlider = (index) => {
     setCurrentIndex(index);
     setIsSliderOpen(true);
+    fetchWeddingInfo();
   };
 
   const goToPrevious = () => {
@@ -41,27 +44,37 @@ const WeddingPhotos = ({ weddingId }) => {
   };
 
   const handlePhotoDeleted = () => {
+    fetchWeddingInfo();
     fetchThumbnails();
+    console.log(pageCount)
+    console.log(pageIndex)
+    console.log("dłg "+thumbnails.length)
+    if(thumbnails.length == 0){
+      console.log("elo")
+      setPageCount(pageCount - 1)
+      setPageIndex(pageIndex - 1)
+    }
   };
+  
+  const fetchWeddingInfo = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const totalPages = Math.ceil(response.data.imagesCount / 24);
+      setPageCount(totalPages);
 
-  useEffect(() => {
-    const fetchWeddingInfo = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const totalPages = Math.ceil(response.data.imagesCount / 24);
-        setPageCount(totalPages);
-
-  }catch (err) {
-  };
+}catch (err) {
 };
-fetchWeddingInfo()
+};
+
+useEffect(() => {
+  fetchWeddingInfo()
 },[weddingId])
 
 const fetchThumbnails = async () => {
@@ -76,6 +89,10 @@ const fetchThumbnails = async () => {
           }
         );
         console.log(response.data)
+        if(response.data.length == 0){
+          setPageCount(pageCount - 1)
+          setPageIndex(pageIndex - 1)
+        }
         const sortedData = response.data.sort(
           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
@@ -107,6 +124,7 @@ const fetchThumbnails = async () => {
         setLoading(false);
       }
     };
+
   useEffect(() => {
     fetchThumbnails();
   }, [weddingId,pageIndex]);
@@ -114,27 +132,8 @@ const fetchThumbnails = async () => {
   return (
     <div className="flex justify-start relative bg-project-dark-bg">
       {loading ? (
-        <div className="flex justify-center items-center h-1/2 w-full">
-          <svg
-            className="animate-spin h-12 w-12 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C6.48 0 0 6.48 0 12h4zm2 5.29a8.959 8.959 0 01-2-2.29H0c.8 2.21 2.27 4.21 4 5.71v-3.42z"
-            ></path>
-          </svg>
+        <div className="w-full pt-64">
+          <Spinner />
         </div>
       ) : (
         <div className="flex flex-col w-full">
@@ -162,8 +161,8 @@ const fetchThumbnails = async () => {
             )}
           </div>
 
-          <div className="flex w-full relative">
-            <div className="w-full">
+          <div className="flex w-full h-[600px] overflow-y-scroll relative">
+            <div className="w-full rounded-lg mx-2">
               {thumbnails.length > 0 ? (
                 <Masonry
                 breakpointCols={breakpointColumnsObj}
@@ -173,11 +172,8 @@ const fetchThumbnails = async () => {
                 {thumbnails.map((thumbnail, index) => (
                   <div
                     key={index}
-                    className="relative rounded-lg overflow-hidden shadow-md cursor-pointer"
+                    className="relative rounded-lg overflow-hidden shadow-md cursor-pointer h-[300px]"
                     onClick={() => openSlider(index)}
-                    style={{
-                      height: `${Math.min(window.innerWidth / 5, 300)}px`,
-                    }}
                   >
                     <img
                       src={thumbnail}
