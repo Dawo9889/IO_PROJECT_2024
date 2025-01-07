@@ -34,12 +34,6 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
         fetchWeddings();
         closeDeleteWindow();
         toast.success('Wedding deleted successfully!');
-
-        setTimeout(() => {
-          if (!document.querySelector(`[data-wedding-id="${id}"]`)) {
-            window.location.reload();
-          }
-        }, 1000);
       })
       .catch((err) => {
         console.error('Error deleting wedding:', err);

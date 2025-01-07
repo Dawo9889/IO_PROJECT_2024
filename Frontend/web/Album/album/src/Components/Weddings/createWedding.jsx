@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Spinner } from '@material-tailwind/react';
+import Spinner from '../Spinner/Spinner'
 import axios from 'axios'
 import './style.css'
 import 'react-toastify/dist/ReactToastify.css';

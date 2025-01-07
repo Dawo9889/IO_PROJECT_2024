@@ -155,8 +155,8 @@ const fetchThumbnails = async () => {
             )}
           </div>
 
-          <div className="flex w-full h-[600px] overflow-y-scroll relative">
-            <div className="w-full rounded-lg mx-2">
+          <div className="flex w-full h-[600px] overflow-y-scroll relative rounded-lg">
+            <div className="w-full">
               {thumbnails.length > 0 ? (
                 <Masonry
                 breakpointCols={breakpointColumnsObj}

@@ -220,7 +220,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
           )}
         </>
       ) : (
-        <p className="text-gray-400 text-center col-span-2">
+        <p className="h-full flex justify-center text-white text-center col-span-2 text-xl">
           Click a wedding to see details
         </p>
       )}
