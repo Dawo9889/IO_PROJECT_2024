@@ -1,9 +1,9 @@
 import {useRef, useState, useEffect} from 'react';
-import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
+import Spinner from '../Spinner/Spinner';
 import axios from "axios";
-import '../Spinner/Spinner.css'
 const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
@@ -206,7 +206,7 @@ const Register = () => {
                 </div>
                 <div className="flex justify-center">
                   {loading ? (
-                  <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
+                    <Spinner />
                   ) : (
                     <button
                       type="submit"

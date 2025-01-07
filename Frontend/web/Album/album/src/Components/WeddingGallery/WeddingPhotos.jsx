@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Spinner from "../Spinner/Spinner";
 import Masonry from "react-masonry-css";
 import WeddingPhotoSlider from "./WeddingPhotoSlider";
 import axios from "axios";
@@ -21,6 +22,7 @@ const WeddingPhotos = ({ weddingId }) => {
     1024: 4,
     768: 2,
     640: 2,
+    400: 1,
   };
 
   const openSlider = (index) => {
@@ -42,8 +44,13 @@ const WeddingPhotos = ({ weddingId }) => {
 
   const handlePhotoDeleted = () => {
     fetchThumbnails();
+    if(thumbnails.length == 0){
+      console.log("elo")
+      setPageCount(pageCount - 1)
+      setPageIndex(pageIndex - 1)
+    }
   };
-
+  
   useEffect(() => {
     const fetchWeddingInfo = async () => {
       try {
@@ -76,6 +83,10 @@ const fetchThumbnails = async () => {
           }
         );
         console.log(response.data)
+        if(response.data.length == 0){
+          setPageCount(pageCount - 1)
+          setPageIndex(pageIndex - 1)
+        }
         const sortedData = response.data.sort(
           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
@@ -107,6 +118,7 @@ const fetchThumbnails = async () => {
         setLoading(false);
       }
     };
+
   useEffect(() => {
     fetchThumbnails();
   }, [weddingId,pageIndex]);
@@ -114,35 +126,16 @@ const fetchThumbnails = async () => {
   return (
     <div className="flex justify-start relative bg-project-dark-bg">
       {loading ? (
-        <div className="flex justify-center items-center h-1/2 w-full">
-          <svg
-            className="animate-spin h-12 w-12 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C6.48 0 0 6.48 0 12h4zm2 5.29a8.959 8.959 0 01-2-2.29H0c.8 2.21 2.27 4.21 4 5.71v-3.42z"
-            ></path>
-          </svg>
+        <div className="w-full pt-64">
+          <Spinner />
         </div>
       ) : (
         <div className="flex flex-col w-full">
-          <div className="flex justify-between items-center min-h-[50px] w-full">
+          <div className="flex justify-between items-center min-h-[50px] w-full pr-2">
             {pageIndex > 1 && (
               <button
                 onClick={goToPrevious}
-                className="absolute left-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+                className="absolute left-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
                 Previous Page
               </button>
@@ -155,14 +148,14 @@ const fetchThumbnails = async () => {
             {pageIndex < pageCount && (
               <button
                 onClick={goToNext}
-                className="absolute right-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+                className="absolute right-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
                 Next Page
               </button>
             )}
           </div>
 
-          <div className="flex w-full relative">
+          <div className="flex w-full h-[600px] overflow-y-scroll relative rounded-lg">
             <div className="w-full">
               {thumbnails.length > 0 ? (
                 <Masonry
@@ -173,11 +166,8 @@ const fetchThumbnails = async () => {
                 {thumbnails.map((thumbnail, index) => (
                   <div
                     key={index}
-                    className="relative rounded-lg overflow-hidden shadow-md cursor-pointer"
+                    className="relative rounded-lg overflow-hidden shadow-md cursor-pointer h-[300px]"
                     onClick={() => openSlider(index)}
-                    style={{
-                      height: `${Math.min(window.innerWidth / 5, 300)}px`,
-                    }}
                   >
                     <img
                       src={thumbnail}

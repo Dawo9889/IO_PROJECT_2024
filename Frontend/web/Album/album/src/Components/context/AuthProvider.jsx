@@ -33,7 +33,7 @@ export const AuthProvider = ({children}) => {
                 }
             });
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
-            // const newExpiryTime = Date.now() + 60 * 1000;
+            // const newExpiryTime = Date.now() + 300 * 1000;
             const updatedAuth = {
                 ...auth,
                 accessToken: response.data.accessToken,

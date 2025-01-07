@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import WeddingQRCode from "./WeddingQrCode";
 import { CalendarIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
+import Spinner from '../Spinner/Spinner';
+import axios from 'axios';
+import WeddingQRCode from "./WeddingQrCode";
 import 'react-toastify/dist/ReactToastify.css';
 
 const formatDate = (isoDate) => {
@@ -175,28 +176,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
   return (
     <div className="max-w-6xl mx-auto p-6 sm:min-h-[800px] md:min-h-[700px] lg:min-h-[700px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {loading ? (
-        <div className="flex items-center justify-center h-full col-span-2">
-          <svg
-            className="animate-spin h-12 w-12 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C6.48 0 0 6.48 0 12h4zm2 5.29a8.959 8.959 0 01-2-2.29H0c.8 2.21 2.27 4.21 4 5.71v-3.42z"
-            ></path>
-          </svg>
-        </div>
+        <Spinner />
       ) : error ? (
         <p className="text-red-500 text-center col-span-2">{error}</p>
       ) : details ? (
@@ -240,7 +220,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
           )}
         </>
       ) : (
-        <p className="text-gray-400 text-center col-span-2">
+        <p className="h-full flex justify-center text-white text-center col-span-2 text-xl">
           Click a wedding to see details
         </p>
       )}

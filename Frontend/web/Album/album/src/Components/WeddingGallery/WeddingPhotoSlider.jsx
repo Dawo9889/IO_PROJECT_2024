@@ -5,6 +5,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import Spinner from '../Spinner/Spinner'
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
@@ -91,9 +92,11 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         }
       );
   
-      onPhotoDeleted();
+      onPhotoDeleted(); //TODO: podczas usuwania przyciemnic ekran
       await fetchPhotos();
-      setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
+      if(currentIndex < photos.length){ //TODO: ogarnac mechanizm sprawdzania numeru strony oraz zdjecia, np (na 2 stronie mam 3 zdjecia) usuwam 1 zdjecie z 2 strony ale zostaje na obecnej stronie
+        setCurrentIndex(currentIndex - 1)
+      }
     } catch (err) {
       console.error('Error deleting photo:', err);
     } finally {
@@ -109,7 +112,6 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
     const loadPhoto = async () => {
       if (!photos[currentIndex]) return;
       setLoading(true);
-      console.log(photos[currentIndex])
       try {
         const photoRes = await axios.get(photos[currentIndex].filePath, {
           headers: {
@@ -154,28 +156,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
       onClick={closeSlider}
     >
       {loading || !currentPhoto ? (
-        <div className="min-h-[500px] flex justify-center items-center">
-          <svg
-            className="animate-spin h-12 w-12 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C6.48 0 0 6.48 0 12h4zm2 5.29a8.959 8.959 0 01-2-2.29H0c.8 2.21 2.27 4.21 4 5.71v-3.42z"
-            ></path>
-          </svg>
-        </div>
+      <Spinner />
       ) : (
         <div className="flex flex-col">
           <div className='text-white text-2xl flex justify-center w-full'>

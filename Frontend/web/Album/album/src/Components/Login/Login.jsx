@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import Spinner from "../Spinner/Spinner";
 import useAuth from "../hooks/useAuth";
 import axios from "axios";
-import '../Spinner/Spinner.css'
 
 const LOGIN_URL = `${import.meta.env.VITE_API_URL}/identity/login`
 const RESEND_URL = `${import.meta.env.VITE_API_URL}/identity/resend-confirmation-email`
@@ -130,8 +130,8 @@ const Login = () => {
         </div>
         <div className="flex justify-center">
           {loading ? (
-            <div className="loader border-t-4 border-blue-500 rounded-full w-8 h-8 animate-spin"></div>
-          ) : (
+            <Spinner />
+             ) : (
             <button
               type="submit"
               className="w-full py-2 bg-project-yellow text-black font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
