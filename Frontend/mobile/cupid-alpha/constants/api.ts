@@ -174,9 +174,10 @@ export const checkIfTokenValid = async (token: string) => {
       } catch(error: any) {
         console.log(error);
         // if (error.data.status == 404) throw new Error(`We can't recognize this token. Please scan new QR token or contact PartyManager.`);
-          if (error.code == 400) throw new Error(`We can't recognize this token. Please try again.`);
-          if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
-          throw error.response;
+          // if (error.code == 400) throw new Error(`We can't recognize this token. Please try again.`);
+          // if (error.code == 404) throw new Error(`We can't recognize this token. Please try again.`);
+          // throw error.response;
+          return null;
         }
 };
 
@@ -207,7 +208,7 @@ export const uploadPicture = async (photo: any) => {
       url,
       formData,
       { headers: { 'Content-Type': 'multipart/form-data', },
-        timeout: 10000 },
+        timeout: 20000 },
     );
     return response;
   } catch (error: any) {

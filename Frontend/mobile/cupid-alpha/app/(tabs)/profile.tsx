@@ -1,6 +1,4 @@
 import { View, Text, SafeAreaView, ScrollView, Image, Alert } from 'react-native'
-
-
 import icons from '@/constants/icons'
 import CustomButton from '@/components/CustomButton'
 import { router } from 'expo-router'
@@ -10,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import IconButton from '@/components/navigation/IconButton'
 import ProfileButton from '@/components/navigation/ProfileButton'
+import React from 'react'
 
 const Profile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -110,7 +109,7 @@ const Profile = () => {
                 </Text>
               
                 <CustomButton
-                  title="Create account or Log in"
+                  title="Create account"
                   handlePress={() => router.push('/sign-up')}
                   containerStyles="mt-5"
                   textStyles=""

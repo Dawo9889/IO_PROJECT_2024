@@ -60,10 +60,9 @@ const PartyQR = () => {
     
   }, [partyDetails]);
 
-  const checkTokenStatus = (date: string) => {                                    // Delete +Z after changes in backend
-    date = date.concat('Z');
+  const checkTokenStatus = (date: string) => {
     const tokenValidTill = new Date(date);
-    // console.log(date, '->', tokenValidTill, ' | ', new Date());
+    console.log(date, '->', tokenValidTill, ' | ', new Date());
     if (tokenValidTill > new Date()) {
       setTokenStatus(`Valid until ${formatDate(tokenValidTill)}`);
       return true;
@@ -78,8 +77,6 @@ const PartyQR = () => {
       await storePartyToken(partyDetails.sessionKey);
       Alert.alert('Welcome', `Welcome to '${partyDetails.name}'`)
     }
-      
-    // await storePartyToken(partyDetails.)                         <-- store party token obtained from partyDetails
   }
 
   const handleConfirmExtend = async () => {

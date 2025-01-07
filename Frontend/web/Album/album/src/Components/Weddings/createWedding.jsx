@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { ArrowLeftIcon, CalendarIcon } from '@heroicons/react/24/solid';
-import './style.css'
-import '../Spinner/Spinner.css'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios'
+import './style.css'
+import '../Spinner/Spinner.css'
 import 'react-toastify/dist/ReactToastify.css';
 
 const CreateWedding = () => {
@@ -37,7 +37,6 @@ const CreateWedding = () => {
                     name: name,
                     eventDate: date,
                     description: description,
-
                 },
                 {
                     headers: {
@@ -50,14 +49,13 @@ const CreateWedding = () => {
             setTimeout(() => {
               navigate(-1);
             }, 1000);
-
         }
         catch(err) {
             console.error(err);
             toast.error('An error occurred while creating the wedding.')
         }
     }
-
+    
     useEffect(() => {
       if (name.trim() && date.trim() && description.trim()) {
         setIsFormValid(true);

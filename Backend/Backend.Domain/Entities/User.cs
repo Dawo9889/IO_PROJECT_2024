@@ -12,6 +12,8 @@ namespace Backend.Domain.Entities
     {
         
         public ICollection<WeddingUser>? WeddingUser { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
 
     }
 }

@@ -1,17 +1,16 @@
-import { CameraView, CameraType, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions} from 'expo-camera';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Button, Text, View } from 'react-native';
+import { Alert, Button, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as base64 from 'base64-js';
 
-import icons from '@/constants/icons'
-import BottomCamActions from '@/components/BottomCamActions';
 import PicturePreview from '@/components/PicturePreview';
 import { FlipType, manipulateAsync } from 'expo-image-manipulator';
 import { router } from 'expo-router';
-import { checkIfTokenValid, uploadPicture } from '@/constants/api';
+import { checkIfTokenValid} from '@/constants/api';
 import { useIsFocused } from '@react-navigation/native';
-import { getPartyToken, removePartyToken, storePartyToken } from '@/constants/storage';
+import { getPartyToken, removePartyToken} from '@/constants/storage';
 import IconButton from '@/components/navigation/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -28,6 +27,8 @@ export default function Camera() {
   const [picture, setPicture] = useState<{uri: string} | null>(null);
   const [tokenValid, setTokenValid] = useState(false);
   const [partyName, setPartyName] = useState('');
+
+  const [pictureDescription, setPictureDescription] = useState('');
 
   // Check party token status
   useEffect(() => {
@@ -93,14 +94,23 @@ export default function Camera() {
           quality: 1,  // Set quality to the highest level
           base64: true, // Optional: this can allow further processing of the image if needed
         });
-      
+  
         if (photo) {
           // Flip the image if the camera is front-facing
           const finalPhoto = facing === 'front'
             ? await manipulateAsync(photo.uri, [{ flip: FlipType.Horizontal }])
             : photo;
-
+  
           setPicture({ uri: finalPhoto.uri });
+  
+          // Calculate the size of the picture in MB
+          if (photo.base64) {
+            const photoSizeInBytes = base64.toByteArray(photo.base64).length;
+            const photoSizeInMB = photoSizeInBytes / (1024 * 1024);
+            console.log(`Picture size: ${photoSizeInMB.toFixed(2)} MB`);
+          } else {
+            console.log("Base64 data is not available.");
+          }
         }
       } catch (error) {
         console.log("Error taking picture:", error);
@@ -108,7 +118,7 @@ export default function Camera() {
     }
   }
 
-  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} />;
+  if (picture) return <PicturePreview picture={picture} setPicture={setPicture} description={pictureDescription} setDescription={setPictureDescription}/>;
 
   return (
     <SafeAreaView className="flex-1 bg-black h-full" edges={['left', 'right']}>
@@ -123,7 +133,14 @@ export default function Camera() {
             style={{ flex: 1 }}
           >
             {partyName &&
-            <Text className='absolute top-10 w-full text-center text-white font-bbold text-2xl'>Party: {partyName}</Text>
+              <View className='w-3/4 mx-auto'>
+                <TouchableOpacity
+                    onPress={() => router.replace('/party-details')}
+                    className={`absolute top-10 w-full flex-row justify-center my-auto`}
+                  >
+                    <Text className='text-white font-bbold text-2xl'>Party: {partyName}</Text>
+                </TouchableOpacity>
+              </View>
             }
           <IconButton
               containerStyle={'absolute top-10 left-2'}
@@ -132,13 +149,6 @@ export default function Camera() {
               iconSize={40}
               disabled={facing === 'front'}
             />
-
-          {/* <BottomCamActions
-              handleTakePicture={() => handleTakePicture()}
-              toggleCameraFacing={() => toggleCameraFacing()}
-              joinParty={() => router.replace('/join-party')}
-              />  */}
-
           <View className="flex-row mt-auto w-full h-[90px] items-center">
 
           <IconButton

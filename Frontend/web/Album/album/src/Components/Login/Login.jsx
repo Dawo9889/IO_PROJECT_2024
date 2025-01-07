@@ -1,9 +1,12 @@
 import { useRef, useState, useEffect } from "react"
-import useAuth from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import useAuth from "../hooks/useAuth";
 import axios from "axios";
 import '../Spinner/Spinner.css'
+
 const LOGIN_URL = `${import.meta.env.VITE_API_URL}/identity/login`
+const RESEND_URL = `${import.meta.env.VITE_API_URL}/identity/resend-confirmation-email`
 
 const Login = () => {
     const {setAuth} = useAuth();
@@ -19,8 +22,10 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [loading, setLoading] = useState(false);
+    const [resendConfirmationMail, setResendConfirmationMail] = useState(false);
 
     useEffect(() => {
+        console.clear()
         userRef.current.focus();
     }, [])
 
@@ -38,9 +43,8 @@ const Login = () => {
                     "password": password
                 }
             );
-
+            // const expiryTime = Date.now() + 60 * 1000;
             const expiryTime = Date.now() + response.data.expiresIn * 1000;
-
             localStorage.setItem("auth", JSON.stringify({
                 user,
                 accessToken: response.data.accessToken,
@@ -48,7 +52,6 @@ const Login = () => {
                 refreshToken: response.data.refreshToken,
                 expiryTime
             }));
-
             localStorage.setItem('refreshToken', response.data.refreshToken);
             setAuth({ user, accessToken: response.data.accessToken, expiryTime });
             setUser('');
@@ -59,25 +62,46 @@ const Login = () => {
         } catch (err) {
             console.log(err)
             if(!err?.response){
-                setErrMsg('No Server response')
+                toast.error('No Server response')
+                // setErrMsg('No Server response')
             }
             else if (err.response?.status === 400) {
-                setErrMsg('Missing username or password')
+                toast.error('Missing username or password');
             }
-            else if (err.response?.status === 401) {
-                setErrMsg('Unathorized');
+            else if (err.response?.status === 401 && err.response?.data === "Email not confirmed.") {
+                setResendConfirmationMail(true);
+                toast.error('Email not confirmed');
+            }
+            else if (err.response?.status === 401 && err.response?.data !== "Email not confirmed.") {
+                toast.error('Unathorized');
             }
             else {
-                setErrMsg('Login Failed')
+                toast.error('Login Failed');
             }
             errRef.current.focus();
         }
-        setLoading(false)
+        finally{
+            setLoading(false)
+        }
+    }
+
+    const resendMail = async () => {
+        try {
+            const response = await axios.post(RESEND_URL, 
+                {
+                    "email": user,
+                }
+            );
+            toast.success(response.data)
+        } catch (err) {
+            toast.error(err)
+        }
     }
 
   return (
+    <>
     <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-    <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">{errMsg}</p>
+    {/* <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">{errMsg}</p> */}
     <h1 className="text-2xl text-white font-bold text-center mb-4">Sign In</h1>
     <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
@@ -124,7 +148,21 @@ const Login = () => {
         </span>
     </p>
 </section>
-
+{resendConfirmationMail && (
+    <div className="max-w-md mx-auto my-4 p-6 bg-project-dark-bg rounded-lg shadow-lg flex flex-col items-center justify-center">
+        <div className="pb-4 w-full text-white text-xl text-center font-bold">
+            Your account wasn't confirmed via e-mail
+        </div>
+        <button
+              onClick={() => resendMail()}
+              type="submit"
+              className="w-full py-2 bg-project-blue text-black font-semibold rounded-lg hover:bg-project-blue-buttons focus:outline-none focus:ring-2 focus:ring-project-blue-buttons"
+            >
+              Resend confirmation mail
+            </button>
+    </div>
+)}
+</>
   )
 }
 

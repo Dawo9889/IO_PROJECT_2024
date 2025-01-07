@@ -92,6 +92,10 @@ sudo chown -R 10001:10001 "$DATA_FOLDER_PATH/database"
 
 cd "$FOLDER_PATH/IO_PROJECT_2024"
 
+echo "Replacing DbConnection with $TARGET_IP in the appsettings.json"
+sed -i 's|"DbConnection": "[^"]*"|"DbConnection": "Server=192.168.1.222,1433;Database=ProjectIO;User Id=sa;Password=Zaq12wsx;Encrypt=True;TrustServerCertificate=True;"|' Backend/Backend.API/appsettings.json
+
+
 # Replace <your-ip-address> with the target IP in the docker-compose.yaml file
 echo "Replacing <your-ip-address> with $TARGET_IP in the file"
 sed -i "s/<your-ip-address>/$TARGET_IP/g" "docker-compose.yaml"

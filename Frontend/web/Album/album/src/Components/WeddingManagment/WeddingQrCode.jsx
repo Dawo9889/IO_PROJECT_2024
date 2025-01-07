@@ -46,7 +46,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
     axios
     .put(
       `${import.meta.env.VITE_API_URL}/wedding/updateToken?id=${weddingId}&hours=${tokenExpire}`,
-      {}, // Pusta treść ciała dla zapytania PUT
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -56,6 +56,9 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
     )
     .then(() => {
       toast.success('Expiration date extended!');
+
+      setTokenExpire('');
+
       if (onTokenUpdated) {
         onTokenUpdated();
       }
@@ -64,7 +67,6 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
       console.error('Error:', err.response?.data || err.message);
       toast.error('An error occurred while updating expiration time.');
     });
-  
   };
 
   if (qrCodeLoading) {
@@ -99,7 +101,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
   }
 
   return (
-    <div className="w-full flex items-center justify-center h-full col-span-1 space-y-4">
+    <div className="w-full flex items-center justify-center h-full col-span-1 space-y-4 p-4">
       <div className="flex flex-col items-center justify-center h-full">
         {qrCode ? (
             <>
@@ -111,6 +113,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
         <div className="w-full flex flex-col md:flex-row items-center gap-4 mt-4">
         <input
           type="number"
+          id="tokenInput"
           min={0}
           value={tokenExpire}
           onChange={(e) => setTokenExpire(e.target.value)}
@@ -118,7 +121,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
           className="w-full md:w-auto py-2 px-4 text-sm text-white bg-project-dark border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-project-blue focus:outline-none"
         />
         <button
-          className="px-6 py-2 text-sm font-medium bg-project-yellow text-black rounded-lg shadow hover:bg-yellow-400 focus:ring-2 focus:ring-offset-2 focus:ring-project-blue"
+          className="w-full px-6 py-2 text-sm font-medium bg-project-yellow text-black rounded-lg shadow hover:bg-yellow-400 focus:ring-2 focus:ring-offset-2 focus:ring-project-blue"
           onClick={updateToken}
         >
           Update Token

@@ -96,5 +96,39 @@ namespace Backend.API.Controllers
 
         }
 
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteImagesData([FromQuery] Guid weddingId, [FromQuery] Guid imageId)
+        {
+            
+            var userId = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized(); 
+            }
+
+            try
+            {
+
+                var result = await _imageService.DeleteImageFromDbAndFile(weddingId, userId, imageId);
+
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound(); 
+                }
+            }
+            catch (Exception ex)
+            {
+              
+                Console.WriteLine($"Error deleting image: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting the image.");
+            }
+        }
+
+
     }
 }

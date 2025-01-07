@@ -16,7 +16,7 @@ services:
      - DATABASE_IP=<your-ip-address>
      - ConnectionStrings__DbConnection=Server=<your-ip-address>,1433;Database=ProjectIO;User Id=sa;Password=Zaq12wsx;Encrypt=True;TrustServerCertificate=True;
      - BaseBackendUrl=http://<your-ip-address>:8080 # If it's production ready, change to domain name
-
+     - SMTP_PASSWORD=PASSWORD
     ports:
       - 8080:8080
     volumes:

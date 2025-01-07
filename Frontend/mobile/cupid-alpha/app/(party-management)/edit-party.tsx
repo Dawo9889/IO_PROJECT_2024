@@ -188,7 +188,8 @@ const EditParty = () => {
                   <ProfileButton
                       title={'Delete'}
                       handlePress={() => confirmDelete()}
-                      containerStyles={'w-1/3 mt-10 mr-5 bg-red-500'}
+                      containerStyles={'w-1/3 mt-10 mr-5'}
+                      bgcolor='bg-red-500'
                       textStyles={''}
                     />
                   <ProfileButton

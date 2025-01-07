@@ -7,18 +7,14 @@ using Backend.Infrastructure.Seeders;
 var builder = WebApplication.CreateBuilder(args);
 
 var env = Environment.GetEnvironmentVariable("DATABASE_IP");
+builder.Configuration.AddEnvironmentVariables();
 
-var dockerConnection = builder.Configuration["ConnectionStrings:DockerConnection"];
+var dbConnectionString = builder.Configuration["ConnectionStrings__DbConnection"];
+if (!string.IsNullOrEmpty(dbConnectionString))
+{
+    builder.Configuration["ConnectionStrings:DbConnection"] = dbConnectionString;
+}
 
-if (!string.IsNullOrEmpty(env))
-{
-    dockerConnection = dockerConnection.Replace("{DATABASE_IP}", env);
-}
-else
-{
-    dockerConnection = dockerConnection.Replace("{DATABASE_IP}", "localhost");
-}
-builder.Configuration["ConnectionStrings:DockerConnection"] = dockerConnection;
 
 // Add services to the container.
 builder.AddPresentation();
@@ -54,7 +50,8 @@ seeder.Seed().Wait();
 
 
 //identity
-app.MapGroup("api/identity").MapIdentityApi<User>();
+//app.MapGroup("api/identity").MapIdentityApi<User>();
+
 //app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
 app.UseAuthorization();

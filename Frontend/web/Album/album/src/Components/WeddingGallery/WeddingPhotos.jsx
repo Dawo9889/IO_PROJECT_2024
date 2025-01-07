@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Masonry from "react-masonry-css";
 import WeddingPhotoSlider from "./WeddingPhotoSlider";
 import axios from "axios";
 
@@ -13,6 +14,14 @@ const WeddingPhotos = ({ weddingId }) => {
   const [currentIndex, setCurrentIndex] = useState(null);
   const [pageCount, setPageCount] = useState(null)
   const [pageIndex, setPageIndex] = useState(1);
+
+  const breakpointColumnsObj = {
+    default: 6,
+    1200: 4,
+    1024: 4,
+    768: 2,
+    640: 2,
+  };
 
   const openSlider = (index) => {
     setCurrentIndex(index);
@@ -31,6 +40,10 @@ const WeddingPhotos = ({ weddingId }) => {
     }
   };
 
+  const handlePhotoDeleted = () => {
+    fetchThumbnails();
+  };
+
   useEffect(() => {
     const fetchWeddingInfo = async () => {
       try {
@@ -46,15 +59,13 @@ const WeddingPhotos = ({ weddingId }) => {
         setPageCount(totalPages);
 
   }catch (err) {
-    // console.error("Błąd podczas pobierania miniatur:", err);
   };
 };
 fetchWeddingInfo()
 },[weddingId])
 
-  useEffect(() => {
-    setLoading(true);
-    const fetchThumbnails = async () => {
+const fetchThumbnails = async () => {
+  setLoading(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${pageIndex}`,
@@ -64,7 +75,7 @@ fetchWeddingInfo()
             },
           }
         );
-  
+        console.log(response.data)
         const sortedData = response.data.sort(
           (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
         );
@@ -83,7 +94,6 @@ fetchWeddingInfo()
               const image = URL.createObjectURL(blob);
               return image;
             } catch (err) {
-              // console.error(`Błąd autoryzacji dla miniatury ${thumbnail}:`, err);
               return null;
             }
           })
@@ -93,17 +103,16 @@ fetchWeddingInfo()
           authorizedThumbnails.filter((thumbnail) => thumbnail !== null)
         );
       } catch (err) {
-        // console.error("Błąd podczas pobierania miniatur:", err);
       } finally {
         setLoading(false);
       }
     };
-  
+  useEffect(() => {
     fetchThumbnails();
   }, [weddingId,pageIndex]);
   
   return (
-    <div className="flex justify-start relative">
+    <div className="flex justify-start relative bg-project-dark-bg">
       {loading ? (
         <div className="flex justify-center items-center h-1/2 w-full">
           <svg
@@ -128,61 +137,76 @@ fetchWeddingInfo()
           </svg>
         </div>
       ) : (
-        <div className="flex justify-start flex-col w-full"> 
-            <div className="flex justify-between items-center min-h-[50px] w-full">
-    {pageIndex > 1 && (
-      <button
-        onClick={goToPrevious}
-        className="absolute left-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
-      >
-        Previous Page
-      </button>
-    )}
-    {pageCount > 0 && (
-      <p className="text-white mx-auto">{pageIndex} / {pageCount}</p>
-    )}
-    {pageIndex < pageCount && (
-      <button
-        onClick={goToNext}
-        className="absolute right-4 text-xl bg-project-yellow p-2 text-black hover:bg-bg-project-yellow hover:opacity-50 rounded-xl"
-      >
-        Next Page
-      </button>
-    )}
-  </div>
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between items-center min-h-[50px] w-full">
+            {pageIndex > 1 && (
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+              >
+                Previous Page
+              </button>
+            )}
+            {pageCount > 0 && (
+              <p className="text-white font-bold mx-auto">
+                {pageIndex} / {pageCount}
+              </p>
+            )}
+            {pageIndex < pageCount && (
+              <button
+                onClick={goToNext}
+                className="absolute right-4 text-xl bg-project-yellow p-2 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
+              >
+                Next Page
+              </button>
+            )}
+          </div>
+
           <div className="flex w-full relative">
-          <div className="h-[400px] lg:min-h-[600px] w-full">
-            {thumbnails.length > 0 ? (
-              <div className="grid grid-cols-6 gap-3">
-                {thumbnails.map((thumbnail, photoIndex) => (
+            <div className="w-full">
+              {thumbnails.length > 0 ? (
+                <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="flex -ml-4"
+                columnClassName="pl-4 space-y-3"
+              >
+                {thumbnails.map((thumbnail, index) => (
                   <div
-                    key={photoIndex}
-                    className="w-full h-40 lg:h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer"
-                    onClick={() => openSlider(photoIndex)}
+                    key={index}
+                    className="relative rounded-lg overflow-hidden shadow-md cursor-pointer"
+                    onClick={() => openSlider(index)}
+                    style={{
+                      height: `${Math.min(window.innerWidth / 5, 300)}px`,
+                    }}
                   >
                     <img
                       src={thumbnail}
-                      alt={`Thumbnail ${photoIndex + 1}`}
-                      className="w-full h-full object-contain transition-opacity rounded-lg shadow-lg duration-200 hover:opacity-50"
+                      alt={`Thumbnail ${index + 1}`}
+                      className="absolute inset-0 w-full h-full object-cover gap-3"
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "center",
+                      }}
                     />
                   </div>
                 ))}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center w-full h-full text-center text-white text-2xl">
-                Brak miniatur
-              </div>
-            )}
-          </div>
+              </Masonry>
+              ) : (
+                <div className="flex items-center justify-center w-full h-full text-center text-white text-2xl">
+                  No images here
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
-  
+
       {isSliderOpen && (
         <WeddingPhotoSlider
           weddingId={weddingId}
           pageCount={pageCount}
           index={currentIndex + (pageIndex - 1) * 24}
+          onPhotoDeleted={handlePhotoDeleted}
           onClose={() => setIsSliderOpen(false)}
         />
       )}

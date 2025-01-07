@@ -19,6 +19,9 @@ namespace Backend.Domain.Entities
 
         public string? Author { get; set; }
 
+        [MaxLength(100)]
+        public string? Description { get; set; }
+
         [ForeignKey("Wedding")]
         public Guid WeddingId { get; set; }
         public Wedding Wedding { get; set; }
