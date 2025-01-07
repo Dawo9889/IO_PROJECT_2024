@@ -25,7 +25,7 @@ const Login = () => {
     const [resendConfirmationMail, setResendConfirmationMail] = useState(false);
 
     useEffect(() => {
-        console.clear()
+        // console.clear()
         userRef.current.focus();
     }, [])
 
@@ -43,7 +43,7 @@ const Login = () => {
                     "password": password
                 }
             );
-            // const expiryTime = Date.now() + 60 * 1000;
+            // const expiryTime = Date.now() + 90 * 1000;
             const expiryTime = Date.now() + response.data.expiresIn * 1000;
             localStorage.setItem("auth", JSON.stringify({
                 user,
@@ -52,7 +52,6 @@ const Login = () => {
                 refreshToken: response.data.refreshToken,
                 expiryTime
             }));
-            localStorage.setItem('refreshToken', response.data.refreshToken);
             setAuth({ user, accessToken: response.data.accessToken, expiryTime });
             setUser('');
             setPassword('');
@@ -99,9 +98,8 @@ const Login = () => {
     }
 
   return (
-    <>
-    <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-    {/* <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">{errMsg}</p> */}
+    <div className="flex items-center justify-center">
+    <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg ml-4 mr-4 w-full">
     <h1 className="text-2xl text-white font-bold text-center mb-4">Sign In</h1>
     <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
@@ -162,7 +160,7 @@ const Login = () => {
             </button>
     </div>
 )}
-</>
+</div>
   )
 }
 

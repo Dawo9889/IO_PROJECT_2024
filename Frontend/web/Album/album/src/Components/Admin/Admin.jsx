@@ -6,32 +6,24 @@ const Admin = () => {
         <div className="h-screen bg-project-dark">
         <h1 className="text-2xl font-bold text-center mb-4 text-white">Welcome {authData.user}</h1>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
-        <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-white text-center mb-4">Create Wedding</h1>
-            <br />
+        <section className="text-center w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
             <div className="flexGrow">
-                <Link to="/createWedding" className="text-project-blue hover:underline">Create Wedding</Link>
+                <Link to="/createWedding" className="text-2xl font-bold text-white text-center mb-4 hover:underline">Create Wedding</Link>
             </div>
         </section>
-        <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-white text-center mb-4">Album Creator</h1>
-            <br />
+        <section className="text-center w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
             <div className="flexGrow">
-                <Link to="/album" className="text-project-blue hover:underline">Album Creator</Link>
+                <Link to="/album" className="text-2xl font-bold text-white text-center mb-4 hover:underline">Album Creator</Link>
             </div>
         </section>
-        <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-white text-center mb-4">Weddings Managment</h1>
-            <br />
+        <section className="text-center w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
             <div className="flexGrow">
-                <Link to="/weddings" className="text-project-blue hover:underline">Weddings Managment</Link>
+                <Link to="/weddings" className="text-2xl font-bold text-white text-center mb-4 hover:underline">Weddings Managment</Link>
             </div>
         </section>
-        <section className="w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-white text-center mb-4">Weddings Gallery</h1>
-            <br />
+        <section className="text-center w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
             <div className="flexGrow">
-                <Link to="/weddingsGallery" className="text-project-blue hover:underline">Weddings Gallery</Link>
+                <Link to="/weddingsGallery" className="text-2xl font-bold text-white text-center mb-4 hover:underline">Weddings Gallery</Link>
             </div>
         </section>
     </div>

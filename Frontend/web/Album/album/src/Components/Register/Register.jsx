@@ -114,7 +114,7 @@ const Register = () => {
     }
 
     return (
-        <>
+      <div className="flex items-center justify-center">
           { success ? (
             <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
               <h1 className="text-2xl text-white font-bold text-center mb-4">Success!</h1>
@@ -124,7 +124,7 @@ const Register = () => {
               </p>
             </section>
           ) : (
-            <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-2xl">
+            <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg ml-4 mr-4 w-full">
               <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">
                 {errMsg}
               </p>
@@ -232,7 +232,7 @@ const Register = () => {
               </p>
             </section>
           )}
-        </>
+        </div>
       );
 }
 

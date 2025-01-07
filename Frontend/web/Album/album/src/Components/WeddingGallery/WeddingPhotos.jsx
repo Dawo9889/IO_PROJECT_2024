@@ -45,15 +45,13 @@ const WeddingPhotos = ({ weddingId }) => {
   const handlePhotoDeleted = () => {
     fetchThumbnails();
     if(thumbnails.length == 0){
-      console.log("elo")
       setPageCount(pageCount - 1)
       setPageIndex(pageIndex - 1)
     }
   };
   
-  useEffect(() => {
-    const fetchWeddingInfo = async () => {
-      try {
+  const fetchWeddingInfo = async () => {
+    try {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
           {
@@ -68,7 +66,16 @@ const WeddingPhotos = ({ weddingId }) => {
   }catch (err) {
   };
 };
+
+useEffect(() => {
 fetchWeddingInfo()
+
+const interval = setInterval(() => {
+  fetchWeddingInfo();
+}, 1000);
+
+return () => clearInterval(interval);
+
 },[weddingId])
 
 const fetchThumbnails = async () => {
@@ -82,7 +89,6 @@ const fetchThumbnails = async () => {
             },
           }
         );
-        console.log(response.data)
         if(response.data.length == 0){
           setPageCount(pageCount - 1)
           setPageIndex(pageIndex - 1)
@@ -131,13 +137,26 @@ const fetchThumbnails = async () => {
         </div>
       ) : (
         <div className="flex flex-col w-full">
-          <div className="flex justify-between items-center min-h-[50px] w-full pr-2">
+          <div className="flex justify-between items-center sm:max-h-[50px] h-[50px] w-full pr-2 ">
             {pageIndex > 1 && (
               <button
                 onClick={goToPrevious}
                 className="absolute left-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
-                Previous Page
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
+                  />
+                </svg>
               </button>
             )}
             {pageCount > 0 && (
@@ -150,17 +169,30 @@ const fetchThumbnails = async () => {
                 onClick={goToNext}
                 className="absolute right-4 text-xl bg-project-yellow p-2 mb-4 text-black hover:bg-project-yellow hover:opacity-50 rounded-xl"
               >
-                Next Page
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                  />
+                </svg>
               </button>
             )}
           </div>
 
-          <div className="flex w-full h-[600px] overflow-y-scroll relative rounded-lg">
-            <div className="w-full">
+          <div className="flex w-full h-[600px] overflow-y-scroll relative rounded-xl">
+            <div className="w-full rounded-xl">
               {thumbnails.length > 0 ? (
                 <Masonry
                 breakpointCols={breakpointColumnsObj}
-                className="flex -ml-4"
+                className="flex -ml-4 mr-2"
                 columnClassName="pl-4 space-y-3"
               >
                 {thumbnails.map((thumbnail, index) => (

@@ -33,7 +33,7 @@ export const AuthProvider = ({children}) => {
                 }
             });
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
-            // const newExpiryTime = Date.now() + 300 * 1000;
+            // const newExpiryTime = Date.now() + 90 * 1000;
             const updatedAuth = {
                 ...auth,
                 accessToken: response.data.accessToken,
@@ -42,7 +42,7 @@ export const AuthProvider = ({children}) => {
             };
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
-            console.log(localStorage.getItem("auth"))
+            // console.log(localStorage.getItem("auth"))
         } catch (error) {
             console.error("Error refreshing token:", error);
             setAuth({});

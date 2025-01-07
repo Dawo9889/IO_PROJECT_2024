@@ -94,7 +94,10 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
   
       onPhotoDeleted(); //TODO: podczas usuwania przyciemnic ekran
       await fetchPhotos();
-      if(currentIndex < photos.length){ //TODO: ogarnac mechanizm sprawdzania numeru strony oraz zdjecia, np (na 2 stronie mam 3 zdjecia) usuwam 1 zdjecie z 2 strony ale zostaje na obecnej stronie
+      if(currentIndex < photos.length && pageCount > 1){ //TODO: ogarnac mechanizm sprawdzania numeru strony oraz zdjecia, np (na 2 stronie mam 3 zdjecia) usuwam 1 zdjecie z 2 strony ale zostaje na obecnej stronie
+        setCurrentIndex(currentIndex - 1)
+      }
+      else {
         setCurrentIndex(currentIndex - 1)
       }
     } catch (err) {
