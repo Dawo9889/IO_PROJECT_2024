@@ -1,6 +1,6 @@
 import { SafeAreaView} from 'react-native-safe-area-context'
 import { Link, Redirect, router } from 'expo-router'
-import { ScrollView, View, Image, Text } from 'react-native'
+import { ScrollView, View, Image, Text, Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import CustomButton from '@/components/CustomButton'
 
@@ -8,6 +8,7 @@ import icons from '@/constants/icons'
 import { useEffect, useState } from 'react'
 import { getAccessToken, getLoggedUsername, getRefreshToken } from '@/constants/storage'
 import { refreshAccessToken } from '@/constants/api'
+import { logout } from '@/constants/helpers'
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -28,6 +29,8 @@ const App = () => {
         }
       } catch (error: any) {
           console.log('Access token expired. Redirecting to login page...');
+          Alert.alert('Session expired', 'Please log in again to continue.');
+          await logout();
           setIsAuthenticated(false);
       } finally {
         setIsLoading(false); // End loading after the check

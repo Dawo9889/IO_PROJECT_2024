@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { getAccessToken, getNickname, getPartyToken, getRefreshToken, storeAccessToken, storeLoggedUsername, storeRefreshToken } from "./storage";
 import * as FileSystem from 'expo-file-system';
-import { dateToString } from "./helpers";
+import { dateToString, logout } from "./helpers";
 
 const API_AUTH_URL = 'https://api.cupid.pics/api/identity';
 const API_IMAGE_URL = 'https://api.cupid.pics/api/image/upload';
@@ -22,30 +22,34 @@ export const registerUser = async (email: string, password: string) => {
     return response.status;
   } catch (err: any) {
     if (err.response) {
-      const errorData = err.response.data;
-      // console.error('Server Error:', errorData);
+      const errorData = err.response.data[0];
+      console.error('Server Error:', errorData);
 
-    // Handle invalid email
-    if (errorData.errors && errorData.errors.InvalidEmail) {
-      throw new Error(`Email '${email}' is invalid!`);
-    }
+      if (errorData.code === 'DuplicateUserName') {
+        throw new Error(errorData.description);
+      }
 
-    // Handle Duplicate user email
-    if (errorData.errors && errorData.errors.DuplicateUserName) {
-      throw new Error(`Account '${email}' already exists!`);
-    }
+    // // Handle invalid email
+    // if (errorData.errors && errorData.errors.InvalidEmail) {
+    //   throw new Error(`Email '${email}' is invalid!`);
+    // }
 
-    // Handle password too weak
-    if (errorData.errors && (
-            errorData.errors.PasswordRequiresLower || 
-            errorData.errors.PasswordRequiresNonAlphanumeric || 
-            errorData.errors.PasswordRequiresUpper || 
-            errorData.errors.PasswordTooShort)) {
-      throw new Error(`Password must be at least 6 characters and contain:
-          at least one uppercase ('A'-'Z')
-          at least one lowercase ('a'-'z')
-          at least one non alphanumeric char`);
-    }
+    // // Handle Duplicate user email
+    // if (errorData.errors && errorData.errors.DuplicateUserName) {
+    //   throw new Error(`Account '${email}' already exists!`);
+    // }
+
+    // // Handle password too weak
+    // if (errorData.errors && (
+    //         errorData.errors.PasswordRequiresLower || 
+    //         errorData.errors.PasswordRequiresNonAlphanumeric || 
+    //         errorData.errors.PasswordRequiresUpper || 
+    //         errorData.errors.PasswordTooShort)) {
+    //   throw new Error(`Password must be at least 6 characters and contain:
+    //       at least one uppercase ('A'-'Z')
+    //       at least one lowercase ('a'-'z')
+    //       at least one non alphanumeric char`);
+    // }
 
     // Handle generic validation or bad request errors.
     if (err.response.status === 400) {
@@ -64,6 +68,19 @@ export const registerUser = async (email: string, password: string) => {
   }
 };
 
+export const resendEmailConfirmation = async (email: string) => {
+  try {
+    const response = await axios.post(`${API_AUTH_URL}/resend-confirmation-email`, 
+        {
+            "email": email,
+        }
+    );
+    return response.status;
+  } catch (err) {
+    throw new Error('Error resending confirmation email. Try again later.');
+}
+}
+
 export const loginUser = async (email: string, password: string) => {
   try {
     const url = `${API_AUTH_URL}/login`;
@@ -81,38 +98,47 @@ export const loginUser = async (email: string, password: string) => {
     setTokenExpiryHandler(response.data.expiresIn)
     return response.status;
   } catch (error: any) {
-    if (error.response?.status === 401) {
-      const errorDetail = error.response?.data?.detail;
+    // if (error.response?.status === 401) {
+    //   const errorDetail = error.response?.data?.detail;
 
-      if (errorDetail === 'LockedOut') {
-        console.error('Account is locked. Please try again later.');
-        throw new Error('AccountLocked'); // Custom error for locked accounts
-      }
+    //   if (errorDetail === 'LockedOut') {
+    //     console.error('Account is locked. Please try again later.');
+    //     throw new Error('AccountLocked'); // Custom error for locked accounts
+    //   }
 
-      console.error('Unauthorized login attempt:', error.response?.data);
-      throw new Error('InvalidCredentials'); // Custom error for invalid credentials
-    }
+    //   console.error('Unauthorized login attempt:', error.response?.data);
+    //   throw new Error('InvalidCredentials'); // Custom error for invalid credentials
+    // }
 
     console.error('Error during login:', error.response?.data || error.message);
-    throw error.response || error;
+    throw error;
   }
 };
 
 export const refreshAccessToken = async () => {
   try {
     const refreshToken = await getRefreshToken();
-    const url = `${API_AUTH_URL}/refresh`;
+    const currentAccessToken = await getAccessToken();
+    const url = `${API_AUTH_URL}/refresh-token`;
     console.log('Sending refreshToken request to:', url);
 
-    const response = await axios.post(
-      url,
-      { refreshToken },
-      { headers: { 'Content-Type': 'application/json' } }
-    );
+    // const response = await axios.post(
+    //   url,
+    //   { refreshToken },
+    //   { headers: { 'Content-Type': 'application/json' } }
+    // );
+
+    const response = await axios.post(`${API_AUTH_URL}/refresh-token`, {
+      "refreshToken": refreshToken
+      },{
+          headers: {
+              Authorization: `Bearer ${currentAccessToken}`
+          }
+      });
 
     // Extract new tokens from the response
-    const { accessToken, refreshToken: newRefreshToken, expiresIn } = response.data;
-
+    const { accessToken, expiresIn, refreshToken: newRefreshToken } = response.data;
+    //console.log(response.data);
     console.log('Successfully refreshed access token:', accessToken);
 
     // Save the new tokens securely
@@ -122,12 +148,14 @@ export const refreshAccessToken = async () => {
       console.log('Updated refresh token saved securely.');
     }
 
-    setTokenExpiryHandler(expiresIn);
+    setTokenExpiryHandler(expiresIn - 20);
 
     // Return the new access token
     return accessToken;
   } catch (err: any) {
+    console.log(err.response);
     console.error('Error refreshing access token:', err.response?.data || err.message);
+    await logout();
     return null; // Return null if refreshing failed
   }
       
@@ -135,7 +163,7 @@ export const refreshAccessToken = async () => {
 let tokenExpiryTimer: NodeJS.Timeout | null = null;
 
 const setTokenExpiryHandler = (expiresIn: number) => {
-  console.log('Token will expire in:', expiresIn, 'seconds');
+  console.log('Token will be refreshed in:', expiresIn, 'seconds');
 
   // Clear existing timer if one is already set
   if (tokenExpiryTimer) {

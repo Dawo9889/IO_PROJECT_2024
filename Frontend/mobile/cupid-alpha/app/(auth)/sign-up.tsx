@@ -22,6 +22,8 @@ const SignUp = () => {
   const [passwordValid, setPasswordValid] = useState(false);
   const [emailValid, setEmailValid] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   
   useEffect(() => {
     if (form.password == confirmPassword) setPasswordsMatch(true);
@@ -53,9 +55,10 @@ const SignUp = () => {
     setIsSubmitting(true);
 
     try{
+      setLoading(true);
       const responseStatus = await registerUser(form.email, form.password)
       if (responseStatus == 200) {
-        Alert.alert('Account created successfully! You can now log in.')
+        Alert.alert('Account created successfully!', 'Confirm your email address and log in.')
         router.replace('/sign-in');
       }
     }
@@ -63,6 +66,7 @@ const SignUp = () => {
       Alert.alert('Error', error.message)
     }
     finally{
+      setLoading(false);
       setIsSubmitting(false);
     }
   }
@@ -109,7 +113,9 @@ const SignUp = () => {
             <CustomButton 
               title="Sign up"
               handlePress={submit}
-              containerStyles='mt-7' textStyles={''} disabled={isSubmitting || !(emailValid && passwordValid && passwordsMatch) } />
+              containerStyles='mt-7' textStyles={''}
+              disabled={isSubmitting || !(emailValid && passwordValid && passwordsMatch) || loading}
+              loading={loading} />
 
             <View className='justif-center pt-5 flex-row gap-2'>
               <Text className='text-lg text-gray-100 font-pregular'>

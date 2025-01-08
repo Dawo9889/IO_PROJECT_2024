@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity, Text, ActivityIndicator } from 'react-native'
 import React from 'react'
 
 interface CustomButtonProps {
@@ -6,10 +6,11 @@ interface CustomButtonProps {
   handlePress: any,
   containerStyles: string,
   textStyles: string,
-  disabled?: boolean
+  disabled?: boolean,
+  loading?: boolean
 }
 
-const CustomButton = ( {title, handlePress, containerStyles, textStyles, disabled=false}: CustomButtonProps) => {
+const CustomButton = ( {title, handlePress, containerStyles, textStyles, disabled=false, loading=false}: CustomButtonProps) => {
   return (
     <TouchableOpacity
         onPress={handlePress}
@@ -18,9 +19,13 @@ const CustomButton = ( {title, handlePress, containerStyles, textStyles, disable
            min-h-[62px] justify-center items-center ${containerStyles} ${disabled ? 'opacity-50' : ''}`}
         disabled={disabled}
         >
+          {loading ? 
+          (<ActivityIndicator size='large' color="#fff" />) :
+          
         <Text className={`text-primary font-bbold text-3xl ${textStyles}`}>
             {title}
         </Text>
+        }
     </TouchableOpacity>
   )
 }

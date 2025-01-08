@@ -8,7 +8,7 @@ import icons from '@/constants/icons'
 import { useSearchParams } from 'expo-router/build/hooks';
 
 import party from '@/models/party';
-import { createParty, deleteParty, getPartyDetails } from '@/constants/api';
+import { createParty, deleteParty, editParty, getPartyDetails } from '@/constants/api';
 import FormField from '@/components/FormField';
 import ProfileButton from '@/components/navigation/ProfileButton';
 import { router } from 'expo-router';
@@ -18,7 +18,6 @@ import { getLoggedUsername } from '@/constants/storage';
 const EditParty = () => {
   const searchParams = useSearchParams();
   const partyID = searchParams.get('id');
-  console.log(partyID)
 
   const [isFocused, setIsFocused] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +25,7 @@ const EditParty = () => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [partyDetails, setPartyDetails] = useState<party | null>(null);
   const [inputsValid, setInputsValid] = useState(false);
+  const [connectionPending, setConnectionPending] = useState(false);
   const [form, setForm] = useState({
     name: '',
     date: new Date(),
@@ -91,10 +91,25 @@ const EditParty = () => {
 
 
   const submit = async () => {
+    console.log('Form:', form);
     if (!form.name || !form.date || !form.description){
       Alert.alert('Error', 'Please fill in all the fields');
       return
     }
+    setConnectionPending(true);
+    if (partyID) {
+      try {
+        const response = await editParty(partyID, form.name, form.date, form.description);
+        if (response) {
+          Alert.alert('Party updated successfully');
+          router.back();
+        }
+      } catch (error) {
+        console.error('Error updating party:', error);
+      } finally {
+        setConnectionPending(false);
+      }
+    } else
     try {
       const response = await createParty(form.name, form.date, form.description);
       if (response) {
@@ -103,6 +118,8 @@ const EditParty = () => {
       }
     } catch (error) {
       console.error('Error creating party:', error);
+    } finally {
+      setConnectionPending(false);
     }
   }
 
@@ -191,13 +208,15 @@ const EditParty = () => {
                       containerStyles={'w-1/3 mt-10 mr-5'}
                       bgcolor='bg-red-500'
                       textStyles={''}
+                      loading={connectionPending}
                     />
                   <ProfileButton
                       title={'Edit'}
-                      handlePress={() => {}}
+                      handlePress={() => submit()}
                       containerStyles={'mt-10 w-3/5'}
                       textStyles={''}
                       disabled={!inputsValid}
+                      loading={connectionPending}
                     />
                   </View>
                   ) : (
@@ -207,6 +226,7 @@ const EditParty = () => {
                       containerStyles={'mt-10 w-full'}
                       textStyles={''}
                       disabled={!inputsValid}
+                      loading={connectionPending}
                     />
                   )}
                   </View> ) : (
