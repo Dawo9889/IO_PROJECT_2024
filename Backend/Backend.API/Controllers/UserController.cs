@@ -211,7 +211,6 @@ public class UserController : ControllerBase
         if (user == null)
             return NotFound("User not found.");
 
-        // Check if the new email is different from the current email
         if (user.Email == model.NewEmail)
             return BadRequest("The new email address is the same as the current email.");
 
@@ -219,7 +218,6 @@ public class UserController : ControllerBase
         var confirmationLink = Url.Action(nameof(ConfirmChangeEmail), "User",
             new { token, newEmail = model.NewEmail, userId}, Request.Scheme);
 
-        // Send confirmation email
         await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ",
             $"Please confirm your new email by clicking this link: {confirmationLink}");
 
