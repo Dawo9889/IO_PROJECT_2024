@@ -11,10 +11,8 @@ using System.Text;
 using IdentityModel.Client;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
-public class RefreshTokenRequest
-{
-    public string refreshToken { get; set; }
-}
+using Backend.Application.DTO.UserDTO;
+
 
 [ApiController]
 [Route("api/identity")]
@@ -36,7 +34,7 @@ public class UserController : ControllerBase
         _configuration = configuration;
         _emailService = emailService;
     }
-
+    
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest model)
     {
@@ -138,7 +136,7 @@ public class UserController : ControllerBase
 
     [HttpPost("refresh-token")]
     [Authorize]
-    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDTO request)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -169,6 +167,61 @@ public class UserController : ControllerBase
             expiresIn = 3600 
         });
     }
+
+
+    [HttpPost("change-email")]
+    public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequestDTO model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized("Invalid token.");
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        // Check if the new email is different from the current email
+        if (user.Email == model.NewEmail)
+            return BadRequest("The new email address is the same as the current email.");
+
+        var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.NewEmail);
+        var confirmationLink = Url.Action(nameof(ConfirmChangeEmail), "User",
+            new { token, newEmail = model.NewEmail }, Request.Scheme);
+
+        // Send confirmation email
+        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address",
+            $"Please confirm your new email by clicking this link: {confirmationLink}");
+
+        return Ok("A confirmation email has been sent to your new email address. ");
+
+    }
+
+    [HttpGet("confirm-change-email")]
+    public async Task<IActionResult> ConfirmChangeEmail(string token, string newEmail)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
+        if (!result.Succeeded)
+            return BadRequest("Email change confirmation failed.");
+
+        return Ok("Email changed successfully.");
+    }
+
+
+
+
+
+
+
+
+
     private string GenerateRefreshToken()
     {
         var randomNumber = new byte[64];
