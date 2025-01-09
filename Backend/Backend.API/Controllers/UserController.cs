@@ -197,6 +197,7 @@ public class UserController : ControllerBase
 
 
     [HttpPost("change-email")]
+
     public async Task<IActionResult> ChangeEmail([FromBody] ChangeEmailRequestDTO model)
     {
         if (!ModelState.IsValid)
@@ -216,7 +217,7 @@ public class UserController : ControllerBase
 
         var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.NewEmail);
         var confirmationLink = Url.Action(nameof(ConfirmChangeEmail), "User",
-            new { token, newEmail = model.NewEmail }, Request.Scheme);
+            new { token, newEmail = model.NewEmail, userId}, Request.Scheme);
 
         // Send confirmation email
         await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ",
@@ -227,9 +228,13 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("confirm-change-email")]
-    public async Task<IActionResult> ConfirmChangeEmail(string token, string newEmail)
+    [AllowAnonymous]
+    public async Task<IActionResult> ConfirmChangeEmail(string token, string newEmail, string userId)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(newEmail) || string.IsNullOrEmpty(userId))
+            return BadRequest("Invalid request. Token, new email, and userId are required.");
+
+
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
             return NotFound("User not found.");
@@ -316,8 +321,48 @@ public class UserController : ControllerBase
         return File(user.ProfilePicture, "image/jpeg"); 
     }
 
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Email))
+            return BadRequest("Email is required.");
 
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+            return BadRequest("User not found.");
 
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        var encodedToken = Uri.EscapeDataString(token);
+
+        var resetLink = $"{Request.Scheme}://{Request.Host}/api/identity/reset-password?email={request.Email}&token={token}";
+
+        await _emailService.SendEmailAsync(request.Email, "Reset Your Password",
+            $"Please reset your password by clicking this link: {resetLink}");
+
+        return Ok("We have sent you an email with instructions to reset your password.");
+    }
+
+    [HttpPost("reset-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] ResetPasswordRequestDTO request)
+    {
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(request.newPassword))
+            return BadRequest("Invalid request. Email, token, and new password are required.");
+        var decodedToken = Uri.UnescapeDataString(token);
+        token = token.Replace(" ", "+").Replace("\t", "+").Replace("\n", "+").Replace("\r", "+");
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return BadRequest("User not found.");
+
+        var result = await _userManager.ResetPasswordAsync(user, token, request.newPassword);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors.Select(e => e.Description));
+
+        return Ok("Your password has been reset successfully.");
+    }
 
     private string GenerateRefreshToken()
     {
