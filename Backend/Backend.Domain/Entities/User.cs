@@ -15,5 +15,7 @@ namespace Backend.Domain.Entities
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
+        public byte[] ProfilePicture { get; set; }
+
     }
 }

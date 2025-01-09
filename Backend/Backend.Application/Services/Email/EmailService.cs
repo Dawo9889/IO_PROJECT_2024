@@ -20,7 +20,7 @@ namespace Backend.Application.Services.Email
             var smtpClient = new SmtpClient("smtp.mailersend.net")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("MS_wy7blF@trial-7dnvo4dxpk9g5r86.mlsender.net", _smtpPassword),
+                Credentials = new NetworkCredential(fromEmail, _smtpPassword),
                 EnableSsl = true
             };
             try

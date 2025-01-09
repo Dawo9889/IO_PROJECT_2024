@@ -12,7 +12,9 @@ using IdentityModel.Client;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Application.DTO.UserDTO;
-
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
 [ApiController]
 [Route("api/identity")]
@@ -239,10 +241,80 @@ public class UserController : ControllerBase
         return Ok("Email changed successfully.");
     }
 
+    [HttpPost("upload-profile-picture")]
+    [Authorize]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        if (!file.ContentType.StartsWith("image/"))
+            return BadRequest("Invalid file type. Please upload an image.");
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized("Invalid token.");
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        byte[] resizedImage;
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.CopyToAsync(memoryStream);
 
 
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            using (var image = SixLabors.ImageSharp.Image.Load(memoryStream))
+            {
+
+                image.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new SixLabors.ImageSharp.Size(400, 400)
+                }));
 
 
+                using (var outputStream = new MemoryStream())
+                {
+                    image.Save(outputStream, new JpegEncoder());
+                    resizedImage = outputStream.ToArray();
+                }
+            }
+        }
+
+        user.ProfilePicture = resizedImage;
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok("Profile picture uploaded successfully.");
+    }
+
+
+    [HttpGet("profile-picture")]
+    [Authorize]
+    public async Task<IActionResult> GetProfilePicture()
+    {
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized("Invalid token.");
+
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+
+        if (user.ProfilePicture == null || user.ProfilePicture.Length == 0)
+            return NotFound("No profile picture found.");
+
+
+        return File(user.ProfilePicture, "image/jpeg"); 
+    }
 
 
 
