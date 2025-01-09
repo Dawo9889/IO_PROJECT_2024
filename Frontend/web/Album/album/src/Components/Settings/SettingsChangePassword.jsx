@@ -43,7 +43,6 @@ const SettingsChangePassword = () => {
             setErrMsg("Invalid password or passwords do not match");
             return;
         }
-
         setLoading(true);
         try {
             const response = await axios.post(CHANGE_PASSWORD_URL, {
@@ -65,7 +64,6 @@ const SettingsChangePassword = () => {
             } else {
                 toast.error("Password change failed");
             }
-            // errRef.current.focus();
         } finally {
             setLoading(false);
         }
@@ -82,7 +80,8 @@ const SettingsChangePassword = () => {
     </a>
   </div>
 
-  <div className="order-2 md:order-2 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+<div className='order-2 md:order-2'>
+  <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
     <h1 className="text-2xl text-white font-bold text-center mb-4">Change Password</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -157,7 +156,33 @@ const SettingsChangePassword = () => {
                     </div>
                 </form>
             </div>
+            <div className="order-2 my-4 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
+            <ul className="list-disc pl-5 space-y-2">
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    Minimum 8 characters
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 special character
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 numerical digit
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 lowercase letter
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 uppercase letter
+                </li>
+            </ul>
+            </div>
         </div>
+    </div>
     );
 };
 

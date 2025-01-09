@@ -139,12 +139,20 @@ const Login = () => {
           )}
         </div>
     </form>
-    <p className="mt-4 text-center text-sm text-white">
+    <div className="flex items-center justify-center">
+    <p className="w-full mt-4 text-center text-sm text-white">
         Need an Account? <br />
         <span className="line">
             <a href="/register" className="text-project-blue hover:underline">Sign Up</a>
         </span>
     </p>
+    <p className="w-full mt-4 text-center text-sm text-white">
+        Forgot password? <br />
+        <span className="line">
+            <a href="/resetPassword" className="text-project-blue hover:underline">Reset Password</a>
+        </span>
+    </p>
+    </div>
 </section>
 {resendConfirmationMail && (
     <div className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg m-4 w-full">

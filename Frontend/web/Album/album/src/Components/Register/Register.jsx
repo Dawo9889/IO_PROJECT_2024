@@ -114,7 +114,7 @@ const Register = () => {
     }
 
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center ml-4 mr-4">
           { success ? (
             <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
               <h1 className="text-2xl text-white font-bold text-center mb-4">Success!</h1>
@@ -232,6 +232,31 @@ const Register = () => {
               </p>
             </section>
           )}
+          <div className="order-2 my-4 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
+            <ul className="list-disc pl-5 space-y-2">
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    Minimum 8 characters
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 special character
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 numerical digit
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 lowercase letter
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 uppercase letter
+                </li>
+            </ul>
+            </div>
         </div>
       );
 }
