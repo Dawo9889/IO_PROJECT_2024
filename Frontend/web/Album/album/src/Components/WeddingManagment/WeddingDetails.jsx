@@ -131,7 +131,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
       .then((response) => {
         setDetails(response.data);
         setIsEditing(false);
-        toast.success('Wedding updated successfully!');
+        toast.success(`Wedding "${updatedDetails.name}" updated successfully!`);
         fetchData();
         onUpdate();
       })

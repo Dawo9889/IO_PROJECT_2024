@@ -34,12 +34,11 @@ const WeddingsGallery = () => {
     <div className='bg-project-dark'>
       <div className="flex items-center justify-between px-4">
         <a
-          className="inline-flex items-center justify-center p-0.5 rounded-lg hover:bg-project-dark-bg"
+          className="absolute left-3 top-20 inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4"
           href="/admin"
         >
           <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
         </a>
-
         <select
           className="mx-auto w-full max-w-xs p-2 text-white bg-project-dark-bg border border-project-blue rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue focus:border-transparent"
           value={selectedWedding || ""}
@@ -55,7 +54,7 @@ const WeddingsGallery = () => {
           ))}
         </select>
       </div>
-      <div className="my-4"/>
+      <div className="p-5"/>
       <div className="sm:min-h-[600px] md:min-h-[500px] lg:min-h-[650px] overflow-y-auto mx-4 p-4 bg-project-dark-bg border border-project-blue rounded-lg shadow-lg">
         <div className="min-h-[650px]">
           {selectedWedding ? (

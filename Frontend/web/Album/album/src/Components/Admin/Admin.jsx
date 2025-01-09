@@ -4,7 +4,7 @@ const Admin = () => {
     const authData = JSON.parse(localStorage.getItem("auth"));
     return (
         <div className="h-screen bg-project-dark">
-        <h1 className="text-2xl font-bold text-center mb-4 text-white">Welcome {authData.user}</h1>
+        <h1 className="text-2xl font-bold text-center m-4 text-white">Welcome {authData.user}</h1>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
         <section className="text-center w-full max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
             <div className="flexGrow">

@@ -77,13 +77,22 @@ export const AuthProvider = ({children}) => {
     
         return () => clearInterval(interval);
     }, [navigate]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             const currentTime = Date.now();
+            // console.log("expirytime "+auth.expiryTime)
+            // console.log("currenttime "+currentTime)
+            // console.log(auth.expiryTime - 60 * 1000)
             if (auth.expiryTime && currentTime > auth.expiryTime - 60 * 1000) {
+                console.log("odswiezam token")
                 refreshAccessToken();
             }
-        }, 5 * 1000);
+            else
+            {
+                console.log("nie odswiezam tokenu")
+            }
+        }, 1 * 1000);
 
         return () => clearInterval(interval);
     }, [auth]);

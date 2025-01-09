@@ -92,9 +92,9 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         }
       );
   
-      onPhotoDeleted(); //TODO: podczas usuwania przyciemnic ekran
+      onPhotoDeleted();
       await fetchPhotos();
-      if(currentIndex < photos.length && pageCount > 1){ //TODO: ogarnac mechanizm sprawdzania numeru strony oraz zdjecia, np (na 2 stronie mam 3 zdjecia) usuwam 1 zdjecie z 2 strony ale zostaje na obecnej stronie
+      if(currentIndex < photos.length && pageCount > 1){
         setCurrentIndex(currentIndex - 1)
       }
       else {
@@ -206,7 +206,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
               </button>
             )}
 
-            <div className="min-h-[250px] lg:min-h-[600px]">
+            <div className="flex flex-col items-center justify-center min-h-[300px] lg:min-h-[600px]">
               <motion.div key={currentIndex} className="flex justify-center">
                 <LazyLoadImage
                   src={currentPhoto?.photoSrc}
