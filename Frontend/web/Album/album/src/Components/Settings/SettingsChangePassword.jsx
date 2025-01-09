@@ -3,13 +3,17 @@ import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import axios from "axios";
 
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-const CHANGE_PASSWORD_URL = `${import.meta.env.VITE_API_URL}/identity/change-password`;
-
 const SettingsChangePassword = () => {
+    const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    const CHANGE_PASSWORD_URL = `${import.meta.env.VITE_API_URL}/identity/change-password`;
+    const authData = JSON.parse(localStorage.getItem("auth"));
+    const accessToken = authData?.accessToken;
+
+    const navigate = useNavigate()
     const errRef = useRef();
     
     const [oldPwd, setOldPwd] = useState('');
@@ -34,7 +38,6 @@ const SettingsChangePassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const validPwd = PWD_REGEX.test(newPwd);
         if (!validPwd || newPwd !== matchPwd) {
             setErrMsg("Invalid password or passwords do not match");
@@ -46,19 +49,23 @@ const SettingsChangePassword = () => {
             const response = await axios.post(CHANGE_PASSWORD_URL, {
                 oldPassword: oldPwd,
                 newPassword: newPwd
+            },{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
             });
-
             toast.success("Password changed successfully");
+            navigate("/admin");
         } catch (err) {
             if (!err?.response) {
                 toast.error("No server response");
             } else if (err.response?.status === 400) {
-                const errors = err.response.data;
-                toast.error(errors?.message || "Invalid input data");
+                const errors = err.response.data.errors;
+                toast.error(errors[0]);
             } else {
                 toast.error("Password change failed");
             }
-            errRef.current.focus();
+            // errRef.current.focus();
         } finally {
             setLoading(false);
         }
