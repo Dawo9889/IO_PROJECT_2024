@@ -60,7 +60,7 @@ public class UserController : ControllerBase
         await _emailService.SendEmailAsync(user.Email, "Confirm your email to your Cupid App Account",
             $"Please confirm your email by clicking this link: {confirmationLink}");
 
-        return Ok($"Confirm your email that we sent to your email address");
+        return Ok($"Confirm your email that we sent to your email address.");
     }
 
     [HttpGet("confirm-email")]
@@ -102,7 +102,32 @@ public class UserController : ControllerBase
         return Ok("Confirmation email has been resent. Please check your inbox.");
     }
 
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
+ 
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized("Invalid token.");
+
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return BadRequest(new { errors });
+        }
+
+        return Ok("Password changed successfully.");
+    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest model)
@@ -192,7 +217,7 @@ public class UserController : ControllerBase
             new { token, newEmail = model.NewEmail }, Request.Scheme);
 
         // Send confirmation email
-        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address",
+        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ",
             $"Please confirm your new email by clicking this link: {confirmationLink}");
 
         return Ok("A confirmation email has been sent to your new email address. ");
