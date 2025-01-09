@@ -98,8 +98,8 @@ const Login = () => {
     }
 
   return (
-    <div className="flex items-center justify-center">
-    <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg ml-4 mr-4 w-full">
+    <div className="flex flex-col items-center justify-center mx-4">
+    <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg w-full">
     <h1 className="text-2xl text-white font-bold text-center mb-4">Sign In</h1>
     <form onSubmit={handleSubmit} className="space-y-4 ">
         <div>
@@ -147,7 +147,7 @@ const Login = () => {
     </p>
 </section>
 {resendConfirmationMail && (
-    <div className="max-w-md mx-auto my-4 p-6 bg-project-dark-bg rounded-lg shadow-lg flex flex-col items-center justify-center">
+    <div className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg m-4 w-full">
         <div className="pb-4 w-full text-white text-xl text-center font-bold">
             Your account wasn't confirmed via e-mail
         </div>
