@@ -14,9 +14,10 @@ import CreateWedding from "./Components/Weddings/createWedding";
 import WeddingsGallery from "./Components/WeddingGallery/WeddingsGallery";
 import Settings from "./Components/Settings/Settings";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
-import { ToastContainer } from "react-toastify";
 import SettingsModifyProfile from "./Components/Settings/SettingsModifyProfile";
 import SettingsChangePassword from "./Components/Settings/SettingsChangePassword";
+import ResetPasswordForm from "./Components/ResetPassword/ResetPasswordForm";
+import { ToastContainer } from "react-toastify";
 function App() {
 
     return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="resetPassword" element={<ResetPassword />} />
+            <Route path="resetPasswordForm" element={<ResetPasswordForm />} />
             <Route path="team" element={<Team />} />
             <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="/" element={<div className="p-4"><Home /></div>} />

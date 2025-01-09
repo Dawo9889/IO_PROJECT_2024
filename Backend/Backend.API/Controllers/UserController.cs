@@ -334,7 +334,7 @@ public class UserController : ControllerBase
 
         var encodedToken = Uri.EscapeDataString(token);
 
-        var resetLink = $"{Request.Scheme}://{Request.Host}/api/identity/reset-password?email={request.Email}&token={token}";
+        var resetLink = $"{Request.Scheme}://{Request.Host}/resetPasswordForm?email={request.Email}&token={token}";
 
         await _emailService.SendEmailAsync(request.Email, "Reset Your Password",
             $"Please reset your password by clicking this link: {resetLink}");

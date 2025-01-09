@@ -28,7 +28,7 @@ const ResetPassword = () => {
                     "email": user
                 }
             );
-            console.log(response)
+            localStorage.removeItem("auth")
             toast.success(response.data)
           } catch (err) {
             console.log(err);
