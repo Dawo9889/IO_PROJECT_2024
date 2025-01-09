@@ -23,13 +23,13 @@ const Settings = () => {
             </p>
             <div className="flex flex-col gap-4">
               <a
-                className="block text-center text-lg text-project-blue hover:text-project-dark bg-project-dark-button py-2 px-4 rounded-lg shadow-md hover:bg-project-blue-buttons transition-colors border-2 border-project-yellow hover:border-project-blue"
+                className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
                 href="/settings/modifyprofile"
               >
                 Modify Profile
               </a>
               <a
-                className="block text-center text-lg text-project-blue hover:text-project-dark bg-project-dark-button py-2 px-4 rounded-lg shadow-md hover:bg-project-blue-buttons transition-colors border-2 border-project-yellow hover:border-project-blue"
+                className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
                 href="/settings/changepassword"
               >
                 Change Password
