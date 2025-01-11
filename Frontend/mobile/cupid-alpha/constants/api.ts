@@ -29,28 +29,6 @@ export const registerUser = async (email: string, password: string) => {
         throw new Error(errorData.description);
       }
 
-    // // Handle invalid email
-    // if (errorData.errors && errorData.errors.InvalidEmail) {
-    //   throw new Error(`Email '${email}' is invalid!`);
-    // }
-
-    // // Handle Duplicate user email
-    // if (errorData.errors && errorData.errors.DuplicateUserName) {
-    //   throw new Error(`Account '${email}' already exists!`);
-    // }
-
-    // // Handle password too weak
-    // if (errorData.errors && (
-    //         errorData.errors.PasswordRequiresLower || 
-    //         errorData.errors.PasswordRequiresNonAlphanumeric || 
-    //         errorData.errors.PasswordRequiresUpper || 
-    //         errorData.errors.PasswordTooShort)) {
-    //   throw new Error(`Password must be at least 6 characters and contain:
-    //       at least one uppercase ('A'-'Z')
-    //       at least one lowercase ('a'-'z')
-    //       at least one non alphanumeric char`);
-    // }
-
     // Handle generic validation or bad request errors.
     if (err.response.status === 400) {
       throw new Error('Invalid input. Please check your email and password.');
@@ -95,7 +73,7 @@ export const loginUser = async (email: string, password: string) => {
     await storeAccessToken(response.data.accessToken);
     await storeRefreshToken(response.data.refreshToken);
     await storeLoggedUsername(email.toLowerCase());
-    setTokenExpiryHandler(response.data.expiresIn)
+    setTokenExpiryHandler(response.data.expiresIn - 20)
     return response.status;
   } catch (error: any) {
     // if (error.response?.status === 401) {
@@ -114,6 +92,33 @@ export const loginUser = async (email: string, password: string) => {
     throw error;
   }
 };
+
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const response = await axios.post(`${API_AUTH_URL}/change-password`, {
+      "oldPassword": oldPassword,
+      "newPassword": newPassword
+      },{
+          headers: {
+              Authorization: `Bearer ${accessToken}`
+          }
+      });
+
+    console.log('Successfully changed password:', response.data);
+    return response.status;
+
+  } catch (err: any) {
+    console.log(err.response.status);
+    console.error('Error changing password:', err.response?.data || err.message);
+    throw err.response;
+  }
+}
+
+export const changeEmail = async (newEmail: string) => {
+  return 200;
+}
 
 export const refreshAccessToken = async () => {
   try {

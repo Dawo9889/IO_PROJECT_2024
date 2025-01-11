@@ -1,4 +1,4 @@
-import { View, Text , Image, ImageSourcePropType, Alert, Modal, TextInput, TouchableOpacity} from 'react-native'
+import { View, Text , Image, ImageSourcePropType, Alert, Modal, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -74,7 +74,7 @@ const PicturePreview = ({picture, setPicture, description, setDescription}: Pict
                       className='border-2 w-2/5 mx-auto h-16 px-4 bg-tertiary rounded-2xl items-center border-tertiary-200 justify-center'
                       disabled={isLoading}
                       onPress={() => savePicture()}>
-                    <Text>Upload</Text>
+                    {isLoading ? <ActivityIndicator size="small" color="#fff" /> : <Text>Upload</Text>}
                   </TouchableOpacity>
                 </View>
             </View>

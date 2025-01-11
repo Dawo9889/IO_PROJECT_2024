@@ -44,7 +44,15 @@ export default function Camera() {
             setPartyName(checkValid.name);
             setTokenValid(true);
           } else {
-            Alert.alert('Your party token is expired. Please scan new party QR.')
+            Alert.alert('Token expired','Your party token is expired. Please scan new party QR.',
+              [
+                      { text: "Delete token", onPress: async () => {
+                          await removePartyToken();
+                        }, style: "destructive" }, // Logout button
+                      { text: "Ok", style: "cancel" }, // Cancel button
+                    ],
+                    { cancelable: true } // Allow dismissing the alert by tapping outside
+            )
             setPartyName('');
             setTokenValid(false);
           }

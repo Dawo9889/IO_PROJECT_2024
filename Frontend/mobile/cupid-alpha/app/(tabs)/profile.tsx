@@ -80,10 +80,9 @@ const Profile = () => {
               <View className='mt-8 w-full'>
                 <ProfileButton
                   title="Edit Profile"
-                  handlePress={() => {}}
+                  handlePress={() => router.push('/profile-management')}
                   containerStyles="w-full mt-7"
                   textStyles=""
-                  disabled={true}
                 />
                 <ProfileButton
                 title="Manage parties"
