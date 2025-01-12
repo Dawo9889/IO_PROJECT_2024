@@ -1,17 +1,60 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import loginPhoto from './login-photo.jpg'
+import axios from 'axios';
+import { useProfileContext } from '../context/ProfileContext';
 
 const Settings = () => {
 
     const authData = JSON.parse(localStorage.getItem("auth"));
-    
+    const accessToken = authData?.accessToken
+
+    const { profileImage, updateProfileImage } = useProfileContext();
+
+    const [profileImageLoading, setProfileImageLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const getProfileImage = () => {
+      if (!accessToken) return;
+      
+      setProfileImageLoading(true);
+      setError(null);
+      axios
+        .get(`${import.meta.env.VITE_API_URL}/identity/profile-picture`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          responseType: 'arraybuffer',
+        })
+        .then((response) => {
+          const binary = new Uint8Array(response.data);
+          const binaryString = binary.reduce((data, byte) => data + String.fromCharCode(byte), '');
+          const base64QrCode = btoa(binaryString);
+          setProfileImage(base64QrCode);
+        })
+        .catch((err) => {
+          
+          if (err.response?.status === 404) {
+            setError('Profile Image not found (404).');
+          } else {
+            setError('Error fetching Profile Image.');
+          }
+        })
+        .finally(() => {
+          setProfileImageLoading(false);
+        }); 
+    }
+
+    useEffect(() => {
+      getProfileImage();
+    },[])
+
     return (
         <div className="flex flex-col items-center justify-center p-6">
           <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
             <div className="flex items-center mb-6">
               <img
                 alt="User Avatar"
-                src={loginPhoto}
+                src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
                 className="w-16 h-16 rounded-full border-2 border-project-blue"
               />
               <div className="ml-4 text-white text-2xl font-semibold">

@@ -2,8 +2,9 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState, useEffect  } from "react";
 import logo from './cupidlogo-white.svg'
-import loginPhoto from './login-photo.jpg'
+import { useProfileContext } from '../context/ProfileContext';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
@@ -15,13 +16,19 @@ function classNames(...classes) {
 }
 
 function Navbar() {
+    const { profileImage, updateProfileImage } = useProfileContext();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [profileImageLoading, setProfileImageLoading] = useState(false);
+    // const [profileImage, setProfileImage] = useState(null);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
     const authData = JSON.parse(localStorage.getItem("auth"));
-  
+    const accessToken = authData?.accessToken;
+
     useEffect(() => {
       const storedAuth = localStorage.getItem("auth");
       setIsAuthenticated(storedAuth ? true : false);
+      fetchProfileImage();
     }, []);
   
     const handleLogout = () => {
@@ -29,6 +36,36 @@ function Navbar() {
       setIsAuthenticated(false);
       navigate("/login");
     };
+
+    const fetchProfileImage = () => {
+        if (!accessToken) return;
+    
+        setProfileImageLoading(true);
+        setError(null);
+        axios
+          .get(`${import.meta.env.VITE_API_URL}/identity/profile-picture`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            responseType: 'arraybuffer',
+          })
+          .then((response) => {
+            const binary = new Uint8Array(response.data);
+            const binaryString = binary.reduce((data, byte) => data + String.fromCharCode(byte), '');
+            const base64Image = btoa(binaryString);
+            updateProfileImage(base64Image);
+          })
+          .catch((err) => {
+            if (err.response?.status === 404) {
+              setError('Profile Image not found (404).');
+            } else {
+              setError('Error fetching Profile Image.');
+            }
+          })
+          .finally(() => {
+            setProfileImageLoading(false);
+          });
+      };
 
   return (
     <Disclosure as="nav" className="bg-project-pink mb-4">
@@ -88,9 +125,9 @@ function Navbar() {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt=""
-                    src={loginPhoto}
-                    className="size-8 rounded-full"
+                    alt="test"
+                    src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
+                    className="size-10 rounded-full outline outline-2 outline-project-blue"
                   />
                 </MenuButton>
               </div>
