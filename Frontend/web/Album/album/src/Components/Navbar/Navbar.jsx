@@ -125,17 +125,11 @@ function Navbar() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  {profileImageLoading ? (
-                    <div className="size-10 rounded-full outline outline-2 outline-project-blue">
-                      <Spinner />
-                    </div>
-                  ) : (
                   <img
                     alt="test"
                     src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
                     className="size-10 rounded-full outline outline-2 outline-project-blue"
                   />
-                )}
                 </MenuButton>
               </div>
               <MenuItems

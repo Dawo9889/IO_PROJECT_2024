@@ -50,7 +50,7 @@ const Weddings = () => {
             fetchWeddings={fetchWeddings} 
           />
         </div>
-        <div className="bg-project-dark sm:col-span-2 md:col-span-2">
+        <div className="bg-project-dark sm:col-span-2 md:col-span-2 ">
         <WeddingDetails 
           weddingId={selectedWedding}
           onUpdate={refreshWeddings} />

@@ -53,7 +53,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
     };
   
     return (
-      <form onSubmit={handleSubmit} className="w-full flex flex-col  justify-center text-white space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
+      <form onSubmit={handleSubmit} className="w-full flex flex-col justify-center text-white space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
         <h1 className='text-2xl w-full text-center'>Update wedding</h1>
         <div>
           <label className="block text-sm font-medium">Name</label>

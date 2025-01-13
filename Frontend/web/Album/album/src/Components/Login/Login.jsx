@@ -59,10 +59,8 @@ const Login = () => {
             navigate(0)
 
         } catch (err) {
-            console.log(err)
             if(!err?.response){
                 toast.error('No Server response')
-                // setErrMsg('No Server response')
             }
             else if (err.response?.status === 400) {
                 toast.error('Missing username or password');
@@ -77,7 +75,7 @@ const Login = () => {
             else {
                 toast.error('Login Failed');
             }
-            errRef.current.focus();
+            // errRef.current.focus();
         }
         finally{
             setLoading(false)

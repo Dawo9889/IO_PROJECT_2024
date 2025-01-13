@@ -50,13 +50,13 @@ const Settings = () => {
     return (
         <div className="flex flex-col items-center justify-center p-6">
           <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-            <div className="flex items-center mb-6">
+            <div className="flex items-center justify-center mb-6">
               <img
                 alt="User Avatar"
                 src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
                 className="w-12 h-12 lg:h-16 lg:w-16 rounded-full border-2 border-project-blue"
               />
-              <div className="mx-2 text-white text-lg sm:text-lg lg:text-2xl font-semibold">
+              <div className="mx-2 text-white text-xl sm:text-xl lg:text-2xl font-semibold">
                 {authData.user}
               </div>
             </div>
@@ -69,6 +69,12 @@ const Settings = () => {
                 href="/settings/modifyprofileimage"
               >
                 Modify Profile Image
+              </a>
+              <a
+                className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
+                href="/settings/changemail"
+              >
+                Edit Email Adress
               </a>
               <a
                 className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"

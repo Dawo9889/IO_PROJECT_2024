@@ -96,7 +96,6 @@ const Register = () => {
           
                   if (errorMessages.length > 0) {
                     toast.error(errorMessages.join(' '));
-                      // setErrMsg(errorMessages.join(' '));
                   } else {
                     toast.error('Invalid input data');
                   }
@@ -124,6 +123,7 @@ const Register = () => {
               </p>
             </section>
           ) : (
+            <>
             <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg ml-4 mr-4 w-full">
               <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">
                 {errMsg}
@@ -231,7 +231,6 @@ const Register = () => {
                 </span>
               </p>
             </section>
-          )}
           <div className="order-2 my-4 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
             <ul className="list-disc pl-5 space-y-2">
@@ -256,7 +255,9 @@ const Register = () => {
                     At least 1 uppercase letter
                 </li>
             </ul>
-            </div>
+          </div>
+          </>
+          )}
         </div>
       );
 }

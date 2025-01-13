@@ -79,23 +79,21 @@ const SettingsModifyProfileImage = () => {
   };
 
   return (
-    <div className=" p-4">
-      {/* Powrót do ustawień */}
-      <div className="p-4 order-1 md:order-1 w-full max-w-sm md:max-w-2xl justify-items-end">
-        <a
-          className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4"
-          href="/settings"
-        >
-          <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
-        </a>
-      </div>
+    <div className="relative p-4">
   
-      {/* Główna sekcja */}
-      <div className="order-2 md:order-2 w-full max-w-2xl mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-        <h1 className="text-xl md:text-2xl text-white font-bold text-center mb-6">Modify Profile Image</h1>
+      <a
+        className="absolute top-4 left-4 inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg"
+        href="/settings"
+      >
+        <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
+      </a>
+  
+      <div className="mt-16 w-full max-w-2xl mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+        <h1 className="text-xl md:text-2xl text-white font-bold text-center mb-6">
+          Modify Profile Image
+        </h1>
   
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Sekcja z obrazem */}
           <div className="w-full flex flex-col items-center">
             {loading ? (
               <div className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg">
@@ -115,7 +113,6 @@ const SettingsModifyProfileImage = () => {
               />
             )}
   
-            {/* Przycisk wyboru zdjęcia */}
             <div
               className="w-60 text-center mt-4 bg-project-blue hover:bg-project-blue-buttons rounded-xl p-2 cursor-pointer"
               onClick={() => document.getElementById('newProfilePhoto').click()}
@@ -131,7 +128,6 @@ const SettingsModifyProfileImage = () => {
             </div>
           </div>
   
-          {/* Przycisk zapisu zmian */}
           {newProfilePhotoCheck ? (
             <button
               type="submit"
@@ -156,7 +152,6 @@ const SettingsModifyProfileImage = () => {
       </div>
     </div>
   );
-  
   
 };
 
