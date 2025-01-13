@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import loginPhoto from './login-photo.jpg'
 import axios from 'axios';
 import { useProfileContext } from '../context/ProfileContext';
 
@@ -55,9 +54,9 @@ const Settings = () => {
               <img
                 alt="User Avatar"
                 src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
-                className="w-16 h-16 rounded-full border-2 border-project-blue"
+                className="w-12 h-12 lg:h-16 lg:w-16 rounded-full border-2 border-project-blue"
               />
-              <div className="ml-4 text-white text-2xl font-semibold">
+              <div className="mx-2 text-white text-lg sm:text-lg lg:text-2xl font-semibold">
                 {authData.user}
               </div>
             </div>
@@ -67,9 +66,9 @@ const Settings = () => {
             <div className="flex flex-col gap-4">
               <a
                 className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
-                href="/settings/modifyprofile"
+                href="/settings/modifyprofileimage"
               >
-                Modify Profile
+                Modify Profile Image
               </a>
               <a
                 className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"

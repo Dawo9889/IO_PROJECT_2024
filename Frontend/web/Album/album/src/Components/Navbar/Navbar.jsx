@@ -5,6 +5,7 @@ import logo from './cupidlogo-white.svg'
 import { useProfileContext } from '../context/ProfileContext';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import Spinner from '../Spinner/Spinner';
 
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
@@ -19,7 +20,7 @@ function Navbar() {
     const { profileImage, updateProfileImage } = useProfileContext();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [profileImageLoading, setProfileImageLoading] = useState(false);
-    // const [profileImage, setProfileImage] = useState(null);
+
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const authData = JSON.parse(localStorage.getItem("auth"));
@@ -124,11 +125,17 @@ function Navbar() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
+                  {profileImageLoading ? (
+                    <div className="size-10 rounded-full outline outline-2 outline-project-blue">
+                      <Spinner />
+                    </div>
+                  ) : (
                   <img
                     alt="test"
                     src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
                     className="size-10 rounded-full outline outline-2 outline-project-blue"
                   />
+                )}
                 </MenuButton>
               </div>
               <MenuItems

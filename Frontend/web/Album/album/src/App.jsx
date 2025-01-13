@@ -14,9 +14,9 @@ import CreateWedding from "./Components/Weddings/createWedding";
 import WeddingsGallery from "./Components/WeddingGallery/WeddingsGallery";
 import Settings from "./Components/Settings/Settings";
 import ResetPassword from "./Components/ResetPassword/ResetPassword";
-import SettingsModifyProfile from "./Components/Settings/SettingsModifyProfile";
 import SettingsChangePassword from "./Components/Settings/SettingsChangePassword";
 import ResetPasswordForm from "./Components/ResetPassword/ResetPasswordForm";
+import SettingsModifyProfileImage from "./Components/Settings/SettingsModifyProfileImage";
 import { ToastContainer } from "react-toastify";
 function App() {
 
@@ -40,7 +40,7 @@ function App() {
             <Route path="createWedding" element={<PrivateRoute element={<CreateWedding />} />} />
             <Route path="weddingsGallery" element={<PrivateRoute element={<WeddingsGallery />} />} />
             <Route path="settings" element={<PrivateRoute element={<Settings />} />} />
-            <Route path="settings/modifyprofile" element={<PrivateRoute element={<SettingsModifyProfile />} />} />
+            <Route path="settings/modifyprofileimage" element={<PrivateRoute element={<SettingsModifyProfileImage />} />} />
             <Route path="settings/changepassword" element={<PrivateRoute element={<SettingsChangePassword />} />} />
          
             <Route path="*" element={<Missing />} />

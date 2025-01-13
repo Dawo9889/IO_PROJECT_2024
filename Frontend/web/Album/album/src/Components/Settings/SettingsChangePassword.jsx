@@ -71,18 +71,18 @@ const SettingsChangePassword = () => {
 
     return (
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-  <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
-    <a 
-      className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4" 
-      href="/settings"
-    >
-      <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
-    </a>
-  </div>
+    <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
+        <a 
+        className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4" 
+        href="/settings"
+        >
+        <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
+        </a>
+    </div>
 
-<div className='order-2 md:order-2'>
-  <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-    <h1 className="text-2xl text-white font-bold text-center mb-4">Change Password</h1>
+    <div className='order-2 md:order-2'>
+    <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl text-white font-bold text-center mb-4">Change Password</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="oldPassword" className="block text-sm font-medium text-white">Old Password:</label>
@@ -157,29 +157,29 @@ const SettingsChangePassword = () => {
                 </form>
             </div>
             <div className="order-2 my-4 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
-            <ul className="list-disc pl-5 space-y-2">
-                <li className="flex items-center text-white">
-                    <span className='mr-2'>•</span>
-                    Minimum 8 characters
-                </li>
-                <li className="flex items-center text-white">
-                    <span className='mr-2'>•</span>
-                    At least 1 special character
-                </li>
-                <li className="flex items-center text-white">
-                    <span className='mr-2'>•</span>
-                    At least 1 numerical digit
-                </li>
-                <li className="flex items-center text-white">
-                    <span className='mr-2'>•</span>
-                    At least 1 lowercase letter
-                </li>
-                <li className="flex items-center text-white">
-                    <span className='mr-2'>•</span>
-                    At least 1 uppercase letter
-                </li>
-            </ul>
+                <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                    <li className="flex items-center text-white">
+                        <span className='mr-2'>•</span>
+                        Minimum 8 characters
+                    </li>
+                    <li className="flex items-center text-white">
+                        <span className='mr-2'>•</span>
+                        At least 1 special character
+                    </li>
+                    <li className="flex items-center text-white">
+                        <span className='mr-2'>•</span>
+                        At least 1 numerical digit
+                    </li>
+                    <li className="flex items-center text-white">
+                        <span className='mr-2'>•</span>
+                        At least 1 lowercase letter
+                    </li>
+                    <li className="flex items-center text-white">
+                        <span className='mr-2'>•</span>
+                        At least 1 uppercase letter
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
