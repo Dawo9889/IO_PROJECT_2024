@@ -93,14 +93,15 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
       );
   
       onPhotoDeleted();
+
       await fetchPhotos();
-      console.log(currentIndex)
-      if(currentIndex < photos.length && pageCount > 1){
-      }
-      else if(currentIndex === 0){
-      }
-      else {
-        setCurrentIndex(currentIndex - 1)
+
+      if (photos.length === 1) {
+        closeSlider();
+      } else if (currentIndex < photos.length - 1) {
+        setCurrentIndex(currentIndex);
+      } else {
+        setCurrentIndex(currentIndex - 1);
       }
     } catch (err) {
       console.error('Error deleting photo:', err);
@@ -147,7 +148,6 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
         setLoading(false);
       }
     };
-
     loadPhoto();
   }, [currentIndex, photos]);
 
