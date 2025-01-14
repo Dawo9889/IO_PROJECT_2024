@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
 import { useProfileContext } from '../context/ProfileContext';
+import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 const Settings = () => {
+    const {auth} = useAuth() 
+    const { profileImage } = useProfileContext();
 
-    const authData = JSON.parse(localStorage.getItem("auth"));
-    const accessToken = authData?.accessToken
-
-    const { profileImage, updateProfileImage } = useProfileContext();
-
-    const [profileImageLoading, setProfileImageLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const getProfileImage = () => {
-      if (!accessToken) return;
+      if (auth === undefined) return;
       
-      setProfileImageLoading(true);
       setError(null);
       axios
         .get(`${import.meta.env.VITE_API_URL}/identity/profile-picture`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
           responseType: 'arraybuffer',
         })
@@ -37,9 +33,6 @@ const Settings = () => {
           } else {
             setError('Error fetching Profile Image.');
           }
-        })
-        .finally(() => {
-          setProfileImageLoading(false);
         }); 
     }
 
@@ -57,7 +50,7 @@ const Settings = () => {
                 className="w-12 h-12 lg:h-16 lg:w-16 rounded-full border-2 border-project-blue"
               />
               <div className="mx-2 text-white text-xl sm:text-xl lg:text-2xl font-semibold">
-                {authData.user}
+                {auth.user}
               </div>
             </div>
             <p className="text-white text-xl font-bold text-center mb-4">

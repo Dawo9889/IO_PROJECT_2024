@@ -2,115 +2,115 @@ import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner/Spinner';
 import axios from "axios";
-const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
+import Spinner from '../Spinner/Spinner';
 
 const Register = () => {
-    const userRef = useRef();
-    const errRef = useRef();
+  const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
+  const userRef = useRef();
+  const errRef = useRef();
 
-    const [user, setUser] = useState('');
-    const [validName, setValidName] = useState(false);
-    const [userFocus, setUserFocus] = useState(false);
+  const [user, setUser] = useState('');
+  const [validName, setValidName] = useState(false);
+  const [userFocus, setUserFocus] = useState(false);
 
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
+  const [pwd, setPwd] = useState('');
+  const [validPwd, setValidPwd] = useState(false);
+  const [pwdFocus, setPwdFocus] = useState(false);
+  const [matchPwd, setMatchPwd] = useState('');
 
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
+  const [validMatch, setValidMatch] = useState(false);
+  const [matchFocus, setMatchFocus] = useState(false);
+  
+  const [errMsg, setErrMsg] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-    const [errMsg, setErrMsg] = useState('')
-    const [success, setSuccess] = useState(false)
-    const [loading,setLoading] = useState(false)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
+    const v1 = USER_REGEX.test(user);
+    const v2 = PWD_REGEX.test(pwd)
 
-    useEffect(() => {
-        const result = USER_REGEX.test(user);
-        setValidName(result)
-    }, [user])
-
-    useEffect(() => {
-        const result = PWD_REGEX.test(pwd);
-        setValidPwd(result)
-        const match = pwd === matchPwd;
-        setValidMatch(match)
-    }, [pwd, matchPwd]) 
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [user, pwd, matchPwd])
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const v1 = USER_REGEX.test(user);
-        const v2 = PWD_REGEX.test(pwd)
-
-        if(!v1 || !v2){
-            setErrMsg("Invalid entry");
-            return;
-        }
-        setLoading(true);
-        try {
-            const response = await axios.post(RESGISTER_URL,
-                {
-                    "email": user,
-                    "password": pwd
-                }
-            );
-            setSuccess(true)
-          } catch (err) {
-            console.log(err);
-        
-            if (!err?.response) {
-              toast.error('No server response');
-          } else if (err.response?.status === 400) {
-              const errors = err.response.data;
-          
-              if (Array.isArray(errors)) {
-                  const errorMessages = errors.map(error => {
-                      if (error.code === 'DuplicateUserName') {
-                          return error.description;
-                      } else if (error.code === 'InvalidEmail') {
-                          return error.description;
-                      } else if (
-                          error.code === 'PasswordTooShort' ||
-                          error.code === 'PasswordRequiresNonAlphanumeric' ||
-                          error.code === 'PasswordRequiresDigit' ||
-                          error.code === 'PasswordRequiresLower' ||
-                          error.code === 'PasswordRequiresUpper' ||
-                          error.code === 'PasswordRequiresUniqueChars'
-                      ) {
-                          return error.description;
-                      }
-                      return null;
-                  }).filter(msg => msg !== null);
-          
-                  if (errorMessages.length > 0) {
-                    toast.error(errorMessages.join(' '));
-                  } else {
-                    toast.error('Invalid input data');
+    if(!v1 || !v2){
+        setErrMsg("Invalid entry");
+        return;
+    }
+    setLoading(true);
+    try {
+        const response = await axios.post(RESGISTER_URL,
+            {
+                "email": user,
+                "password": pwd
+            }
+        );
+        setSuccess(true)
+      } catch (err) {
+        console.log(err);
+    
+        if (!err?.response) {
+          toast.error('No server response');
+      } else if (err.response?.status === 400) {
+          const errors = err.response.data;
+      
+          if (Array.isArray(errors)) {
+              const errorMessages = errors.map(error => {
+                  if (error.code === 'DuplicateUserName') {
+                      return error.description;
+                  } else if (error.code === 'InvalidEmail') {
+                      return error.description;
+                  } else if (
+                      error.code === 'PasswordTooShort' ||
+                      error.code === 'PasswordRequiresNonAlphanumeric' ||
+                      error.code === 'PasswordRequiresDigit' ||
+                      error.code === 'PasswordRequiresLower' ||
+                      error.code === 'PasswordRequiresUpper' ||
+                      error.code === 'PasswordRequiresUniqueChars'
+                  ) {
+                      return error.description;
                   }
+                  return null;
+              }).filter(msg => msg !== null);
+      
+              if (errorMessages.length > 0) {
+                toast.error(errorMessages.join(' '));
               } else {
                 toast.error('Invalid input data');
               }
           } else {
-            toast.error('Registration Failed');
+            toast.error('Invalid input data');
           }
-            errRef.current.focus();
-          }
-        finally{
-            setLoading(false)
-        }
+      } else {
+        toast.error('Registration Failed');
+      }
+        errRef.current.focus();
+      }
+    finally{
+        setLoading(false)
     }
+}
+
+  useEffect(() => {
+      userRef.current.focus();
+  }, [])
+
+  useEffect(() => {
+      const result = USER_REGEX.test(user);
+      setValidName(result)
+  }, [user])
+
+  useEffect(() => {
+      const result = PWD_REGEX.test(pwd);
+      setValidPwd(result)
+      const match = pwd === matchPwd;
+      setValidMatch(match)
+  }, [pwd, matchPwd]) 
+
+  useEffect(() => {
+      setErrMsg('');
+  }, [user, pwd, matchPwd])
 
     return (
       <div className="flex flex-col items-center justify-center ml-4 mr-4">
@@ -258,8 +258,8 @@ const Register = () => {
           </div>
           </>
           )}
-        </div>
-      );
+      </div>
+    );
 }
 
 export default Register

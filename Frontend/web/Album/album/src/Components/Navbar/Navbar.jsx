@@ -5,7 +5,7 @@ import logo from './cupidlogo-white.svg'
 import { useProfileContext } from '../context/ProfileContext';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import Spinner from '../Spinner/Spinner';
+import useAuth from '../hooks/useAuth';
 
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
@@ -18,20 +18,13 @@ function classNames(...classes) {
 
 function Navbar() {
     const { profileImage, updateProfileImage } = useProfileContext();
+    const {auth} = useAuth()
+    const navigate = useNavigate();
+
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [profileImageLoading, setProfileImageLoading] = useState(false);
-
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
-    const authData = JSON.parse(localStorage.getItem("auth"));
-    const accessToken = authData?.accessToken;
 
-    useEffect(() => {
-      const storedAuth = localStorage.getItem("auth");
-      setIsAuthenticated(storedAuth ? true : false);
-      fetchProfileImage();
-    }, []);
-  
     const handleLogout = () => {
       localStorage.removeItem("auth");
       setIsAuthenticated(false);
@@ -39,14 +32,14 @@ function Navbar() {
     };
 
     const fetchProfileImage = () => {
-        if (!accessToken) return;
+        if (auth.accessToken === undefined) return;
     
         setProfileImageLoading(true);
         setError(null);
         axios
           .get(`${import.meta.env.VITE_API_URL}/identity/profile-picture`, {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${auth.accessToken}`,
             },
             responseType: 'arraybuffer',
           })
@@ -67,6 +60,12 @@ function Navbar() {
             setProfileImageLoading(false);
           });
       };
+
+      useEffect(() => {
+        const storedAuth = localStorage.getItem("auth");
+        setIsAuthenticated(storedAuth ? true : false);
+        fetchProfileImage();
+      }, []);
 
   return (
     <Disclosure as="nav" className="bg-project-pink mb-4">
@@ -141,7 +140,7 @@ function Navbar() {
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    {isAuthenticated && authData && authData.user ? authData.user : ""}
+                    {isAuthenticated && auth && auth.user ? auth.user : ""}
                   </a>
                 </MenuItem>
                 <MenuItem>

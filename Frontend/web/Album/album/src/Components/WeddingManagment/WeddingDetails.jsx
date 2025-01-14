@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { CalendarIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner/Spinner';
 import axios from 'axios';
+import Spinner from '../Spinner/Spinner';
 import WeddingQRCode from "./WeddingQrCode";
-import 'react-toastify/dist/ReactToastify.css';
 import useAuth from '../hooks/useAuth';
-
 
 const formatDate = (isoDate) => {
   if (!isoDate) return '-';
@@ -34,13 +32,11 @@ const openDatePicker = () => {
 
 const WeddingDetails = ({ weddingId, onUpdate }) => {
   const {auth} = useAuth()
+  
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const authData = JSON.parse(localStorage.getItem("auth"));
-  const accessToken = authData?.accessToken;
 
   const EditForm = ({ details, onSave, onCancel }) => {
     const [formData, setFormData] = useState({ ...details });
@@ -227,12 +223,11 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
           Click a wedding to see details
         </p>
       )}
-    <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
-      <WeddingQRCode
-        weddingId={weddingId}
-        accessToken={auth.accessToken}
-        onTokenUpdated={fetchData}
-      />
+      <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
+        <WeddingQRCode
+          weddingId={weddingId}
+          onTokenUpdated={fetchData}
+        />
       </div>
     </div>
   );

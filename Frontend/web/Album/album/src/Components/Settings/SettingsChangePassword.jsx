@@ -6,35 +6,23 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../Spinner/Spinner';
 import axios from "axios";
+import useAuth from '../hooks/useAuth';
 
 const SettingsChangePassword = () => {
     const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     const CHANGE_PASSWORD_URL = `${import.meta.env.VITE_API_URL}/identity/change-password`;
-    const authData = JSON.parse(localStorage.getItem("auth"));
-    const accessToken = authData?.accessToken;
 
-    const navigate = useNavigate()
+    const {auth} = useAuth()
     const errRef = useRef();
+    const navigate = useNavigate()
     
     const [oldPwd, setOldPwd] = useState('');
     const [newPwd, setNewPwd] = useState('');
     const [matchPwd, setMatchPwd] = useState('');
-
     const [validNewPwd, setValidNewPwd] = useState(false);
     const [validMatch, setValidMatch] = useState(false);
-
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
-
-    useEffect(() => {
-        const result = PWD_REGEX.test(newPwd);
-        setValidNewPwd(result);
-        setValidMatch(newPwd === matchPwd);
-    }, [newPwd, matchPwd]);
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [oldPwd, newPwd, matchPwd]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -50,7 +38,7 @@ const SettingsChangePassword = () => {
                 newPassword: newPwd
             },{
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${auth.accessToken}`
                 }
             });
             toast.success("Password changed successfully");
@@ -69,21 +57,30 @@ const SettingsChangePassword = () => {
         }
     };
 
-    return (
-<div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-    <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
-        <a 
-        className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3" 
-        href="/settings"
-        >
-        <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
-        </a>
-    </div>
+    useEffect(() => {
+        const result = PWD_REGEX.test(newPwd);
+        setValidNewPwd(result);
+        setValidMatch(newPwd === matchPwd);
+    }, [newPwd, matchPwd]);
 
-    <div className='order-2 md:order-2'>
-    <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl text-white font-bold text-center mb-4">Change Password</h1>
-                <form onSubmit={handleSubmit} className="space-y-4">
+    useEffect(() => {
+        setErrMsg('');
+    }, [oldPwd, newPwd, matchPwd]);
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
+                <a 
+                    className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3" 
+                    href="/settings"
+                >
+                    <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
+                </a>
+            </div>
+            <div className='order-2 md:order-2'>
+                <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+                    <h1 className="text-2xl text-white font-bold text-center mb-4">Change Password</h1>
+                    <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="oldPassword" className="block text-sm font-medium text-white">Old Password:</label>
                         <input
@@ -95,7 +92,6 @@ const SettingsChangePassword = () => {
                             className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
                         />
                     </div>
-
                     <div>
                         <label htmlFor="newPassword" className="block text-sm font-medium text-white">New Password:</label>
                         <div className="relative">
@@ -115,7 +111,6 @@ const SettingsChangePassword = () => {
                             </span>
                         </div>
                     </div>
-
                     <div>
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm New Password:</label>
                         <div className="relative">
@@ -135,7 +130,6 @@ const SettingsChangePassword = () => {
                             </span>
                         </div>
                     </div>
-
                     <div className="flex justify-center">
                         {loading ? (
                             <Spinner />

@@ -1,30 +1,25 @@
-import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const ResetPassword = () => {
-  const [searchParams] = useSearchParams();
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  const navigate = useNavigate();
+
   const [newPwd, setNewPwd] = useState('');
   const [matchPwd, setMatchPwd] = useState('');
   const [validNewPwd, setValidNewPwd] = useState(false);
   const [validMatch, setValidMatch] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  
+  const [searchParams] = useSearchParams();
+  
   const email = searchParams.get('email');
   const token = searchParams.get('token');
-
-  const navigate = useNavigate();
-
-  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-
-  useEffect(() => {
-    setValidNewPwd(PWD_REGEX.test(newPwd));
-    setValidMatch(newPwd === matchPwd);
-  }, [newPwd, matchPwd]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +46,11 @@ const ResetPassword = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setValidNewPwd(PWD_REGEX.test(newPwd));
+    setValidMatch(newPwd === matchPwd);
+  }, [newPwd, matchPwd]);
 
   return (
     <div className='mx-4'>

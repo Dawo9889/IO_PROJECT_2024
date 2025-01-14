@@ -42,7 +42,6 @@ export const AuthProvider = ({children}) => {
             };
             setAuth(updatedAuth);
             localStorage.setItem("auth", JSON.stringify(updatedAuth));
-            // console.log(localStorage.getItem("auth"))
         } catch (error) {
             console.error("Error refreshing token:", error);
             setAuth({});
@@ -77,6 +76,7 @@ export const AuthProvider = ({children}) => {
     
         return () => clearInterval(interval);
     }, [navigate]);
+
     useEffect(() => {
         const interval = setInterval(() => {
             const currentTime = Date.now();
@@ -84,7 +84,6 @@ export const AuthProvider = ({children}) => {
                 refreshAccessToken();
             }
         }, 5 * 1000);
-
         return () => clearInterval(interval);
     }, [auth]);
 

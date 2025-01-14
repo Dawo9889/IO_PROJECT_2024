@@ -1,27 +1,19 @@
-import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import { toast } from 'react-toastify';
-import { useProfileContext } from '../context/ProfileContext';
 import React, { useState, useEffect } from 'react';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import { useProfileContext } from '../context/ProfileContext';
 import axios from 'axios';
 import Spinner from '../Spinner/Spinner';
+import useAuth from '../hooks/useAuth';
 
 const SettingsModifyProfileImage = () => {
-  const { profileImage, updateProfileImage } = useProfileContext();
-
-  const authData = JSON.parse(localStorage.getItem("auth"));
-  const accessToken = authData?.accessToken;
+  const {profileImage, updateProfileImage } = useProfileContext();
+  const {auth} = useAuth()
 
   const [newProfilePhoto, setNewProfilePhoto] = useState(null);
   const [newProfilePhotoCheck, setNewProfilePhotoCheck] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState(profileImage ? `data:image/png;base64,${profileImage}` : null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!photoPreview && profileImage) {
-      setPhotoPreview(`data:image/png;base64,${profileImage}`);
-    }
-  }, [profileImage]);
+  const [photoPreview, setPhotoPreview] = useState(profileImage ? `data:image/png;base64,${profileImage}` : null);
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -46,7 +38,7 @@ const SettingsModifyProfileImage = () => {
       return;
     }
 
-    if (!accessToken) {
+    if (auth.accessToken === undefined) {
       setError("Authentication failed. Please log in.");
       return;
     }
@@ -62,7 +54,7 @@ const SettingsModifyProfileImage = () => {
         formData,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -77,6 +69,12 @@ const SettingsModifyProfileImage = () => {
     } catch (err) {
     }
   };
+
+  useEffect(() => {
+    if (!photoPreview && profileImage) {
+      setPhotoPreview(`data:image/png;base64,${profileImage}`);
+    }
+  }, [profileImage]);
 
   return (
     <div className="relative p-4">
