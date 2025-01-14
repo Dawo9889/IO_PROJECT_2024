@@ -73,7 +73,7 @@ const SettingsChangePassword = () => {
 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
     <div className="p-4 order-1 md:order-1 w-full max-w-md justify-items-end">
         <a 
-        className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3 md:p-4 md:mb-4" 
+        className="relative inline-flex items-center justify-center p-0.5 mb-2 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg sm:p-2 sm:mb-3" 
         href="/settings"
         >
         <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />

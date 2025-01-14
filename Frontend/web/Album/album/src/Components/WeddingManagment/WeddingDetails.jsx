@@ -5,13 +5,15 @@ import Spinner from '../Spinner/Spinner';
 import axios from 'axios';
 import WeddingQRCode from "./WeddingQrCode";
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../hooks/useAuth';
+
 
 const formatDate = (isoDate) => {
   if (!isoDate) return '-';
-
+  
   const date = new Date(isoDate);
   const now = new Date();
-
+  
   if (date.getTime() < now.getTime()) {
     return 'Wedding is expired';
   }
@@ -22,7 +24,7 @@ const formatDate = (isoDate) => {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   const seconds = date.getSeconds().toString().padStart(2, '0');
-
+  
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} UTC`;
 };
 
@@ -31,6 +33,7 @@ const openDatePicker = () => {
 };
 
 const WeddingDetails = ({ weddingId, onUpdate }) => {
+  const {auth} = useAuth()
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -125,7 +128,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
         })
       .then((response) => {
@@ -151,7 +154,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${auth.accessToken}`,
         },
       })
       .then((response) => {
@@ -227,7 +230,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
     <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
       <WeddingQRCode
         weddingId={weddingId}
-        accessToken={accessToken}
+        accessToken={auth.accessToken}
         onTokenUpdated={fetchData}
       />
       </div>

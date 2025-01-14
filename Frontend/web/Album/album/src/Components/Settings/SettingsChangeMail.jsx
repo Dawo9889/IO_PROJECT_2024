@@ -45,10 +45,11 @@ const SettingsModifyProfileImage = () => {
             );
             toast.success(response.data);    
             setTimeout(() => {
-                toast.info("Session cleared. Please log in again.");
-                navigate("/login");
-                localStorage.removeItem("auth");
+              localStorage.removeItem("auth");
+              navigate("/");
+              window.location.reload();
             }, 5000);
+            toast.info("Session cleared. Please log in again.");
         } catch (err) {
             const errorMsg =
                 err.response?.data;
@@ -74,7 +75,7 @@ const SettingsModifyProfileImage = () => {
               </a>
           
               <div className="mt-16 my-4 w-full text-white text-center text-xl max-w-xl mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-                After clicking 'Save Changes' button, you will be logged out!
+                After clicking 'Save Changes' button, you will be logout!
               </div>
           
               <div className="w-full max-w-xl mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">

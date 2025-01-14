@@ -6,6 +6,7 @@ import Spinner from '../Spinner/Spinner'
 import axios from 'axios'
 import './style.css'
 import 'react-toastify/dist/ReactToastify.css';
+import useAuth from "../hooks/useAuth";
 
 const CreateWedding = () => {
 
@@ -16,7 +17,7 @@ const CreateWedding = () => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const {auth} = useAuth();
     var curr = new Date();
     curr.setDate(curr.getDate() + 3);
     var inputDate = curr.toISOString().substring(0,10)
@@ -27,8 +28,6 @@ const CreateWedding = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const authData = JSON.parse(localStorage.getItem("auth"));
-        const accessToken = authData?.accessToken;
         setLoading(true)
         try {
             const response = await axios.post(
@@ -40,7 +39,7 @@ const CreateWedding = () => {
                 },
                 {
                     headers: {
-                        Authorization: `Bearer ${accessToken}`
+                        Authorization: `Bearer ${auth.accessToken}`
                     }
                 }
             );

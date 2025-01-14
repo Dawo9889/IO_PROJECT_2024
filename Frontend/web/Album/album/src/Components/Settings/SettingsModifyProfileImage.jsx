@@ -82,7 +82,7 @@ const SettingsModifyProfileImage = () => {
     <div className="relative p-4">
   
       <a
-        className="absolute top-4 left-4 inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg"
+        className="absolute top-9 left-9 inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg hover:bg-project-dark-bg"
         href="/settings"
       >
         <ArrowLeftIcon className="w-6 h-6 text-white sm:w-8 sm:h-8 md:w-10 md:h-10" />
