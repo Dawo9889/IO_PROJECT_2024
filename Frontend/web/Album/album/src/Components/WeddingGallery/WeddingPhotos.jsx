@@ -43,6 +43,8 @@ const WeddingPhotos = ({ weddingId }) => {
 
   const handlePhotoDeleted = () => {
     fetchThumbnails();
+    console.log(pageCount)
+    console.log(pageIndex)
     if(thumbnails.length == 0){
       setPageCount(pageCount - 1)
       setPageIndex(pageIndex - 1)
@@ -80,12 +82,9 @@ const fetchThumbnails = async () => {
         );
         if(response.data.length == 0){
           setPageCount(pageCount - 1)
-          setPageIndex(pageIndex - 1)
+          // setPageIndex(pageIndex - 1)
         }
-        const sortedData = response.data.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        );
-        const thumbnailLinks = sortedData.map((item) => item.thumbnailPath);
+        const thumbnailLinks = response.data.map((item) => item.thumbnailPath);
         const authorizedThumbnails = await Promise.all(
           thumbnailLinks.map(async (thumbnail) => {
             try {
@@ -114,7 +113,6 @@ const fetchThumbnails = async () => {
 
   useEffect(() => {
     fetchWeddingInfo()
-
     const interval = setInterval(() => {
       fetchWeddingInfo();
     }, 1000);

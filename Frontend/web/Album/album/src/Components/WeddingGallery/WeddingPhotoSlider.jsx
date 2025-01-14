@@ -94,7 +94,10 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
   
       onPhotoDeleted();
       await fetchPhotos();
+      console.log(currentIndex)
       if(currentIndex < photos.length && pageCount > 1){
+      }
+      else if(currentIndex === 0){
       }
       else {
         setCurrentIndex(currentIndex - 1)
