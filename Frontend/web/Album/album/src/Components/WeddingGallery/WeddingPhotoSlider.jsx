@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { motion } from 'framer-motion';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import Spinner from '../Spinner/Spinner'
+import useAuth from '../hooks/useAuth';
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
-const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose }) => {
+const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClose }) => {
+  const {auth} = useAuth()
+
   const [photos, setPhotos] = useState([]);
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isVertical, setIsVertical] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(index);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const authData = JSON.parse(localStorage.getItem('auth'));
-  const accessToken = authData?.accessToken;
 
   const closeSlider = () => onClose();
 
@@ -55,7 +55,7 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
           `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${i}`,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${auth.accessToken}`,
             },
           }
         );
@@ -87,18 +87,21 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         `${import.meta.env.VITE_API_URL}/image/delete?weddingId=${weddingId}&imageId=${photoId}`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
         }
       );
   
-      onPhotoDeleted(); //TODO: podczas usuwania przyciemnic ekran
+      onPhotoDeleted();
+
       await fetchPhotos();
-      if(currentIndex < photos.length && pageCount > 1){ //TODO: ogarnac mechanizm sprawdzania numeru strony oraz zdjecia, np (na 2 stronie mam 3 zdjecia) usuwam 1 zdjecie z 2 strony ale zostaje na obecnej stronie
-        setCurrentIndex(currentIndex - 1)
-      }
-      else {
-        setCurrentIndex(currentIndex - 1)
+
+      if (photos.length === 1) {
+        closeSlider();
+      } else if (currentIndex < photos.length - 1) {
+        setCurrentIndex(currentIndex);
+      } else {
+        setCurrentIndex(currentIndex - 1);
       }
     } catch (err) {
       console.error('Error deleting photo:', err);
@@ -118,14 +121,14 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
       try {
         const photoRes = await axios.get(photos[currentIndex].filePath, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
           responseType: 'arraybuffer',
         });
 
         const thumbnailRes = await axios.get(photos[currentIndex].thumbnailPath, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
           responseType: 'arraybuffer',
         });
@@ -145,7 +148,6 @@ const WeddingPhotoSlider = ({ weddingId,pageCount, index,onPhotoDeleted, onClose
         setLoading(false);
       }
     };
-
     loadPhoto();
   }, [currentIndex, photos]);
 

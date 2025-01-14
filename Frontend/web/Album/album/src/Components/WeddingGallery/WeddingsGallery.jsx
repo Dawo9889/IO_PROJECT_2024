@@ -1,20 +1,20 @@
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-import WeddingPhotos from './WeddingPhotos';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import WeddingPhotos from './WeddingPhotos';
+import useAuth from '../hooks/useAuth';
 
 const WeddingsGallery = () => {
+  const {auth} = useAuth()
+
   const [weddings, setWeddings] = useState([]);
   const [selectedWedding, setSelectedWedding] = useState(null);
-
+  
   useEffect(() => {
-    const authData = JSON.parse(localStorage.getItem("auth"));
-    const accessToken = authData?.accessToken;
-
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${auth.accessToken}`,
         },
       })
       .then((response) => {
