@@ -63,7 +63,7 @@ const WeddingPhotos = ({ weddingId }) => {
         const totalPages = Math.ceil(response.data.imagesCount / 24);
         setPageCount(totalPages);
 
-  }catch (err) {
+  } catch (err) {
   };
 };
 
