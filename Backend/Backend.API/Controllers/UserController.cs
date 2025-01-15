@@ -258,7 +258,7 @@ public class UserController : ControllerBase
             .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
             .Build();
 
-        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ", emailHtml);
+        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address to Your Cupid account.", emailHtml);
 
         return Ok("A confirmation email has been sent to your new email address. ");
 

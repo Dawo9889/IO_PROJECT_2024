@@ -15,7 +15,10 @@ namespace Backend.Application.Services.Email
         {
             Console.WriteLine($"Smtp Password: {_smtpPassword}");
             var fromEmail = "no-reply@cupid.pics";
-            var mailMessage = new MailMessage(fromEmail, to, subject, body);
+            var mailMessage = new MailMessage(fromEmail, to, subject, body)
+            {
+                IsBodyHtml = true
+            };
 
             var smtpClient = new SmtpClient("smtp.resend.com")
             {
