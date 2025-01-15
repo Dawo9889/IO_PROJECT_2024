@@ -327,7 +327,7 @@ public class UserController : ControllerBase
 
         var encodedToken = Uri.EscapeDataString(token);
 
-        var resetLink = $"https:/app.cupid.pics/identity/reset-password?email={request.Email}&token={token}";
+        var resetLink = $"https:/app.cupid.pics/resetPasswordForm?email={request.Email}&token={token}";
 
         var emailHtml = new HtmlMessageBuilder()
         .SetTitle("Reset Your Password")
