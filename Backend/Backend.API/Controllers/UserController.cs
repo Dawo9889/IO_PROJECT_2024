@@ -469,30 +469,7 @@ public class UserController : ControllerBase
         return File(user.ProfilePicture, "image/jpeg"); 
     }
 
-    [HttpPost("forgot-password")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
-    {
-        if (string.IsNullOrEmpty(request.Email))
-            return BadRequest("Email is required.");
 
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return BadRequest("User not found.");
-
-        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-        var encodedToken = Uri.EscapeDataString(token);
-
-        var resetLink = $"{Request.Scheme}://{Request.Host}/api/identity/reset-password?email={request.Email}&token={token}";
-
-        await _emailService.SendEmailAsync(request.Email, "Reset Your Password",
-            $"Please reset your password by clicking this link: {resetLink}");
-
-        return Ok("We have sent you an email with instructions to reset your password.");
-    }
-
-    
 
     private string GenerateRefreshToken()
     {
