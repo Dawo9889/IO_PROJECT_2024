@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { CalendarIcon } from '@heroicons/react/24/solid';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner/Spinner';
 import axios from 'axios';
+import Spinner from '../Spinner/Spinner';
 import WeddingQRCode from "./WeddingQrCode";
-import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../hooks/useAuth';
 
 const formatDate = (isoDate) => {
   if (!isoDate) return '-';
-
+  
   const date = new Date(isoDate);
   const now = new Date();
-
+  
   if (date.getTime() < now.getTime()) {
     return 'Wedding is expired';
   }
@@ -22,7 +22,7 @@ const formatDate = (isoDate) => {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   const seconds = date.getSeconds().toString().padStart(2, '0');
-
+  
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} UTC`;
 };
 
@@ -31,13 +31,12 @@ const openDatePicker = () => {
 };
 
 const WeddingDetails = ({ weddingId, onUpdate }) => {
+  const {auth} = useAuth()
+  
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const authData = JSON.parse(localStorage.getItem("auth"));
-  const accessToken = authData?.accessToken;
 
   const EditForm = ({ details, onSave, onCancel }) => {
     const [formData, setFormData] = useState({ ...details });
@@ -53,7 +52,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
     };
   
     return (
-      <form onSubmit={handleSubmit} className="w-full flex flex-col  justify-center text-white space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
+      <form onSubmit={handleSubmit} className="w-full flex flex-col justify-center text-white space-y-3 col-span-1 md:col-span-2 lg:col-span-1">
         <h1 className='text-2xl w-full text-center'>Update wedding</h1>
         <div>
           <label className="block text-sm font-medium">Name</label>
@@ -125,7 +124,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${auth.accessToken}`,
           },
         })
       .then((response) => {
@@ -151,7 +150,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${auth.accessToken}`,
         },
       })
       .then((response) => {
@@ -224,12 +223,11 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
           Click a wedding to see details
         </p>
       )}
-    <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
-      <WeddingQRCode
-        weddingId={weddingId}
-        accessToken={accessToken}
-        onTokenUpdated={fetchData}
-      />
+      <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
+        <WeddingQRCode
+          weddingId={weddingId}
+          onTokenUpdated={fetchData}
+        />
       </div>
     </div>
   );

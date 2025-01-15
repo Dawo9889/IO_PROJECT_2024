@@ -3,14 +3,7 @@ import { useState, useEffect } from 'react';
 const DeleteWedding = ({ weddingId, weddingName, onClose, onConfirm }) => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
-
+  
   const handleConfirm = () => {
     if (inputValue === weddingName) {
       onConfirm(weddingId);
@@ -18,6 +11,13 @@ const DeleteWedding = ({ weddingId, weddingName, onClose, onConfirm }) => {
       setError('Entered name does not match. Please try again.');
     }
   };
+  
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   return (
     <div

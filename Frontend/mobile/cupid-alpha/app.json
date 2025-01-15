@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "cupid-alpha",
-    "slug": "cupid-alpha",
-    "version": "1.0.0",
+    "name": "Cupid",
+    "slug": "Cupid",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -13,14 +13,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#20211A"
-      }
+        "foregroundImage": "./assets/images/adaptive-icon-black.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "mobile.cupid.pics"
     },
     "web": {
       "bundler": "metro",
       "output": "single",
-      "favicon": "./assets/images/adaptive-icon.png"
+      "favicon": "./assets/images/adaptive-icon-black.png"
     },
     "plugins": [
       "expo-router",
@@ -37,6 +38,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6b8b5b1e-998f-4f81-9454-240df8319ef8"
+      }
     }
   }
 }

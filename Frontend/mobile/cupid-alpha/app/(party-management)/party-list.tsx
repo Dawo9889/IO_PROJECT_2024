@@ -68,6 +68,7 @@ const PartyList = () => {
                   <PartyComponent
                     key={party.id}
                     name={party.name}
+                    displayGallery={() => router.push({ pathname: '/gallery', params: { id: party.id }})}
                     tokenSettings={() => router.push({ pathname: '/party-qr', params: { id: party.id }})}
                     partySettings={() => router.push({ pathname: '/edit-party', params: { id: party.id }})} />
                 ))}

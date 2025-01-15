@@ -7,6 +7,7 @@ import React from "react";
 import App from "./App";
 import Navbar from "./Components/Navbar/Navbar";
 import './index.css';
+import { ProfileProvider } from './Components/context/ProfileContext';
 
 const queryClient = new QueryClient();
 
@@ -18,10 +19,12 @@ root.render(
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <AuthProvider>
+    <ProfileProvider>
       <Navbar />
       <Routes>
         <Route path='/*' element={<div className="bg-project-dark"><App /></div>} />
       </Routes>
+    </ProfileProvider>
     </AuthProvider>
     </BrowserRouter>
     </QueryClientProvider>

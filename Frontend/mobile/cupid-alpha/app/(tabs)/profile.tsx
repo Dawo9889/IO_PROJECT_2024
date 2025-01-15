@@ -39,8 +39,8 @@ const Profile = () => {
       "Are you sure you want to log out?",
       [
         { text: "Cancel", style: "cancel" }, // Cancel button
-        { text: "Log Out", onPress: () => {
-            logout;     Alert.alert('You have been logged out!');
+        { text: "Log Out", onPress: async () => {
+            await logout();     Alert.alert('You have been logged out!');
             router.replace('/');
           }, style: "destructive" }, // Logout button
       ],
@@ -80,10 +80,9 @@ const Profile = () => {
               <View className='mt-8 w-full'>
                 <ProfileButton
                   title="Edit Profile"
-                  handlePress={() => {}}
+                  handlePress={() => router.push('/profile-management')}
                   containerStyles="w-full mt-7"
                   textStyles=""
-                  disabled={true}
                 />
                 <ProfileButton
                 title="Manage parties"
