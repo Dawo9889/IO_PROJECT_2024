@@ -247,6 +247,10 @@ public class UserController : ControllerBase
         if (user.Email == model.NewEmail)
             return BadRequest("The new email address is the same as the current email.");
 
+        var existingUser = await _userManager.FindByEmailAsync(model.NewEmail);
+        if (existingUser != null)
+            return BadRequest("This email address is already in use.");
+
         var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.NewEmail);
         var confirmationLink = Url.Action(nameof(ConfirmChangeEmail), "User",
             new { token, newEmail = model.NewEmail, userId}, protocol: "https", host: "api.cupid.pics");
@@ -258,7 +262,7 @@ public class UserController : ControllerBase
             .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
             .Build();
 
-        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ", emailHtml);
+        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address to Your Cupid account.", emailHtml);
 
         return Ok("A confirmation email has been sent to your new email address. ");
 
