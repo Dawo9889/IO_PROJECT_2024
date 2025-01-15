@@ -9,7 +9,8 @@ const ResetPassword = () => {
     const [user, setUser] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const resetPassword = async () => {
+    const resetPassword = async (e) => {
+      e.preventDefault();
       if (!user || user.trim() === "") {
         toast.error("Email address is required");
         return;
@@ -28,7 +29,7 @@ const ResetPassword = () => {
         localStorage.removeItem("auth")
         toast.success(response.data)
       } catch (err) {
-        console.log(err);
+        toast.error(err.response.data)
     }
     finally{
         setLoading(false)
@@ -37,6 +38,7 @@ const ResetPassword = () => {
   return (
     <div className="flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+        <form onSubmit={resetPassword}>
         <p className="text-white text-xl font-bold text-center mb-4">
           Reset Password
         </p>
@@ -55,11 +57,12 @@ const ResetPassword = () => {
           </div>
         <button
           className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
-          onClick={() => resetPassword()}
+          type="submit"
         >
           Reset Password
        </button>
       </div>
+      </form>
     </div>
   </div>
   )
