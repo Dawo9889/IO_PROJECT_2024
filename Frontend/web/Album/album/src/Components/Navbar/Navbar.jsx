@@ -138,7 +138,7 @@ function Navbar() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
                     {isAuthenticated && auth && auth.user ? auth.user : ""}
                   </a>
@@ -146,7 +146,7 @@ function Navbar() {
                 <MenuItem>
                   <a
                     href="/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
                     Settings
                   </a>
@@ -155,7 +155,7 @@ function Navbar() {
                   <a
                     href="#"
                     onClick={isAuthenticated ? handleLogout : null}
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
                     Sign out
                   </a>

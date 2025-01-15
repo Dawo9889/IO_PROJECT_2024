@@ -92,61 +92,63 @@ const SettingsModifyProfileImage = () => {
         </h1>
   
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="w-full flex flex-col items-center">
-            {loading ? (
-              <div className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg">
-                <Spinner />
-              </div>
-            ) : (
-              <img
-                alt="User Avatar"
-                src={
-                  photoPreview
-                    ? photoPreview
-                    : profileImage
-                    ? `data:image/png;base64,${profileImage}`
-                    : '/login-photo.png'
-                }
-                className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg object-cover"
-              />
-            )}
-  
-            <div
-              className="w-60 text-center mt-4 bg-project-blue hover:bg-project-blue-buttons rounded-xl p-2 cursor-pointer"
-              onClick={() => document.getElementById('newProfilePhoto').click()}
-            >
-              <span className="text-black text-sm font-semibold">Choose Photo</span>
-              <input
-                type="file"
-                id="newProfilePhoto"
-                accept="image/*"
-                onChange={handlePhotoChange}
-                className="hidden"
-              />
-            </div>
-          </div>
-  
-          {newProfilePhotoCheck ? (
-            <button
-              type="submit"
-              className="shadow-lg w-full relative inline-flex items-center justify-center p-2 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
-                        border-project-yellow bg-project-yellow text-dark group focus:outline-none focus:ring-2 
-                        focus:ring-project-yellow"
-            >
-              Save Changes
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="shadow-lg w-full relative inline-flex items-center justify-center p-2 mb-2 overflow-hidden text-sm font-medium rounded-lg border 
-                        border-project-yellow bg-project-dark text-white group focus:outline-none focus:ring-2 
-                        focus:ring-project-yellow"
-              disabled
-            >
-              Save Changes
-            </button>
-          )}
-        </form>
+  {/* Obrazek */}
+  <div className="flex justify-center">
+    {loading ? (
+      <div className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg">
+        <Spinner />
+      </div>
+    ) : (
+      <img
+        alt="User Avatar"
+        src={
+          photoPreview
+            ? photoPreview
+            : profileImage
+            ? `data:image/png;base64,${profileImage}`
+            : '/login-photo.png'
+        }
+        className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg object-cover"
+      />
+    )}
+  </div>
+
+  {/* Przyciski */}
+  <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+    <div
+      className="text-center bg-project-blue hover:bg-project-blue-buttons rounded-xl p-2 cursor-pointer w-48"
+      onClick={() => document.getElementById('newProfilePhoto').click()}
+    >
+      <span className="text-black text-sm font-semibold">Choose Photo</span>
+      <input
+        type="file"
+        id="newProfilePhoto"
+        accept="image/*"
+        onChange={handlePhotoChange}
+        className="hidden"
+      />
+    </div>
+
+    {newProfilePhotoCheck ? (
+      <button
+        type="submit"
+        className="shadow-lg w-48 p-2 text-sm font-medium rounded-lg border border-project-yellow bg-project-yellow text-black 
+                   hover:bg-project-yellow-dark focus:outline-none focus:ring-2 focus:ring-project-yellow"
+      >
+        Save Changes
+      </button>
+    ) : (
+      <button
+        type="submit"
+        className="shadow-lg w-48 p-2 text-sm font-medium rounded-lg border border-project-yellow bg-project-dark text-white 
+                   hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-project-yellow"
+        disabled
+      >
+        Save Changes
+      </button>
+    )}
+  </div>
+</form>
       </div>
     </div>
   );
