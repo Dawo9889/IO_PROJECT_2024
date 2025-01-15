@@ -31,7 +31,7 @@ services:
      args:
       DOCKER_ENV_FRONT_URL: "{URL}" # default http://<your-ip-address>:8080/api
     ports:
-      - 3001:3000
+      - 3001:80
     restart: always
     depends_on:
       - backend
