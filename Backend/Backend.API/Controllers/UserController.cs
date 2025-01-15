@@ -57,10 +57,16 @@ public class UserController : ControllerBase
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var confirmationLink = Url.Action(nameof(ConfirmEmail), "User",
-            new { userId = user.Id, token }, Request.Scheme);
+            new { userId = user.Id, token }, protocol: "https", host: "api.cupid.pics");
 
-        await _emailService.SendEmailAsync(user.Email, "Confirm your email to your Cupid App Account",
-            $"Please confirm your email by clicking this link: {confirmationLink}");
+        var emailHtml = new HtmlMessageBuilder()
+            .SetTitle("Confirm Your Email")
+            .SetBody("Thank you for registering! Click the button below to confirm your email.")
+            .SetButton("Confirm Email", confirmationLink)
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
+
+        await _emailService.SendEmailAsync(user.Email, "Confirm your email to your Cupid App Account", emailHtml);
 
         return Ok($"Confirm your email that we sent to your email address.");
     }
@@ -70,13 +76,35 @@ public class UserController : ControllerBase
     {
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
-            return NotFound("User not found.");
+        {
+            var notFound = new HtmlMessageBuilder()
+                .SetTitle("User not found")
+                .SetBody("Your request was not processed successfully.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+            return Content(notFound, "text/html");
+        }
+           
 
         var result = await _userManager.ConfirmEmailAsync(user, token);
         if (!result.Succeeded)
-            return BadRequest("Email confirmation failed.");
+        {
+            var badRequest = new HtmlMessageBuilder()
+                .SetTitle("Something went wrong")
+                .SetBody("Your request was not processed successfully.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+            return Content(badRequest, "text/html");
+        }
+           
 
-        return Ok("Email confirmed successfully.");
+        var statusHtml = new HtmlMessageBuilder()
+            .SetTitle("Operation Successful")
+            .SetBody("Your email has been confirmed successfully.")
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
+
+        return Content(statusHtml, "text/html");
     }
     [HttpPost("resend-confirmation-email")]
     public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest model)
@@ -96,39 +124,17 @@ public class UserController : ControllerBase
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
         var confirmationLink = Url.Action(nameof(ConfirmEmail), "User",
-            new { userId = user.Id, token }, Request.Scheme);
+            new { userId = user.Id, token }, protocol: "https", host: "api.cupid.pics");
+        var emailHtml = new HtmlMessageBuilder()
+            .SetTitle("Confirm Your Email")
+            .SetBody("Thank you for registering! Click the button below to confirm your email.")
+            .SetButton("Confirm Email", confirmationLink)
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
 
-        await _emailService.SendEmailAsync(user.Email, "Resend Confirmation Email for Your Cupid App Account",
-            $"Please confirm your email by clicking this link: {confirmationLink}");
+        await _emailService.SendEmailAsync(user.Email, "Resend Confirmation Email for Your Cupid App Account", emailHtml);
 
         return Ok("Confirmation email has been resent. Please check your inbox.");
-    }
-
-    [HttpPost("change-password")]
-    [Authorize]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
- 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("Invalid token.");
-
-
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-            return NotFound("User not found.");
-
-        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        if (!result.Succeeded)
-        {
-            var errors = result.Errors.Select(e => e.Description).ToList();
-            return BadRequest(new { errors });
-        }
-
-        return Ok("Password changed successfully.");
     }
 
     [HttpPost("login")]
@@ -148,7 +154,7 @@ public class UserController : ControllerBase
         var refreshToken = GenerateRefreshToken();
 
         user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7); 
+        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
         await _userManager.UpdateAsync(user);
 
         return Ok(new
@@ -156,9 +162,36 @@ public class UserController : ControllerBase
             tokenType = "Bearer",
             accessToken,
             refreshToken,
-            expiresIn = 3600 
+            expiresIn = 3600
         });
     }
+
+
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO model)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId))
+            return Unauthorized("Invalid token.");
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+            return NotFound("User not found.");
+
+        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return BadRequest(new { errors });
+        }
+
+        return Ok("Password changed successfully.");
+    }
+
 
 
     [HttpPost("refresh-token")]
@@ -216,10 +249,16 @@ public class UserController : ControllerBase
 
         var token = await _userManager.GenerateChangeEmailTokenAsync(user, model.NewEmail);
         var confirmationLink = Url.Action(nameof(ConfirmChangeEmail), "User",
-            new { token, newEmail = model.NewEmail, userId}, Request.Scheme);
+            new { token, newEmail = model.NewEmail, userId}, protocol: "https", host: "api.cupid.pics");
 
-        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ",
-            $"Please confirm your new email by clicking this link: {confirmationLink}");
+        var emailHtml = new HtmlMessageBuilder()
+            .SetTitle("Confirm Your Email")
+            .SetBody("There was a request to change your email address. Please confirm your new email by clicking the button below.")
+            .SetButton("Confirm Email", confirmationLink)
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
+
+        await _emailService.SendEmailAsync(model.NewEmail, "Confirm your new email address. ", emailHtml);
 
         return Ok("A confirmation email has been sent to your new email address. ");
 
@@ -230,19 +269,130 @@ public class UserController : ControllerBase
     public async Task<IActionResult> ConfirmChangeEmail(string token, string newEmail, string userId)
     {
         if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(newEmail) || string.IsNullOrEmpty(userId))
-            return BadRequest("Invalid request. Token, new email, and userId are required.");
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("Invalid Request")
+                .SetBody("The request is invalid. Please make sure the token, new email, and user ID are provided correctly.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
 
+            return Content(errorHtml, "text/html");
+        }
 
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
-            return NotFound("User not found.");
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("User Not Found")
+                .SetBody("We could not find a user matching the provided information.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+
+            return Content(errorHtml, "text/html");
+        }
 
         var result = await _userManager.ChangeEmailAsync(user, newEmail, token);
         if (!result.Succeeded)
-            return BadRequest("Email change confirmation failed.");
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("Email Change Failed")
+                .SetBody("We encountered an issue while confirming your email change. Please try again or contact support.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
 
-        return Ok("Email changed successfully.");
+            return Content(errorHtml, "text/html");
+        }
+
+        var successHtml = new HtmlMessageBuilder()
+            .SetTitle("Email Changed Successfully")
+            .SetBody("Your email address has been successfully updated. Thank you for keeping your profile up-to-date!")
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
+
+        return Content(successHtml, "text/html");
     }
+
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        if (string.IsNullOrEmpty(request.Email))
+            return BadRequest("Email is required.");
+
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+            return BadRequest("User not found.");
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        var encodedToken = Uri.EscapeDataString(token);
+
+        var resetLink = $"https:/app.cupid.pics/identity/reset-password?email={request.Email}&token={token}";
+
+        var emailHtml = new HtmlMessageBuilder()
+        .SetTitle("Reset Your Password")
+        .SetBody("We received a request to reset your password. If you made this request, click the button below to reset your password. If you didn’t request this, you can safely ignore this email.")
+        .SetButton("Reset Password", resetLink)
+        .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+        .Build();
+
+        await _emailService.SendEmailAsync(request.Email, "Reset Your Password", emailHtml);
+
+        return Ok("We have sent you an email with instructions to reset your password.");
+    }
+
+    [HttpPost("reset-password")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] ResetPasswordRequestDTO request)
+    {
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(request.newPassword))
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("Invalid Request")
+                .SetBody("Invalid request. Please ensure that you provide a valid email, token, and new password.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+
+            return Content(errorHtml, "text/html");
+        }
+
+        var decodedToken = Uri.UnescapeDataString(token);
+        token = token.Replace(" ", "+").Replace("\t", "+").Replace("\n", "+").Replace("\r", "+");
+
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("User Not Found")
+                .SetBody("We could not find a user associated with this email address. Please check your email and try again.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+
+            return Content(errorHtml, "text/html");
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, token, request.newPassword);
+        if (!result.Succeeded)
+        {
+            var errorHtml = new HtmlMessageBuilder()
+                .SetTitle("Password Reset Failed")
+                .SetBody("We encountered an issue while resetting your password. Please make sure your token is valid and try again.")
+                .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+                .Build();
+
+            return Content(errorHtml, "text/html");
+        }
+
+        var successHtml = new HtmlMessageBuilder()
+            .SetTitle("Password Reset Successful")
+            .SetBody("Your password has been successfully reset. You can now log in with your new password.")
+            .SetFooter("&copy; 2025 Cupid Wedding App. All rights reserved.")
+            .Build();
+
+        return Content(successHtml, "text/html");
+    }
+
+
 
     [HttpPost("upload-profile-picture")]
     [Authorize]
@@ -319,48 +469,7 @@ public class UserController : ControllerBase
         return File(user.ProfilePicture, "image/jpeg"); 
     }
 
-    [HttpPost("forgot-password")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
-    {
-        if (string.IsNullOrEmpty(request.Email))
-            return BadRequest("Email is required.");
-
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-            return BadRequest("User not found.");
-
-        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-        var encodedToken = Uri.EscapeDataString(token);
-
-        var resetLink = $"{Request.Scheme}://{Request.Host}/api/identity/reset-password?email={request.Email}&token={token}";
-
-        await _emailService.SendEmailAsync(request.Email, "Reset Your Password",
-            $"Please reset your password by clicking this link: {resetLink}");
-
-        return Ok("We have sent you an email with instructions to reset your password.");
-    }
-
-    [HttpPost("reset-password")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ResetPassword([FromQuery] string email, [FromQuery] string token, [FromBody] ResetPasswordRequestDTO request)
-    {
-
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(request.newPassword))
-            return BadRequest("Invalid request. Email, token, and new password are required.");
-        var decodedToken = Uri.UnescapeDataString(token);
-        token = token.Replace(" ", "+").Replace("\t", "+").Replace("\n", "+").Replace("\r", "+");
-        var user = await _userManager.FindByEmailAsync(email);
-        if (user == null)
-            return BadRequest("User not found.");
-
-        var result = await _userManager.ResetPasswordAsync(user, token, request.newPassword);
-        if (!result.Succeeded)
-            return BadRequest(result.Errors.Select(e => e.Description));
-
-        return Ok("Your password has been reset successfully.");
-    }
+    
 
     private string GenerateRefreshToken()
     {

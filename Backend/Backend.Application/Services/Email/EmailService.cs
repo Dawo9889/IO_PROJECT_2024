@@ -25,13 +25,11 @@ namespace Backend.Application.Services.Email
             };
             try
             {
-             
                 smtpClient.Send(mailMessage);
                 Console.WriteLine("Email sent successfully.");
             }
             catch (Exception ex)
             {
-              
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
             return Task.CompletedTask;
