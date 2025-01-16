@@ -1,4 +1,6 @@
-﻿import axios from "axios";
+﻿/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 const Gallery = ({ weddingId }) => {

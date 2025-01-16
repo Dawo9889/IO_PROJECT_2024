@@ -145,7 +145,7 @@ input {
     .staticPage img {
         width: 100%;
         height: 100%;
-        object-fit: fill;
+        object-fit: none;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
@@ -237,7 +237,7 @@ input {
     .staticPage img {
         width: 100%; /* Ustaw pełną szerokość */
         height: 100%; /* Ustaw pełną wysokość */
-        object-fit: fill; /* Dopasowanie obrazu tak jak w dynamicznym */
+        object-fit: none; /* Dopasowanie obrazu tak jak w dynamicznym */
         border-radius: 5px; /* Zaokrąglone rogi */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
     }
@@ -251,4 +251,65 @@ input {
         margin: 10px auto; /* Wycentrowanie w kontenerze */
         overflow: hidden; /* Ukrywanie nadmiaru */
         position: relative; /* Ustawienie dla obrazu */
+    }
+
+    /* Jedno zdjęcie - domyślny układ */
+    .staticPage.single .staticDropZone,
+    .page.single .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .staticPage.single img,
+    .page.single img {
+        width: 100%;
+        height: auto;
+        object-fit: none;
+    }
+
+    /* Dwa zdjęcia poziomo */
+    .staticPage.horizontal .staticDropZone,
+    .page.horizontal .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .staticPage.horizontal img,
+    .page.horizontal img {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Dwa zdjęcia pionowo */
+    .staticPage.vertical .staticDropZone,
+    .page.vertical .image-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .staticPage.vertical img,
+    .page.vertical img {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Siatka 2x2 */
+    .staticPage.grid-2x2 .staticDropZone,
+    .page.grid-2x2 .image-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .staticPage.grid-2x2 img,
+    .page.grid-2x2 img {
+        width: 100%;
+        height: 100%;
     }
