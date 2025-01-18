@@ -5,7 +5,9 @@ const Missing = () => {
         <h1 className="text-3xl my-2">Oops!</h1>
         <p className="text-xl">Page Not Found</p>
         <a href="/" className="mt-8 p-2 bg-project-blue text-black font-semibold rounded-lg hover:bg-project-blue-buttons focus:outline-none focus:ring-2 focus:ring-project-blue-buttons"
-            >Go to the Home page!</a>
+        >
+            Go to the Home page!
+        </a>
     </div>
 </div>
 

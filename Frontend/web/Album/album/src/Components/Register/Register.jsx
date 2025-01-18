@@ -2,119 +2,118 @@ import {useRef, useState, useEffect} from 'react';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
-import Spinner from '../Spinner/Spinner';
 import axios from "axios";
-const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
+import Spinner from '../Spinner/Spinner';
 
 const Register = () => {
-    const userRef = useRef();
-    const errRef = useRef();
+  const USER_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  const RESGISTER_URL = `${import.meta.env.VITE_API_URL}/identity/register`;
+  const userRef = useRef();
+  const errRef = useRef();
 
-    const [user, setUser] = useState('');
-    const [validName, setValidName] = useState(false);
-    const [userFocus, setUserFocus] = useState(false);
+  const [user, setUser] = useState('');
+  const [validName, setValidName] = useState(false);
+  const [userFocus, setUserFocus] = useState(false);
 
-    const [pwd, setPwd] = useState('');
-    const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
+  const [pwd, setPwd] = useState('');
+  const [validPwd, setValidPwd] = useState(false);
+  const [pwdFocus, setPwdFocus] = useState(false);
+  const [matchPwd, setMatchPwd] = useState('');
 
-    const [matchPwd, setMatchPwd] = useState('');
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
+  const [validMatch, setValidMatch] = useState(false);
+  const [matchFocus, setMatchFocus] = useState(false);
+  
+  const [errMsg, setErrMsg] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-    const [errMsg, setErrMsg] = useState('')
-    const [success, setSuccess] = useState(false)
-    const [loading,setLoading] = useState(false)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
+    const v1 = USER_REGEX.test(user);
+    const v2 = PWD_REGEX.test(pwd)
 
-    useEffect(() => {
-        const result = USER_REGEX.test(user);
-        setValidName(result)
-    }, [user])
-
-    useEffect(() => {
-        const result = PWD_REGEX.test(pwd);
-        setValidPwd(result)
-        const match = pwd === matchPwd;
-        setValidMatch(match)
-    }, [pwd, matchPwd]) 
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [user, pwd, matchPwd])
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const v1 = USER_REGEX.test(user);
-        const v2 = PWD_REGEX.test(pwd)
-
-        if(!v1 || !v2){
-            setErrMsg("Invalid entry");
-            return;
-        }
-        setLoading(true);
-        try {
-            const response = await axios.post(RESGISTER_URL,
-                {
-                    "email": user,
-                    "password": pwd
-                }
-            );
-            setSuccess(true)
-          } catch (err) {
-            console.log(err);
-        
-            if (!err?.response) {
-              toast.error('No server response');
-          } else if (err.response?.status === 400) {
-              const errors = err.response.data;
-          
-              if (Array.isArray(errors)) {
-                  const errorMessages = errors.map(error => {
-                      if (error.code === 'DuplicateUserName') {
-                          return error.description;
-                      } else if (error.code === 'InvalidEmail') {
-                          return error.description;
-                      } else if (
-                          error.code === 'PasswordTooShort' ||
-                          error.code === 'PasswordRequiresNonAlphanumeric' ||
-                          error.code === 'PasswordRequiresDigit' ||
-                          error.code === 'PasswordRequiresLower' ||
-                          error.code === 'PasswordRequiresUpper' ||
-                          error.code === 'PasswordRequiresUniqueChars'
-                      ) {
-                          return error.description;
-                      }
-                      return null;
-                  }).filter(msg => msg !== null);
-          
-                  if (errorMessages.length > 0) {
-                    toast.error(errorMessages.join(' '));
-                      // setErrMsg(errorMessages.join(' '));
-                  } else {
-                    toast.error('Invalid input data');
+    if(!v1 || !v2){
+        setErrMsg("Invalid entry");
+        return;
+    }
+    setLoading(true);
+    try {
+        const response = await axios.post(RESGISTER_URL,
+            {
+                "email": user,
+                "password": pwd
+            }
+        );
+        setSuccess(true)
+      } catch (err) {
+        console.log(err);
+    
+        if (!err?.response) {
+          toast.error('No server response');
+      } else if (err.response?.status === 400) {
+          const errors = err.response.data;
+      
+          if (Array.isArray(errors)) {
+              const errorMessages = errors.map(error => {
+                  if (error.code === 'DuplicateUserName') {
+                      return error.description;
+                  } else if (error.code === 'InvalidEmail') {
+                      return error.description;
+                  } else if (
+                      error.code === 'PasswordTooShort' ||
+                      error.code === 'PasswordRequiresNonAlphanumeric' ||
+                      error.code === 'PasswordRequiresDigit' ||
+                      error.code === 'PasswordRequiresLower' ||
+                      error.code === 'PasswordRequiresUpper' ||
+                      error.code === 'PasswordRequiresUniqueChars'
+                  ) {
+                      return error.description;
                   }
+                  return null;
+              }).filter(msg => msg !== null);
+      
+              if (errorMessages.length > 0) {
+                toast.error(errorMessages.join(' '));
               } else {
                 toast.error('Invalid input data');
               }
           } else {
-            toast.error('Registration Failed');
+            toast.error('Invalid input data');
           }
-            errRef.current.focus();
-          }
-        finally{
-            setLoading(false)
-        }
+      } else {
+        toast.error('Registration Failed');
+      }
+        errRef.current.focus();
+      }
+    finally{
+        setLoading(false)
     }
+}
+
+  useEffect(() => {
+      userRef.current.focus();
+  }, [])
+
+  useEffect(() => {
+      const result = USER_REGEX.test(user);
+      setValidName(result)
+  }, [user])
+
+  useEffect(() => {
+      const result = PWD_REGEX.test(pwd);
+      setValidPwd(result)
+      const match = pwd === matchPwd;
+      setValidMatch(match)
+  }, [pwd, matchPwd]) 
+
+  useEffect(() => {
+      setErrMsg('');
+  }, [user, pwd, matchPwd])
 
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center ml-4 mr-4">
           { success ? (
             <section className="max-w-md mx-auto p-6 bg-project-dark-bg rounded-lg shadow-lg">
               <h1 className="text-2xl text-white font-bold text-center mb-4">Success!</h1>
@@ -124,6 +123,7 @@ const Register = () => {
               </p>
             </section>
           ) : (
+            <>
             <section className="max-w-md p-6 bg-project-dark-bg rounded-lg shadow-lg ml-4 mr-4 w-full">
               <p ref={errRef} className={errMsg ? "errmsg text-red-600 text-sm text-center mb-2" : "offscreen"} aria-live="assertive">
                 {errMsg}
@@ -231,9 +231,35 @@ const Register = () => {
                 </span>
               </p>
             </section>
+          <div className="order-2 my-4 w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-4">Password Requirements:</h3>
+            <ul className="list-disc pl-5 space-y-2">
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    Minimum 8 characters
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 special character
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 numerical digit
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 lowercase letter
+                </li>
+                <li className="flex items-center text-white">
+                    <span className='mr-2'>•</span>
+                    At least 1 uppercase letter
+                </li>
+            </ul>
+          </div>
+          </>
           )}
-        </div>
-      );
+      </div>
+    );
 }
 
 export default Register

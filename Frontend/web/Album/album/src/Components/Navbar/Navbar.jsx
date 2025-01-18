@@ -2,8 +2,10 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState, useEffect  } from "react";
 import logo from './cupidlogo-white.svg'
-import loginPhoto from './login-photo.jpg'
+import { useProfileContext } from '../context/ProfileContext';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
@@ -15,20 +17,55 @@ function classNames(...classes) {
 }
 
 function Navbar() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { profileImage, updateProfileImage } = useProfileContext();
+    const {auth} = useAuth()
     const navigate = useNavigate();
-    const authData = JSON.parse(localStorage.getItem("auth"));
-  
-    useEffect(() => {
-      const storedAuth = localStorage.getItem("auth");
-      setIsAuthenticated(storedAuth ? true : false);
-    }, []);
-  
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [profileImageLoading, setProfileImageLoading] = useState(false);
+    const [error, setError] = useState(null);
+
     const handleLogout = () => {
       localStorage.removeItem("auth");
       setIsAuthenticated(false);
       navigate("/login");
     };
+
+    const fetchProfileImage = () => {
+        if (auth.accessToken === undefined) return;
+    
+        setProfileImageLoading(true);
+        setError(null);
+        axios
+          .get(`${import.meta.env.VITE_API_URL}/identity/profile-picture`, {
+            headers: {
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+            responseType: 'arraybuffer',
+          })
+          .then((response) => {
+            const binary = new Uint8Array(response.data);
+            const binaryString = binary.reduce((data, byte) => data + String.fromCharCode(byte), '');
+            const base64Image = btoa(binaryString);
+            updateProfileImage(base64Image);
+          })
+          .catch((err) => {
+            if (err.response?.status === 404) {
+              setError('Profile Image not found (404).');
+            } else {
+              setError('Error fetching Profile Image.');
+            }
+          })
+          .finally(() => {
+            setProfileImageLoading(false);
+          });
+      };
+
+      useEffect(() => {
+        const storedAuth = localStorage.getItem("auth");
+        setIsAuthenticated(storedAuth ? true : false);
+        fetchProfileImage();
+      }, []);
 
   return (
     <Disclosure as="nav" className="bg-project-pink mb-4">
@@ -88,9 +125,9 @@ function Navbar() {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <img
-                    alt=""
-                    src={loginPhoto}
-                    className="size-8 rounded-full"
+                    alt="test"
+                    src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
+                    className="size-10 rounded-full outline outline-2 outline-project-blue"
                   />
                 </MenuButton>
               </div>
@@ -101,15 +138,15 @@ function Navbar() {
                 <MenuItem>
                   <a
                     href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
-                    {isAuthenticated && authData && authData.user ? authData.user : ""}
+                    {isAuthenticated && auth && auth.user ? auth.user : ""}
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <a
                     href="/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
                     Settings
                   </a>
@@ -118,7 +155,7 @@ function Navbar() {
                   <a
                     href="#"
                     onClick={isAuthenticated ? handleLogout : null}
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                    className="block px-2 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                   >
                     Sign out
                   </a>

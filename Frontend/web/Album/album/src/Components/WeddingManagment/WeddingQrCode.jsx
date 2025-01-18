@@ -1,14 +1,47 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 import Spinner from '../Spinner/Spinner';
-import 'react-toastify/dist/ReactToastify.css';
+import useAuth from '../hooks/useAuth';
 
-const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
+const WeddingQRCode = ({ weddingId, onTokenUpdated  }) => {
+  const {auth} = useAuth()
+  
   const [qrCode, setQrCode] = useState(null);
   const [qrCodeLoading, setQrCodeLoading] = useState(false);
   const [error, setError] = useState(null);
   const [tokenExpire, setTokenExpire] = useState('');
+
+  const updateToken = () => {
+    if (!tokenExpire) {
+        toast.error('Please provide the token expiration time in hours.');
+        return;
+      }
+    axios
+    .put(
+      `${import.meta.env.VITE_API_URL}/wedding/updateToken?id=${weddingId}&hours=${tokenExpire}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${auth.accessToken}`,
+          Accept: '*/*',
+        },
+      }
+    )
+    .then(() => {
+      toast.success('Expiration date extended!');
+
+      setTokenExpire('');
+
+      if (onTokenUpdated) {
+        onTokenUpdated();
+      }
+    })
+    .catch((err) => {
+      console.error('Error:', err.response?.data || err.message);
+      toast.error('An error occurred while updating expiration time.');
+    });
+  };
 
   useEffect(() => {
     if (!weddingId) return;
@@ -17,7 +50,7 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/wedding/token-qr/?id=${weddingId}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${auth.accessToken}`,
         },
         responseType: 'arraybuffer',
       })
@@ -38,37 +71,6 @@ const WeddingQRCode = ({ weddingId, accessToken, onTokenUpdated  }) => {
         setQrCodeLoading(false);
       });
   }, [weddingId]);
-
-  const updateToken = () => {
-    if (!tokenExpire) {
-        toast.error('Please provide the token expiration time in hours.');
-        return;
-      }
-    axios
-    .put(
-      `${import.meta.env.VITE_API_URL}/wedding/updateToken?id=${weddingId}&hours=${tokenExpire}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: '*/*',
-        },
-      }
-    )
-    .then(() => {
-      toast.success('Expiration date extended!');
-
-      setTokenExpire('');
-
-      if (onTokenUpdated) {
-        onTokenUpdated();
-      }
-    })
-    .catch((err) => {
-      console.error('Error:', err.response?.data || err.message);
-      toast.error('An error occurred while updating expiration time.');
-    });
-  };
 
   if (qrCodeLoading) {
     return (
