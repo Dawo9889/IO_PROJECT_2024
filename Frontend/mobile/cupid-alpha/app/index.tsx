@@ -31,7 +31,7 @@ const App = () => {
           console.log('Access token expired. Redirecting to login page...');
           Alert.alert('Session expired', 'Please log in again to continue.');
           await logout();
-          router.replace('/');
+          // router.replace('/');
           setIsAuthenticated(false);
       } finally {
         setIsLoading(false); // End loading after the check

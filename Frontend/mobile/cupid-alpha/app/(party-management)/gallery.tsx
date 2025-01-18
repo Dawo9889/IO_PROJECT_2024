@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'expo-router/build/hooks';
 import { StatusBar } from 'expo-status-bar';
 import party from '@/models/party';
-import { getPartyDetails } from '@/constants/api';
+import { fetchGalleryThumbnails, getPartyDetails } from '@/constants/api';
 import { getLoggedUsername } from '@/constants/storage';
 import { icons } from '@/constants';
 import CustomButton from '@/components/CustomButton';
 import { router } from 'expo-router';
+import axios from 'axios';
 
 const Gallery = () => {
   const searchParams = useSearchParams();
@@ -17,6 +18,14 @@ const Gallery = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [partyDetails, setPartyDetails] = useState<party | null>(null);
 
+  const [thumbnails, setThumbnails] = useState<any[]>([]);
+  const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState<null | number>(null);
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+
+
+  // Fetch details and check login status
   useEffect(() => {
     setIsLoading(true);
     const fetchPartyDetails = async () => {
@@ -52,6 +61,32 @@ const Gallery = () => {
       fetchPartyDetails();
       setIsLoading(false);
     }, []);
+
+  const openSlider = (index: number) => {
+    setCurrentIndex(index);
+    setIsSliderOpen(true);
+  };
+
+  const fetchThumbnails = async () => {
+    setIsLoading(true);
+    try {
+      if (!partyID) return
+      const response = await fetchGalleryThumbnails(partyID, pageIndex);
+      if (response === -1) {
+        setPageCount(0);
+        setPageIndex(1);
+        return;
+      }
+      setThumbnails(response);
+        } catch (err) {
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+    useEffect(() => {
+      fetchThumbnails();
+    }, [pageIndex]);
 
   return (
     <SafeAreaView className='bg-primarygray h-full'>

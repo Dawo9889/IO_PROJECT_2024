@@ -4,7 +4,7 @@ import * as FileSystem from 'expo-file-system';
 import { dateToString, logout } from "./helpers";
 
 const API_AUTH_URL = 'https://api.cupid.pics/api/identity';
-const API_IMAGE_URL = 'https://api.cupid.pics/api/image/upload';
+const API_IMAGE_URL = 'https://api.cupid.pics/api/image';
 const API_PARTY_URL = 'https://api.cupid.pics/api/wedding'
 
 
@@ -236,7 +236,7 @@ export const uploadPicture = async (photo: any) => {
       name: photo.name || 'upload.png', // File name
     } as any);
     formData.append('author', author);
-    const url = `${API_IMAGE_URL}?token=${partyToken}`;
+    const url = `${API_IMAGE_URL}/upload?token=${partyToken}`;
     const response = await axios.post(
       url,
       formData,
@@ -259,6 +259,53 @@ export const uploadPicture = async (photo: any) => {
     throw error; // Rethrow the error to handle it at a higher level
   }
 };
+
+
+export const fetchGalleryThumbnails = async (partyID: string, pageIndex: number) => {
+  const accessToken = await getAccessToken();
+  console.log('Fetching thumbnails');
+  try {
+    const response = await axios.get(
+      `${API_IMAGE_URL}/path?weddingId=${partyID}&pageNumber=${pageIndex}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if(response.data.length == 0){
+      // setPageCount(pageCount - 1)
+      // setPageIndex(pageIndex - 1)
+      return -1;
+    }
+    const sortedData = response.data.sort(
+      (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+
+    const thumbnailLinks = sortedData.map((item: any) => item.thumbnailPath);
+    const authorizedThumbnails = await Promise.all(
+      thumbnailLinks.map(async (thumbnail: any) => {
+        try {
+          const res = await axios.get(thumbnail, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            responseType: "arraybuffer",
+          });
+          const blob = new Blob([res.data], { type: "image/jpeg" });
+          const image = URL.createObjectURL(blob);
+          return image;
+        } catch (err) {
+          console.error('Error fetching thumbnail:', err);
+          return null;
+        }
+      }));
+    return authorizedThumbnails.filter((thumbnail) => thumbnail !== null);
+  } catch (err) {
+    console.error('Error fetching thumbnails:', err);
+    throw err;
+  }
+}
 
 
 export const getUserParties = async () => {
