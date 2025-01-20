@@ -215,7 +215,7 @@ export const checkIfTokenValid = async (token: string) => {
 };
 
 
-export const uploadPicture = async (photo: any) => {
+export const uploadPicture = async (photo: any, description: string) => {
   try {
     const partyToken = await getPartyToken();
     // check if valid
@@ -235,13 +235,14 @@ export const uploadPicture = async (photo: any) => {
       type: photo.type || 'image/png', // MIME type
       name: photo.name || 'upload.png', // File name
     } as any);
-    formData.append('author', author);
+    formData.append('Author', author);
+    formData.append('Description', description);
     const url = `${API_IMAGE_URL}/upload?token=${partyToken}`;
     const response = await axios.post(
       url,
       formData,
       { headers: { 'Content-Type': 'multipart/form-data', },
-        timeout: 20000 },
+        timeout: 60000 },
     );
     return response;
   } catch (error: any) {
@@ -261,6 +262,7 @@ export const uploadPicture = async (photo: any) => {
 };
 
 
+
 export const fetchGalleryThumbnails = async (partyID: string, pageIndex: number) => {
   const accessToken = await getAccessToken();
   console.log('Fetching thumbnails');
@@ -273,9 +275,7 @@ export const fetchGalleryThumbnails = async (partyID: string, pageIndex: number)
         },
       }
     );
-    if(response.data.length == 0){
-      // setPageCount(pageCount - 1)
-      // setPageIndex(pageIndex - 1)
+    if (response.data.length === 0) {
       return -1;
     }
     const sortedData = response.data.sort(
@@ -286,26 +286,124 @@ export const fetchGalleryThumbnails = async (partyID: string, pageIndex: number)
     const authorizedThumbnails = await Promise.all(
       thumbnailLinks.map(async (thumbnail: any) => {
         try {
-          const res = await axios.get(thumbnail, {
+          const res = await FileSystem.downloadAsync(thumbnail, FileSystem.cacheDirectory + `image_${Math.random()}.jpg`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
-            responseType: "arraybuffer",
           });
-          const blob = new Blob([res.data], { type: "image/jpeg" });
-          const image = URL.createObjectURL(blob);
-          return image;
+          return res.uri;
         } catch (err) {
           console.error('Error fetching thumbnail:', err);
           return null;
         }
-      }));
+      })
+    );
+
     return authorizedThumbnails.filter((thumbnail) => thumbnail !== null);
   } catch (err) {
     console.error('Error fetching thumbnails:', err);
     throw err;
   }
+};
+
+export const fetchOriginalPhotos = async (partyID: string, pageCount: number) => {
+  console.log('Fetching original photos, pageCount:', pageCount);
+  const accessToken = await getAccessToken();
+  const allPhotos = [];
+  try {
+    for (let i = 1; i <= pageCount; i++) {
+      const response = await axios.get(
+        `${API_IMAGE_URL}/path?weddingId=${partyID}&pageNumber=${i}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const sortedData = response.data.sort(
+        (a: any, b: any) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+      allPhotos.push(...sortedData);
+    }
+    console.log('Fetched all photos:', allPhotos);
+    return allPhotos;
+  } catch (err) {
+    console.error('Error fetching images:', err);
+    throw err;
+  }
 }
+
+// export const fetchPhoto = async (photoDetails: any) => {
+//   const accessToken = await getAccessToken();
+//   const photoPath = photoDetails.filePath;
+//   const thumbnailPath = photoDetails.thumbnailPath;
+//   try {
+//     const photoRes = await axios.get(photoPath, {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//       responseType: 'arraybuffer',
+//     });
+
+//     const thumbnailRes = await axios.get(thumbnailPath, {
+//       headers: {
+//         Authorization: `Bearer ${accessToken}`,
+//       },
+//       responseType: 'arraybuffer',
+//     });
+
+//     const photoBlob = new Blob([photoRes.data], { type: 'image/jpeg' });
+//     const thumbnailBlob = new Blob([thumbnailRes.data], { type: 'image/jpeg' });
+
+//     return { photoBlob: photoBlob, thumbnailBlob: thumbnailBlob };
+
+//   } catch (err) {
+//     console.error('Error fetching photo:', err);
+//     throw err;
+//   }
+// }
+
+export const fetchPhoto = async (photoDetails: any) => {
+  const accessToken = await getAccessToken();
+  const photoPath = photoDetails.filePath;
+  const thumbnailPath = photoDetails.thumbnailPath;
+
+  try {
+    const photoRes = await axios.get(photoPath, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      responseType: 'arraybuffer',
+    });
+
+    const thumbnailRes = await axios.get(thumbnailPath, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      responseType: 'arraybuffer',
+    });
+
+    // Convert ArrayBuffer to Base64
+    const photoBase64 = arrayBufferToBase64(photoRes.data);
+    const thumbnailBase64 = arrayBufferToBase64(thumbnailRes.data);
+
+    // Save Base64 data to file system
+    const photoUri = `${FileSystem.cacheDirectory}${photoDetails.id}_photo.jpg`;
+    await FileSystem.writeAsStringAsync(photoUri, photoBase64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    const thumbnailUri = `${FileSystem.cacheDirectory}${photoDetails.id}_thumbnail.jpg`;
+    await FileSystem.writeAsStringAsync(thumbnailUri, thumbnailBase64, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    return { photoUri, thumbnailUri };
+  } catch (err) {
+    console.error('Error fetching photo:', err);
+    throw err;
+  }
+};
 
 
 export const getUserParties = async () => {

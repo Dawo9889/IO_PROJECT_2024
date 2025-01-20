@@ -1,8 +1,8 @@
-import { View, Text , Image, ImageSourcePropType, Alert, Modal, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { View, Text , Image, Alert, Modal, TextInput, TouchableOpacity, ActivityIndicator} from 'react-native'
+import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { router, useNavigation } from 'expo-router'
+import { router} from 'expo-router'
 
 import IconButton from './navigation/IconButton'
 import { uploadPicture } from '@/constants/api'
@@ -24,7 +24,7 @@ const PicturePreview = ({picture, setPicture, description, setDescription}: Pict
   const savePicture = async () => {
     setIsLoading(true);
     try{
-      const result = await uploadPicture(picture);
+      const result = await uploadPicture(picture, description);
       setPicture(null);
       if (result) Alert.alert('Picture uploaded!');
       setDescription('');
