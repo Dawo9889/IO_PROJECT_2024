@@ -218,7 +218,7 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
                   className={`mx-auto rounded-lg ${
                     isVertical
                       ? 'max-h-[85vh] max-w-[70vw]'
-                      : 'max-w-full max-h-screen'
+                      : 'max-h-[85vh] max-w-full'
                   } object-contain`}
                   onLoad={handleImageLoad}
                 />
