@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import DeleteWedding from '../Weddings/DeleteWedding';
 
-const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
+const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings,onDeleteWedding }) => {
   const [error, setError] = useState(null);
   const [isDeleteWindowIsOpen, setIsDeleteWindowIsOpen] = useState(false);
   const [weddingId, setWeddingId] = useState(null);
@@ -34,6 +34,8 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings }) => {
         fetchWeddings();
         closeDeleteWindow();
         toast.success('Wedding deleted successfully!');
+        setSelectedWedding(null)
+        onDeleteWedding();
       })
       .catch((err) => {
         console.error('Error deleting wedding:', err);

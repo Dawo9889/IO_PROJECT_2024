@@ -29,6 +29,10 @@ const Weddings = () => {
   const refreshWeddings = () => {
     fetchWeddings(); 
   }
+  const onDeleteWedding = () => {
+    setSelectedWedding(null); 
+    fetchWeddings();
+  }
 
   useEffect(() => {
     fetchWeddings(); 
@@ -49,7 +53,8 @@ const Weddings = () => {
           <WeddingList 
             weddings={weddings} 
             setSelectedWedding={setSelectedWedding} 
-            fetchWeddings={fetchWeddings} 
+            fetchWeddings={fetchWeddings}
+            onDeleteWedding={onDeleteWedding} 
           />
         </div>
         <div className="bg-project-dark sm:col-span-2 md:col-span-2 ">

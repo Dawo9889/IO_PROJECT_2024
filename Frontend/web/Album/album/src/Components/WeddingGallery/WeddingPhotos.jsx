@@ -81,7 +81,6 @@ const fetchThumbnails = async () => {
         );
         if(response.data.length == 0){
           setPageCount(pageCount - 1)
-          // setPageIndex(pageIndex - 1)
         }
         const thumbnailLinks = response.data.map((item) => item.thumbnailPath);
         const authorizedThumbnails = await Promise.all(

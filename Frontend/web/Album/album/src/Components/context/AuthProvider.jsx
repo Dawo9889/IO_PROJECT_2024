@@ -24,6 +24,7 @@ export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
 
     const refreshAccessToken = async () => {
+        console.log("hello there")
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}/identity/refresh-token`, {
                 "refreshToken": auth.refreshToken
@@ -33,7 +34,7 @@ export const AuthProvider = ({children}) => {
                 }
             });
             const newExpiryTime = Date.now() + response.data.expiresIn * 1000;
-            // const newExpiryTime = Date.now() + 90 * 1000;
+            // const newExpiryTime = Date.now() + 60 * 1000;
             const updatedAuth = {
                 ...auth,
                 accessToken: response.data.accessToken,
@@ -47,6 +48,7 @@ export const AuthProvider = ({children}) => {
             setAuth({});
             localStorage.removeItem("auth");
         }
+        console.log(auth)
     };
     const testBackend = async () => {
         if (localStorage.getItem("auth") !== null) {
@@ -83,7 +85,10 @@ export const AuthProvider = ({children}) => {
             if (auth.expiryTime && currentTime > auth.expiryTime - 60 * 1000) {
                 refreshAccessToken();
             }
-        }, 5 * 1000);
+            else{
+                console.log("sprawdzam")
+            }
+        }, 1 * 1000);
         return () => clearInterval(interval);
     }, [auth]);
 
