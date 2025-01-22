@@ -1,10 +1,8 @@
-﻿/* eslint-disable react/prop-types */
-/* eslint-disable react/display-name */
-import html2canvas from "html2canvas";
+﻿import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { Document, Packer, Paragraph, TextRun, ImageRun } from "docx";
+import { Document, Packer, Paragraph, TextRun, ImageRun, Table, TableRow, TableCell } from "docx";
 
 export const saveAlbumAsHTML = async (pages) => {
     const zip = new JSZip();
@@ -196,30 +194,14 @@ export const exportAlbumToPDF = async (coverFront, coverBack, staticPages) => {
     pdf.save("album.pdf");
 };
 
-const toBase64 = (url) => {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous"; // Zabezpieczenie przed CORS
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL("image/jpeg")); // Zwraca base64 w formacie jpg
-        };
-        img.onerror = reject;
-        img.src = url;
-    });
-};
-
 export const exportAlbumToDocx = async (pages) => {
     const frontCoverText = document.querySelector(".staticCoverStart")?.innerText || "Okładka przednia";
     const backCoverText = document.querySelector(".staticCoverBack")?.innerText || "Okładka tylna";
 
     const albumPages = pages.map((page) => ({
         header: page.header,
-        images: [page.imageLeft, page.imageLeftBottom].filter(Boolean),
+        images: page.images.map((image) => image.src), // Pobieramy tylko src każdego obrazka
+        layout: page.layout,
     }));
 
     const doc = new Document({
@@ -251,6 +233,9 @@ export const exportAlbumToDocx = async (pages) => {
                 const imageBase64Promises = page.images.map((imageUrl) => toBase64(imageUrl));
                 const imageBase64s = await Promise.all(imageBase64Promises);
 
+                // Generowanie układu zdjęć w zależności od layoutu
+                const layoutContent = generateLayout(imageBase64s, page.layout);
+
                 return {
                     children: [
                         new Paragraph({
@@ -264,20 +249,7 @@ export const exportAlbumToDocx = async (pages) => {
                             alignment: "center",
                             spacing: { after: 400 },
                         }),
-                        ...imageBase64s.map((base64Image) =>
-                            new Paragraph({
-                                children: [
-                                    new ImageRun({
-                                        data: base64Image,
-                                        transformation: {
-                                            width: 600,
-                                            height: 400,
-                                        },
-                                    }),
-                                ],
-                                alignment: "center",
-                            })
-                        ),
+                        ...layoutContent,
                     ],
                 };
             })),
@@ -311,3 +283,122 @@ export const exportAlbumToDocx = async (pages) => {
         saveAs(blob, "album.docx");
     });
 };
+
+// Generowanie układu dla zdjęć
+function generateLayout(images, layout) {
+    switch (layout) {
+        case "horizontal":
+            // Dwa zdjęcia jeden pod drugim
+            return images.map((base64Image) =>
+                new Paragraph({
+                    children: [
+                        new ImageRun({
+                            data: base64Image,
+                            transformation: { width: 600, height: 400 },
+                        }),
+                    ],
+                    alignment: "center",
+                })
+            );
+
+        case "vertical":
+            // Dwa zdjęcia obok siebie
+            return [
+                new Table({
+                    rows: [
+                        new TableRow({
+                            children: images.map((base64Image) =>
+                                new TableCell({
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new ImageRun({
+                                                    data: base64Image,
+                                                    transformation: { width: 300, height: 200 },
+                                                }),
+                                            ],
+                                            alignment: "center",
+                                        }),
+                                    ],
+                                })
+                            ),
+                        }),
+                    ],
+                }),
+            ];
+
+        case "grid-2x2": {
+            // Siatka 2x2 dla maksymalnie 4 zdjęć
+            const rows = [];
+            for (let i = 0; i < images.length; i += 2) {
+                const rowImages = images.slice(i, i + 2);
+                rows.push(
+                    new TableRow({
+                        children: rowImages.map((base64Image) =>
+                            new TableCell({
+                                children: [
+                                    new Paragraph({
+                                        children: [
+                                            new ImageRun({
+                                                data: base64Image,
+                                                transformation: { width: 300, height: 200 },
+                                            }),
+                                        ],
+                                        alignment: "center",
+                                    }),
+                                ],
+                            })
+                        ),
+                    })
+                );
+            }
+            return [
+                new Table({
+                    rows,
+                }),
+            ];
+        }
+
+        case "default":
+        default:
+            // Domyślnie jedno zdjęcie na środku
+            return images.slice(0, 1).map((base64Image) =>
+                new Paragraph({
+                    children: [
+                        new ImageRun({
+                            data: base64Image,
+                            transformation: { width: 600, height: 450 },
+                        }),
+                    ],
+                    alignment: "center",
+                })
+            );
+    }
+}
+
+// Funkcja konwertująca obraz do Base64
+async function toBase64(url) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.setAttribute("crossOrigin", "anonymous");
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob((blob) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                    const base64data = reader.result;
+                    resolve(base64data.split(",")[1]); // Usuwamy nagłówek Base64
+                };
+            });
+        };
+        img.onerror = (error) => reject(error);
+        img.src = url;
+    });
+}

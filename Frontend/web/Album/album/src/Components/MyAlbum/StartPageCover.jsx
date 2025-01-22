@@ -4,8 +4,8 @@ import React from "react";
 
 const StartPageCover = React.forwardRef((props, ref) => {
     return (
-        <div className="coverStart" ref={ref} data-density="hard">
-            <div>
+        <div style={{ textAlign: "center" }}>
+            <div className="coverStart" ref={ref} data-density="hard">
                 <h2>{props.children}</h2>
             </div>
         </div>

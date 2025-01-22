@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const Gallery = ({ weddingId }) => {
-    const [thumbnails, setThumbnails] = useState([]);
+    const [thumbnails, setOriginalPhotos] = useState([]);
     const [loading, setLoading] = useState(false);
     const [pageCount, setPageCount] = useState(null);
     const [pageIndex, setPageIndex] = useState(1);
@@ -45,7 +45,7 @@ const Gallery = ({ weddingId }) => {
 
     useEffect(() => {
         setLoading(true);
-        const fetchThumbnails = async () => {
+        const fetchOriginalPhotos = async () => {
             try {
                 const response = await axios.get(
                     `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${pageIndex}`,
@@ -60,11 +60,14 @@ const Gallery = ({ weddingId }) => {
                     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
                 );
 
-                const thumbnailLinks = sortedData.map((item) => item.thumbnailPath);
-                const authorizedThumbnails = await Promise.all(
-                    thumbnailLinks.map(async (thumbnail) => {
+                // Pobierz ścieżki do oryginalnych zdjęć
+                const originalPhotoLinks = sortedData.map((item) => item.filePath);
+
+                // Pobierz każde oryginalne zdjęcie i przekształć w URL
+                const authorizedOriginalPhotos = await Promise.all(
+                    originalPhotoLinks.map(async (filePath) => {
                         try {
-                            const res = await axios.get(thumbnail, {
+                            const res = await axios.get(filePath, {
                                 headers: {
                                     Authorization: `Bearer ${accessToken}`,
                                 },
@@ -73,23 +76,24 @@ const Gallery = ({ weddingId }) => {
                             const blob = new Blob([res.data], { type: "image/jpeg" });
                             return URL.createObjectURL(blob);
                         } catch (err) {
-                            console.error(`Authorization error for thumbnail ${thumbnail}:`, err);
+                            console.error(`Authorization error for original photo ${filePath}:`, err);
                             return null;
                         }
                     })
                 );
 
-                setThumbnails(
-                    authorizedThumbnails.filter((thumbnail) => thumbnail !== null)
+                // Ustaw stan dla oryginalnych zdjęć (filtrując null, jeśli są błędy)
+                setOriginalPhotos(
+                    authorizedOriginalPhotos.filter((photo) => photo !== null)
                 );
             } catch (err) {
-                console.error("Error fetching thumbnails:", err);
+                console.error("Error fetching original photos:", err);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchThumbnails();
+        fetchOriginalPhotos();
     }, [weddingId, pageIndex]);
 
     return (

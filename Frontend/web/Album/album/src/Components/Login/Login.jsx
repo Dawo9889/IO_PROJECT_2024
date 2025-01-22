@@ -40,7 +40,7 @@ const Login = () => {
             const response = await axios.post(LOGIN_URL, 
                 {
                     "email": user,
-                    "password": password
+                    "password": password,
                 }
             );
             // const expiryTime = Date.now() + 90 * 1000;

@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+
 /* Główne style aplikacji */
 .app-container {
-    min-height: 100vh;
-    padding: 20px;
+    display: flex; /* Flexbox dla układów */
+    justify-content: center; /* Wyśrodkowanie poziome */
+    align-items: center; /* Wyśrodkowanie pionowe */
+    min-height: 100vh; /* Pełna wysokość widoku */
+    margin: 0; /* Usuń domyślne marginesy */
+    padding: 0; /* Usuń domyślne odstępy */
 }
 
 .upload-box-container {
@@ -114,12 +121,17 @@ input {
 .coverStart, .coverBack,
 .staticCoverStart, .staticCoverBack {
     background-color: #ffed90;
-    width: 500px;
-    height: 750px;
+    width: 550px;
+    height: 650px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    text-align: center;
+    font-family: 'Playfair Display', serif; /* Zmieniamy czcionkę na Google Fonts, np. Roboto */
+    font-size: 2rem; /* Zwiększamy rozmiar czcionki */
+    font-weight: bold; /* Pogrubiamy czcionkę */
+    color: #333; /* Zmieniamy kolor na ciemniejszy */
 }
 
 .coverStart, .coverBack {
@@ -220,8 +232,8 @@ input {
 }
 
 .staticPage {
-    width: 500px;
-    height: 750px;
+    width: 550px;
+    height: 650px;
     margin: 20px auto;
     background-color: whitesmoke;
     box-sizing: border-box;
@@ -247,8 +259,8 @@ input {
         justify-content: center;
         align-items: center;
         width: 90%; /* Dopasowanie do dynamicznego wyglądu */
-        height: calc(100% - 20px); /* Zachowanie proporcji */
-        margin: 10px auto; /* Wycentrowanie w kontenerze */
+        height: 90%; /* Zachowanie proporcji */
+        margin: 5%; /* Wycentrowanie w kontenerze */
         overflow: hidden; /* Ukrywanie nadmiaru */
         position: relative; /* Ustawienie dla obrazu */
     }
@@ -269,17 +281,32 @@ input {
     }
 
     /* Dwa zdjęcia poziomo */
-    .staticPage.horizontal .staticDropZone,
     .page.horizontal .image-container {
+        display: flex; /* Zmieniamy na flexbox */
+        flex-direction: column; /* Ustawiamy elementy w kolumnie */
+        gap: 10px; /* Odstęp między zdjęciami */
+        justify-content: flex-start; /* Wyrównanie do góry */
+        align-items: center; /* Wyśrodkowanie zdjęć */
+    }
+    .staticPage.horizontal .staticDropZone {
         display: flex;
+        flex-direction: column;
+        gap: 10px;
         justify-content: center;
         align-items: center;
+        height: 100%; /* Pełna wysokość strefy */
+        overflow: hidden;
     }
 
-    .staticPage.horizontal img,
     .page.horizontal img {
         width: 100%;
         height: 100%;
+    }
+    .staticPage.horizontal img {
+        width: 100%; /* Szerokość zdjęcia dopasowana */
+        height: calc(50% - 5px); /* Połowa wysokości strefy minus odstęp */
+        object-fit: cover; /* Dopasowanie bez zniekształceń */
+        border-radius: 5px; /* Zaokrąglone rogi */
     }
 
     /* Dwa zdjęcia pionowo */
