@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'expo-router/build/hooks';
 import { StatusBar } from 'expo-status-bar';
 import party from '@/models/party';
-import { fetchGalleryThumbnails, getPartyDetails } from '@/constants/api';
+import { fetchGalleryThumbnails, fetchOriginalPhotos, getPartyDetails } from '@/constants/api';
 import { getLoggedUsername } from '@/constants/storage';
 import { icons } from '@/constants';
 import CustomButton from '@/components/CustomButton';
@@ -21,6 +21,7 @@ const Gallery = () => {
   const [partyDetails, setPartyDetails] = useState<party | null>(null);
 
   const [thumbnails, setThumbnails] = useState<any[]>([]);
+  const [photos, setPhotos] = useState<any[]>([]);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<null | number>(null);
   const [pageIndex, setPageIndex] = useState(1);
@@ -60,8 +61,22 @@ const Gallery = () => {
         console.error('Error checking login status:', error);
       }
     };
+    const fetchPhotos = async () => {
+        if (partyID && currentIndex !== null && pageCount !== null) {
+          try {
+            const allPhotos = await fetchOriginalPhotos(partyID, pageCount);
+            setPhotos(allPhotos);
+            // setPhotos(allPhotos.map(photo => photo.filePath)); // Extract the filePath for Image source
+          } catch (error) {
+            console.error('Error fetching full-size photos:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      };
       checkLogginStatus();
       fetchPartyDetails();
+      fetchPhotos();
       setIsLoading(false);
     }, []);
 
@@ -90,11 +105,12 @@ const Gallery = () => {
         } finally {
           setIsLoading(false);
         }
-      };
+  };
   
-    useEffect(() => {
-      fetchThumbnails();
-    }, [pageIndex]);
+  useEffect(() => {
+    fetchThumbnails();
+    // fetchPhotos();
+  }, [pageIndex]);
 
 const renderThumbnail = ({ item, index }: { item: string; index: number }) => (
   <TouchableOpacity style={{ flex: 1 / 3, aspectRatio: 1, margin: 5 }} onPress={() => {openSlider(index)}}>
@@ -102,16 +118,28 @@ const renderThumbnail = ({ item, index }: { item: string; index: number }) => (
   </TouchableOpacity>
 );
 
+
+const [isSwiping, setIsSwiping] = useState(false); // Add a flag to control swiping
+
 const handleSwipe = ({ nativeEvent }: any) => {
   const { translationX } = nativeEvent;
 
+  if (isSwiping) return; // Prevent multiple swipes at once
+
   if (pageCount && translationX < -50 && pageIndex < pageCount) {
     // Swipe left (next page)
+    setIsSwiping(true);
     setPageIndex((prev) => prev + 1);
   } else if (translationX > 50 && pageIndex > 1) {
     // Swipe right (previous page)
+    setIsSwiping(true);
     setPageIndex((prev) => prev - 1);
   }
+
+  // Reset the swiping flag after a short delay
+  setTimeout(() => {
+    setIsSwiping(false);
+  }, 300); // Adjust timeout as needed
 };
 
 return (
@@ -144,6 +172,7 @@ return (
           isSliderOpen={isSliderOpen}
           setIsSliderOpen={setIsSliderOpen}
           pageCount={pageCount}
+          photos={photos}
           partyID={partyID} />
       ) : (
         <>
@@ -153,7 +182,21 @@ return (
           keyExtractor={(_, index) => index.toString()}
           numColumns={3}
           showsVerticalScrollIndicator={false}
-          // contentContainerStyle={{ paddingBottom: 20 }}
+          ListFooterComponent={() => (
+            <>
+              <View className="m-2 items-center">
+                {pageCount && pageCount > 1 && pageIndex == 1 ? (
+                <Text className='text-white font-bbold'>Swipe left to switch between pages</Text>  
+                ) :
+                pageCount && pageIndex < pageCount ? (
+                <Text className='text-white font-bbold'>Swipe left/right to switch between pages</Text>  
+                ) : 
+                pageCount && pageCount > 1 && pageIndex == pageCount ? (
+                <Text className='text-white font-bbold'>Swipe right to switch between pages</Text>  
+                ) : null}
+              </View>
+            </>
+          )}
         />
         {!isSliderOpen && (
           <Text className='text-white text-center'>Page {pageIndex} of {pageCount}</Text>

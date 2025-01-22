@@ -49,12 +49,14 @@ const ChangeEmail = () => {
             setLoading(true);
             const responseStatus = await changeEmail(form.newEmail)
             if (responseStatus == 200) {
-                Alert.alert('Email changed succesfully!')
+                Alert.alert('Confirmation email sent!', 'Please check your inbox and confirm your new e-mail address in order to log in.')
                 await logout();
                 router.replace('/');
             }
         } catch (error: any) {
             Alert.alert('Error', error)
+            // Alert.alert('Error', 'An error occurred while changing e-mail address. Please try again later.')
+            // console.error('Error changing e-mail:', error)
         } finally {
             setLoading(false);
         }

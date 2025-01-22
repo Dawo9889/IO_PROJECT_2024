@@ -70,14 +70,19 @@ export default function Camera() {
       }
     };
     if (isFocused) checkPartyTokenStatus();
+    if (isFocused && (!camPermission || !camPermission.granted)) {
+      requestCamPermission();
+    }
+    // return () => {
+    //   cameraRef.current?.stopRecording?.(); // Clean up resources
+    // };
   }, [isFocused]);
 
   if (isLoading) {
-    return <SafeAreaView className="bg-primarygray h-full" />;
+    return <SafeAreaView className="bg-primarygray h-full" ><Text className='text-white font-bbold'>Loading...</Text></SafeAreaView>;
   }
 
   if (!camPermission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
@@ -139,6 +144,7 @@ export default function Camera() {
             mirror={false}
             enableTorch={torchEnabled}
             style={{ flex: 1 }}
+            onMountError={(error) => Alert.alert('Camera error:', error.toString())}
           >
             {partyName &&
               <View className='w-3/4 mx-auto'>
@@ -174,7 +180,7 @@ export default function Camera() {
               iconSize={90}
             /> :
           <View className='flex-row absolute bottom-[20px] left-1/2 transform -translate-x-1/2 w-[230px]'>
-          <Text className='text-white text-3xl font-bbold mr-[20px] ml-[40px]'>JOIN PARTY</Text>
+          <Text className='text-white text-2xl font-bbold mr-[5px] ml-[40px]'>JOIN PARTY</Text>
           <Ionicons name='arrow-forward-outline' color='white' size={30}/>
           </View>
           }

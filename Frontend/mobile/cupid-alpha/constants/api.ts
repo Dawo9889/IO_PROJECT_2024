@@ -116,8 +116,39 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
   }
 }
 
+export const resetPassword = async (email: string) => {
+  try {
+    const response = await axios.post(`${API_AUTH_URL}/forgot-password`, {
+      "email": email
+      });
+    return response.status;
+  } catch (err: any) {
+    console.log(err.response.status);
+    console.error('Error resetting password:', err.response?.data || err.message);
+    throw err.response?.data;
+  }
+}
+
 export const changeEmail = async (newEmail: string) => {
-  return 200;
+  try {
+    const accessToken = await getAccessToken();
+
+    const response = await axios.post(`${API_AUTH_URL}/change-email`, {
+      "newEmail": newEmail
+      },{
+          headers: {
+              Authorization: `Bearer ${accessToken}`
+          }
+      });
+
+    console.log('Successfully changed email:', response.data);
+    return response.status;
+
+  } catch (err: any) {
+    console.log(err.response.status);
+    console.error('Error changing email:', err.response?.data);
+    throw err.response?.data;
+  }
 }
 
 export const refreshAccessToken = async () => {

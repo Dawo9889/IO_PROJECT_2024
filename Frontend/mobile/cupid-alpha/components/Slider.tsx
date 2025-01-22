@@ -12,35 +12,20 @@ interface sliderProps {
     setIsSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
     pageCount: number | null;
     partyID: string;
+    photos: any[];
 }
 
-const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID }: sliderProps) => {
-    const [photos, setPhotos] = useState<any[]>([]);
+const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID, photos }: sliderProps) => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [currentPhoto, setCurrentPhoto] = useState<any>(null);
 
-  
-
-    const fetchPhotos = async () => {
-        if (partyID && currentIndex !== null && pageCount !== null) {
-          setLoading(true);
-          try {
-            const allPhotos = await fetchOriginalPhotos(partyID, pageCount);
-            setPhotos(allPhotos);
-            // setPhotos(allPhotos.map(photo => photo.filePath)); // Extract the filePath for Image source
-          } catch (error) {
-            console.error('Error fetching full-size photos:', error);
-          } finally {
-            setLoading(false);
-            setAccessToken(await getAccessToken());
-          }
-        }
-      };
-
+    const handleGetAccessToken = async () => {
+        setAccessToken(await getAccessToken());
+    }
 
     useEffect(() => {
-      fetchPhotos();
+      handleGetAccessToken()
     }, []);
 
     useEffect(() => {
@@ -69,18 +54,26 @@ const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, 
       loadPhoto();
     }, [photos, currentIndex]);
   
+    const [isSwiping, setIsSwiping] = useState(false); // Add a flag to control swiping
     // Gesture Handler callback to detect swipe
     const onSwipeGesture = (event: any) => {
+      if (isSwiping) return; // Prevent multiple swipes at once
       const { translationX } = event.nativeEvent; // Get the swipe translation in the X axis
       if (Math.abs(translationX) > 100) {
         if (translationX > 0) {
+          setIsSwiping(true); // Set the flag to prevent multiple swipes
           // Swipe Right (go to previous image)
           setCurrentIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : photos.length - 1));
         } else {
           // Swipe Left (go to next image)
+          setIsSwiping(true); // Set the flag to prevent multiple swipes
           setCurrentIndex((prev) => (prev !== null && prev < photos.length - 1 ? prev + 1 : 0));
         }
       }
+        // Reset the swiping flag after a short delay
+      setTimeout(() => {
+        setIsSwiping(false);
+      }, 300); // Adjust timeout as needed
     };
   
     if (currentIndex === null || photos.length === 0) return null; // Return nothing if currentIndex is invalid or photos are not loaded
