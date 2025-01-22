@@ -31,7 +31,7 @@ namespace Backend.Infrastructure.Extensions
                 using (var scope = serviceProvider.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    context.Database.Migrate(); // Creating migration if doesnt exist on a database
+                    context.Database.Migrate(); 
                 }
             }
         }

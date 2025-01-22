@@ -123,7 +123,7 @@ const CreateWedding = () => {
                 type="text" 
                 name="floating_text" 
                 id="floating_text" 
-                className="block py-2.5 px-0 w-full text-sm text-project-blue bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
+                className="block py-2.5 px-0 w-full text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-project-blue peer" 
                 onChange={(e) => setDescription(e.target.value)}
                 value={description} 
                 placeholder=" " 

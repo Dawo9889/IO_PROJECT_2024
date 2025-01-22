@@ -56,12 +56,12 @@ namespace Backend.Application.Services.Email
             {
                 buttonHtml = $@"
                 <tr>
-                  <td style='text-align: center; padding: 20px; background-color: #37392d;'>
-                    <a href='{_buttonLink}' class=button-link style='text-decoration: none; padding: 15px 30px; color: #ffffff; background-color: #e6648c; border-radius: 5px; font-size: 16px; font-weight: bold; display: inline-block;"">
-                      {_buttonText}
-                    </a>
-                  </td>
-                 </tr>";
+                    <td style='text-align: center; padding: 20px; background-color: #37392d;'>
+                        <a href='{_buttonLink}' class='button-link' style='text-decoration: none; padding: 15px 30px; color: {_buttonTextColor}; background-color: #e6648c; border-radius: 5px; font-size: 16px; font-weight: bold; display: inline-block;'>
+                            {_buttonText}
+                        </a>
+                    </td>
+                </tr>";
             }
 
             var footerHtml = !string.IsNullOrEmpty(_footer)
