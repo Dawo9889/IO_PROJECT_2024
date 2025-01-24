@@ -1,5 +1,5 @@
 import HTMLFlipBook from "react-pageflip";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./MyAlbum.css";
 import StartPageCover from "./StartPageCover";
 import EndPageCover from "./EndPageCover";
@@ -23,6 +23,29 @@ function MyAlbum() {
     const [bookKey, setBookKey] = useState(0);
     const flipBookRef = useRef(null);
     const [isStaticView, setIsStaticView] = useState(false);
+
+    const [bookDimensions, setBookDimensions] = useState({ width: 300, height: 500 });
+
+    useEffect(() => {
+        // Funkcja do obliczania wymiarów książki jako procentów ekranu
+        const calculateBookDimensions = () => {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+
+            const width = Math.floor((screenWidth * 0.3)); // np. 30% szerokości ekranu
+            const height = Math.floor((screenHeight * 0.5)); // np. 50% wysokości ekranu
+
+            setBookDimensions({ width, height });
+        };
+
+        // Wywołanie funkcji na początku i nasłuchiwanie zmian rozmiaru okna
+        calculateBookDimensions();
+        window.addEventListener("resize", calculateBookDimensions);
+
+        return () => {
+            window.removeEventListener("resize", calculateBookDimensions);
+        };
+    }, []);
 
     const renderStaticView = () => {
         setIsStaticView(true);
@@ -54,12 +77,8 @@ function MyAlbum() {
                     <div style={{ flex: 1 }}>
                         <HTMLFlipBook
                             key={bookKey}
-                            width={550}
-                            height={650}
-                            minWidth={315}
-                            maxWidth={1000}
-                            minHeight={420}
-                            maxHeight={1350}
+                            height={bookDimensions.width}
+                            width={bookDimensions.height}
                             showCover={true}
                             flippingTime={1000}
                             style={{ margin: "0 auto" }}
