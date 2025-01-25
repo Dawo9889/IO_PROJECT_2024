@@ -23,6 +23,7 @@ const SettingsChangePassword = () => {
     const [validMatch, setValidMatch] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -84,7 +85,7 @@ const SettingsChangePassword = () => {
                     <div>
                         <label htmlFor="oldPassword" className="block text-sm font-medium text-white">Old Password:</label>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             id="oldPassword"
                             value={oldPwd}
                             onChange={(e) => setOldPwd(e.target.value)}
@@ -96,7 +97,7 @@ const SettingsChangePassword = () => {
                         <label htmlFor="newPassword" className="block text-sm font-medium text-white">New Password:</label>
                         <div className="relative">
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="newPassword"
                                 value={newPwd}
                                 onChange={(e) => setNewPwd(e.target.value)}
@@ -115,7 +116,7 @@ const SettingsChangePassword = () => {
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-white">Confirm New Password:</label>
                         <div className="relative">
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="confirmPassword"
                                 value={matchPwd}
                                 onChange={(e) => setMatchPwd(e.target.value)}
@@ -130,6 +131,16 @@ const SettingsChangePassword = () => {
                             </span>
                         </div>
                     </div>
+                    <div className="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            id="showPassword"
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="showPassword" className="text-sm text-white">Show Password</label>
+                </div>
                     <div className="flex justify-center">
                         {loading ? (
                             <Spinner />
@@ -159,7 +170,7 @@ const SettingsChangePassword = () => {
                     </li>
                     <li className="flex items-center text-white">
                         <span className='mr-2'>•</span>
-                        At least 1 special character
+                        At least 1 special character (!@#$%^&*)
                     </li>
                     <li className="flex items-center text-white">
                         <span className='mr-2'>•</span>

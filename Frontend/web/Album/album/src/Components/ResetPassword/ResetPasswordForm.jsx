@@ -15,9 +15,9 @@ const ResetPassword = () => {
   const [validNewPwd, setValidNewPwd] = useState(false);
   const [validMatch, setValidMatch] = useState(false);
   const [loading, setLoading] = useState(false);
-  
   const [searchParams] = useSearchParams();
-  
+  const [showPassword, setShowPassword] = useState(false);
+
   const email = searchParams.get('email');
   const token = searchParams.get('token');
 
@@ -63,7 +63,7 @@ const ResetPassword = () => {
           </label>
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="newPassword"
               value={newPwd}
               onChange={(e) => setNewPwd(e.target.value)}
@@ -85,7 +85,7 @@ const ResetPassword = () => {
           </label>
           <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="confirmPassword"
               value={matchPwd}
               onChange={(e) => setMatchPwd(e.target.value)}
@@ -100,7 +100,16 @@ const ResetPassword = () => {
             </span>
           </div>
         </div>
-
+        <div className="flex items-center space-x-2 mt-4">
+          <input
+            type="checkbox"
+            id="showPassword"
+            checked={showPassword}
+            onChange={() => setShowPassword(!showPassword)}
+            className="h-4 w-4"
+            />
+          <label htmlFor="showPassword" className="text-sm text-white">Show Password</label>
+        </div>
         <button
           type="submit"
           disabled={loading}
@@ -119,7 +128,7 @@ const ResetPassword = () => {
         </li>
         <li className="flex items-center text-white">
             <span className='mr-2'>•</span>
-            At least 1 special character
+            At least 1 special character (!@#$%^&*)
         </li>
         <li className="flex items-center text-white">
             <span className='mr-2'>•</span>

@@ -27,6 +27,7 @@ const Register = () => {
   const [errMsg, setErrMsg] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,8 +49,6 @@ const Register = () => {
         );
         setSuccess(true)
       } catch (err) {
-        console.log(err);
-    
         if (!err?.response) {
           toast.error('No server response');
       } else if (err.response?.status === 400) {
@@ -159,7 +158,7 @@ const Register = () => {
                   <label htmlFor="password" className="block text-sm font-medium text-white">Password:</label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       onChange={(e) => setPwd(e.target.value)}
                       value={pwd}
@@ -185,7 +184,7 @@ const Register = () => {
                   <label htmlFor="confirm_pwd" className="block text-sm font-medium text-white">Confirm Password:</label>
                   <div className="relative">
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       id="confirm_pwd"
                       onChange={(e) => setMatchPwd(e.target.value)}
                       value={matchPwd}
@@ -203,6 +202,16 @@ const Register = () => {
                       <FontAwesomeIcon icon={faTimes} />
                     </span>
                   </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            id="showPassword"
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="showPassword" className="text-sm text-white">Show Password</label>
                 </div>
                 <div className="flex justify-center">
                   {loading ? (
@@ -240,7 +249,7 @@ const Register = () => {
                 </li>
                 <li className="flex items-center text-white">
                     <span className='mr-2'>•</span>
-                    At least 1 special character
+                    At least 1 special character (!@#$%^&*)
                 </li>
                 <li className="flex items-center text-white">
                     <span className='mr-2'>•</span>
