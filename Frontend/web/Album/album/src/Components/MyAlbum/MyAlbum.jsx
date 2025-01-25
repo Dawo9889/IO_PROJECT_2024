@@ -4,7 +4,7 @@ import "./MyAlbum.css";
 import StartPageCover from "./StartPageCover";
 import EndPageCover from "./EndPageCover";
 import ImageGallery from "./ImageGallery";
-import { saveAlbumAsHTML, exportAlbumToPDF, exportAlbumToDocx } from "./exportUtils";
+import { exportAlbumToPDF, exportAlbumToDocx } from "./exportUtils";
 import Page from "./Page"
 import { updateHeader, updateLayout, addPage, handleImageDrop, handleJumpToPage, handleWeddingSelect } from './AlbumCustomize';
 
@@ -148,9 +148,6 @@ function MyAlbum() {
                                 <option value="horizontal">Dwa zdjęcia (poziomo)</option>
                                 <option value="grid-2x2">Siatka 2x2</option>
                             </select>
-                            <button className="btn" onClick={() => saveAlbumAsHTML(pages)}>
-                                Zapisz album jako HTML
-                            </button>
                             <button className="btn" onClick={renderStaticView}>
                                 Render
                             </button>
@@ -158,11 +155,16 @@ function MyAlbum() {
                     </div>
                 </div>
             ) : (
-                <div style={{ textAlign: "center" }}>
+                    <div style={{ textAlign: "center" }}>
                     <button className="btn" onClick={handleBack}>Powrót do dynamicznego widoku</button>
                     <button className="btn" onClick={handleExportToPDF}>Eksportuj album do PDF</button>
                     <button className="btn" onClick={() => exportAlbumToDocx(pages)}>Eksportuj okładkę do DOCX</button>
-                    <div className="staticCoverStart">
+                        <div className="staticCoverStart"
+                            style={{
+                            height: bookDimensions.width,
+                                width: bookDimensions.height
+                            }}
+                        >
                             <h2>Album: {selectedWeddingName}</h2>
                     </div>
                     <div>
@@ -170,6 +172,10 @@ function MyAlbum() {
                             <div
                                 key={page.number}
                                 className={`staticPage ${page.layout}`}
+                                style={{
+                                    height: bookDimensions.width,
+                                    width: bookDimensions.height
+                                }}
                             >
                                 <h1>{page.header}</h1>
                                 <div className="staticDropZone">
@@ -185,7 +191,12 @@ function MyAlbum() {
                             </div>
                         ))}
                     </div>
-                    <div className="staticCoverBack">
+                        <div className="staticCoverBack"
+                            style={{
+                                height: bookDimensions.width,
+                                width: bookDimensions.height
+                            }}
+                        >
                         <h2>Do zobaczenia na poprawinach</h2>
                     </div>
                 </div>
