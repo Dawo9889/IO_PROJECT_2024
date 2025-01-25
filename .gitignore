@@ -35,3 +35,4 @@
 /Backend/Backend.Infrastructure/Migrations
 /assets/.vs/assets
 /assets/.vs
+/Backend/Backend.API/appsettings.json
