@@ -1,5 +1,9 @@
 # Cupid App
+
 [Website](https://app.cupid.pics)
+
+![main]
+
 ## Table of Contents
 
 - [Description](#description)
@@ -44,7 +48,22 @@ The project is based on **Clean Architecture**, ensuring a clear separation of c
 
 ## Gallery
 
+![web-gallery]
 
+![web-preview]
+
+![mobile-gallery]
+
+![mobile-preview]
+
+![album]
+
+[web-gallery]: ./media/web-gallery.jpeg
+[web-preview]: ./media/web-preview.jpeg
+[mobile-gallery]: ./media/mobile-gallery.jpg
+[mobile-preview]: ./media/mobile-preview.jpg
+[main]: ./media/main.png
+[album]: ./media/album.png
 ---
 
 **Thanks for checking out the project!**

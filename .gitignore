@@ -5,6 +5,7 @@
 /.vs
 *.log
 *.env
+/Backend/Backend.API/appsettings.json
 /Backend/Backend.API/zdjecia/Perfect Wedding_25.08.2024
 /Frontend/web/Album/.vs/Album/v17/.suo
 /Frontend/web/Album/.vs/Album/FileContentIndex/11f26094-e065-43be-ab07-0620a4a107f7.vsidx
