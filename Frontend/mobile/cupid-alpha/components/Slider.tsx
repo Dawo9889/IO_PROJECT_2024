@@ -12,20 +12,35 @@ interface sliderProps {
     setIsSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
     pageCount: number | null;
     partyID: string;
-    photos: any[];
 }
 
-const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID, photos }: sliderProps) => {
+const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID}: sliderProps) => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [currentPhoto, setCurrentPhoto] = useState<any>(null);
+    const [photos, setPhotos] = useState<any[]>([]);
 
     const handleGetAccessToken = async () => {
         setAccessToken(await getAccessToken());
     }
 
     useEffect(() => {
-      handleGetAccessToken()
+      const fetchPhotos = async () => {
+        if (partyID && currentIndex !== null && pageCount !== null) {
+          setLoading(true);
+          try {
+            const allPhotos = await fetchOriginalPhotos(partyID, pageCount);
+            setPhotos(allPhotos);
+            // setPhotos(allPhotos.map(photo => photo.filePath)); // Extract the filePath for Image source
+          } catch (error) {
+            console.error('Error fetching full-size photos:', error);
+          } finally {
+            setLoading(false);
+          }
+        }
+      };
+      handleGetAccessToken();
+      fetchPhotos();
     }, []);
 
     useEffect(() => {

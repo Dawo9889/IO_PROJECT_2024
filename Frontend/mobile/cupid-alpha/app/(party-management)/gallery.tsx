@@ -11,10 +11,12 @@ import { router } from 'expo-router';
 import axios from 'axios';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 import Slider from '@/components/Slider';
+import { useIsFocused } from '@react-navigation/native';
 
 const Gallery = () => {
   const searchParams = useSearchParams();
   const partyID = searchParams.get('id');
+  const isScreenFocused = useIsFocused();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,28 +63,17 @@ const Gallery = () => {
         console.error('Error checking login status:', error);
       }
     };
-    const fetchPhotos = async () => {
-        if (partyID && currentIndex !== null && pageCount !== null) {
-          try {
-            const allPhotos = await fetchOriginalPhotos(partyID, pageCount);
-            setPhotos(allPhotos);
-            // setPhotos(allPhotos.map(photo => photo.filePath)); // Extract the filePath for Image source
-          } catch (error) {
-            console.error('Error fetching full-size photos:', error);
-          } finally {
-            setIsLoading(false);
-          }
-        }
-      };
+    
       checkLogginStatus();
       fetchPartyDetails();
-      fetchPhotos();
       setIsLoading(false);
-    }, []);
+      console.log('Gallery page loaded');
+    }, [partyID, isScreenFocused]);
 
   const openSlider = (index: number) => {
     console.log('Opening slider at index:', index);
     if (thumbnails && thumbnails.length > 0) {
+      // console.log(photos)
       setCurrentIndex(index);
       setIsSliderOpen(true);
     }
@@ -172,7 +163,6 @@ return (
           isSliderOpen={isSliderOpen}
           setIsSliderOpen={setIsSliderOpen}
           pageCount={pageCount}
-          photos={photos}
           partyID={partyID} />
       ) : (
         <>
