@@ -15,17 +15,33 @@ interface sliderProps {
     photos: any[];
 }
 
-const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID, photos }: sliderProps) => {
+const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID}: sliderProps) => {
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [currentPhoto, setCurrentPhoto] = useState<any>(null);
+    const [photos, setPhotos] = useState<any[]>([]);
 
     const handleGetAccessToken = async () => {
         setAccessToken(await getAccessToken());
     }
 
     useEffect(() => {
-      handleGetAccessToken()
+      const fetchPhotos = async () => {
+        if (partyID && currentIndex !== null && pageCount !== null) {
+          setLoading(true);
+          try {
+            const allPhotos = await fetchOriginalPhotos(partyID, pageCount);
+            setPhotos(allPhotos);
+            // setPhotos(allPhotos.map(photo => photo.filePath)); // Extract the filePath for Image source
+          } catch (error) {
+            console.error('Error fetching full-size photos:', error);
+          } finally {
+            setLoading(false);
+          }
+        }
+      };
+      handleGetAccessToken();
+      fetchPhotos();
     }, []);
 
     useEffect(() => {
@@ -101,8 +117,8 @@ const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, 
                     onError={(error) => console.error('Error loading image:', currentPhoto.photoSrc)}
                   />
                   {(currentPhoto.description || currentPhoto.author) && (
-                  <View className='absolute bottom-[20px] border-2 border-white rounded-lg p-3 w-[90%] h-[80px] items-center justify-center'>
-                    <Text className='text-white'>{`${currentPhoto.description} ${currentPhoto.author}`}</Text>
+                  <View className='absolute bottom-[20px] border-2 border-white rounded-lg p-3 w-[90%] h-[80px] items-center justify-center bg-gray-400'>
+                    <Text className='text-black'>{`${currentPhoto.description} ${currentPhoto.author}`}</Text>
                   </View>
                   )}
                 </>

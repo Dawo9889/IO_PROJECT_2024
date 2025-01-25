@@ -58,7 +58,7 @@ const PartyList = () => {
       <StatusBar translucent={true} />
         <View className='w-full justify-center items-center min-h-[85vh] px-4'>
           <Image source={icons.cupidlogohorizontal} className='h-[100px] absolute top-5' resizeMode='contain' tintColor='#fff' />       
-            <View className='w-full'>
+            <View className='w-full mt-[150px]'>
             {isLoading ? ( // Show the throbber if loading
               <View className="mt-10 flex justify-center items-center">
                 <ActivityIndicator size="large" color="#fff" className='flex'/>
@@ -74,7 +74,7 @@ const PartyList = () => {
                   renderItem={renderPartyComponent}
                   keyExtractor={(item) => item.id}
                   numColumns={1}
-                  showsVerticalScrollIndicator={true}
+                  showsVerticalScrollIndicator={false}
                   ListFooterComponent={() => (
                     <>
                       <View className="m-2 border-2 border-white rounded-lg p-3 items-center">
@@ -85,7 +85,7 @@ const PartyList = () => {
                           iconSize={50}
                         />
                       </View>
-                      <View className="h-[50px]"/>
+                      <View className="h-[100px]"/>
                     </>
                   )}
                 />

@@ -10,10 +10,12 @@ import { useEffect, useState } from 'react'
 import { getAccessToken, getLoggedUsername, getRefreshToken } from '@/constants/storage'
 import { refreshAccessToken } from '@/constants/api'
 import { logout } from '@/constants/helpers'
+import { useIsFocused } from '@react-navigation/native'
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Start as loading
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -26,7 +28,10 @@ const App = () => {
           setIsAuthenticated(false);
         } else {
           const response = await refreshAccessToken();
-          if (response) setIsAuthenticated(true);
+          if (response) {
+            setIsAuthenticated(true);
+            router.replace('/home');
+          }
           else {
             setIsAuthenticated(false);
             Alert.alert('Session expired', 'Please log in again to continue.');
@@ -46,6 +51,18 @@ const App = () => {
     };
     checkLoginStatus();
   }, []);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const loggedUsername = await getLoggedUsername();
+      if (loggedUsername) {
+        router.replace('/home');
+      }
+    }
+    if (isFocused) {
+      checkLoginStatus();
+      }
+  }, [isFocused])
 
   useEffect(() => {
     // Navigate once authentication state is determined

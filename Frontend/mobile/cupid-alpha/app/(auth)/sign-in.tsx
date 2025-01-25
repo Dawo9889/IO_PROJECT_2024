@@ -8,6 +8,7 @@ import { Link, router } from 'expo-router'
 import icons from '@/constants/icons'
 import { loginUser, resendEmailConfirmation } from '@/constants/api'
 import ProfileButton from '@/components/navigation/ProfileButton'
+import { getLoggedUsername } from '@/constants/storage'
 
 const SignIn = () => {
 
@@ -17,8 +18,6 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
-
-
 
   const [form, setForm] = useState({
     email: '',
@@ -110,13 +109,6 @@ const SignIn = () => {
               isPassword={true}
               handleChangeText={(e: string) => setForm({ ...form, password: e })}
               otherStyles="mt-5" placeholder='' keyboardType='default' inputValid={null}      />
-            {loginFailed &&
-              <View className='justif-center mt-1 flex-row'>
-                <Text className='text-lg text-gray-100 font-pregular'>
-                  Forgot password? 
-                </Text>
-                <Link href='./reset-password' className='text-lg text-secondary font-psemibold'> Reset password</Link>
-              </View>}
 
             <CustomButton 
               title={`Sign in`}
