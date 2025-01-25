@@ -20,6 +20,7 @@ import SettingsModifyProfileImage from "./Components/Settings/SettingsModifyProf
 import { ToastContainer } from "react-toastify";
 import SettingsChangeMail from "./Components/Settings/SettingsChangeMail";
 import PublicRoute from "./Components/AuthMechanizm/PublicRoute";
+import Mobile from "./Components/Other/Mobile";
 function App() {
 
     return (
@@ -33,8 +34,9 @@ function App() {
             <Route path="resetPassword" element={<PublicRoute element={<ResetPassword />} />} />
             <Route path="resetPasswordForm" element={<PublicRoute element={<ResetPasswordForm />} />} />
             <Route path="team" element={<Team />} />
+            <Route path="mobile" element={<Mobile />} />
             <Route path="unauthorized" element={<Unauthorized />} />
-            <Route path="/" element={<div className="p-4"><Home /></div>} />
+            <Route path="/" element={<div className="p-4 bg-project-dark"><Home /></div>} />
          
             <Route path="album" element={<PrivateRoute element={<MyAlbum />} />} />
             <Route path="admin" element={<PrivateRoute element={<Admin />} />} />
