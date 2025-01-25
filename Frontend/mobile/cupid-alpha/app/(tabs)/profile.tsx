@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons'
 import IconButton from '@/components/navigation/IconButton'
 import ProfileButton from '@/components/navigation/ProfileButton'
 import React from 'react'
+import { logout } from '@/constants/helpers'
 
 const Profile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,26 +33,16 @@ const Profile = () => {
     checkLoginStatus();
   }, []);
 
-  const logout = async () => {
-    try {
-      await removeAccessToken();
-      await removeRefreshToken();
-      await removeLoggedUsername();
-    } catch (error: any) {
-      Alert.alert('Error', error);
-      return;
-    }
-    Alert.alert('You have been logged out!');
-    router.replace('/');
-  }
-
   const confirmLogout = () => {
     Alert.alert(
       "Confirm Logout",
       "Are you sure you want to log out?",
       [
         { text: "Cancel", style: "cancel" }, // Cancel button
-        { text: "Log Out", onPress: logout, style: "destructive" }, // Logout button
+        { text: "Log Out", onPress: async () => {
+            await logout();     Alert.alert('You have been logged out!');
+            router.replace('/');
+          }, style: "destructive" }, // Logout button
       ],
       { cancelable: true } // Allow dismissing the alert by tapping outside
     );
@@ -89,10 +80,9 @@ const Profile = () => {
               <View className='mt-8 w-full'>
                 <ProfileButton
                   title="Edit Profile"
-                  handlePress={() => {}}
+                  handlePress={() => router.push('/profile-management')}
                   containerStyles="w-full mt-7"
                   textStyles=""
-                  disabled={true}
                 />
                 <ProfileButton
                 title="Manage parties"

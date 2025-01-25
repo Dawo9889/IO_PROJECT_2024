@@ -26,6 +26,20 @@ const JoinParty = () => {
     const [inputValue, setInputValue] = useState('');
     const [isFocused, setIsFocused] = useState(false);
 
+    const isScreenFocused = useIsFocused();
+    const [isCameraReady, setIsCameraReady] = useState(false);
+    const [shouldShowCamera, setShouldShowCamera] = useState(false);
+
+    useEffect(() => {
+      let timeoutId: NodeJS.Timeout;
+      if (isScreenFocused) {
+        timeoutId = setTimeout(() => setShouldShowCamera(true), 200); // Delay of 200ms
+      } else {
+        setShouldShowCamera(false); // Hide camera immediately on blur
+      }
+      return () => clearTimeout(timeoutId);
+    }, [isScreenFocused]);
+
     if (!camPermission) {
         // Camera permissions are still loading.
         return <View />;
@@ -79,7 +93,7 @@ const JoinParty = () => {
         setNewToken('');
       }
 
-    return (
+    return isScreenFocused && camPermission.granted ? (
         <SafeAreaView className='bg-primarygray h-full'> 
         <StatusBar translucent={true} />
         <ScrollView contentContainerStyle={{
@@ -125,14 +139,18 @@ const JoinParty = () => {
 
               <Text className='absolute top-[130px] text-3xl text-center font-bbold text-white'>Scan party token</Text>
               <View className="absolute top-[170px] w-[250px] h-[250px] border-2 border-white rounded-lg overflow-hidden">
-                <CameraView
+                {shouldShowCamera && <CameraView
+                onCameraReady={() => setIsCameraReady(true)}
                 style={[{ flex: 1 }, {transform: [{ scale: 3}]}]}
                 facing='back'
                 onBarcodeScanned={scanned ? undefined : handleQRScanned}
                 barcodeScannerSettings={{
                     barcodeTypes: ['qr'],
                 }}
-                />
+                onMountError={(error) => Alert.alert('Camera error', error.toString())}
+                >
+                  {!isCameraReady && <Text className='text-white text-2xl font-bbold text-center'>Loading camera...</Text>}
+                </CameraView>}
               </View>
               {scanned &&
               <CustomButton title={'Scan again'} handlePress={resetScanner} containerStyles={'absolute top-[420px] w-[200px] m-[10px]'} textStyles={''} />
@@ -165,7 +183,7 @@ const JoinParty = () => {
               />
         </ScrollView>
         </SafeAreaView>
-    )
+    ) : <View />;
 }
 
 export default JoinParty

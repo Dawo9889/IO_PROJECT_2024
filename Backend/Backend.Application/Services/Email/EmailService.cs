@@ -14,24 +14,25 @@ namespace Backend.Application.Services.Email
         public Task SendEmailAsync(string to, string subject, string body)
         {
             Console.WriteLine($"Smtp Password: {_smtpPassword}");
-            var fromEmail = "MS_wy7blF@trial-7dnvo4dxpk9g5r86.mlsender.net";
-            var mailMessage = new MailMessage(fromEmail, to, subject, body);
+            var fromEmail = "no-reply@cupid.pics";
+            var mailMessage = new MailMessage(fromEmail, to, subject, body)
+            {
+                IsBodyHtml = true
+            };
 
-            var smtpClient = new SmtpClient("smtp.mailersend.net")
+            var smtpClient = new SmtpClient("smtp.resend.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("MS_wy7blF@trial-7dnvo4dxpk9g5r86.mlsender.net", _smtpPassword),
+                Credentials = new NetworkCredential("resend", _smtpPassword),
                 EnableSsl = true
             };
             try
             {
-             
                 smtpClient.Send(mailMessage);
                 Console.WriteLine("Email sent successfully.");
             }
             catch (Exception ex)
             {
-              
                 Console.WriteLine($"Error sending email: {ex.Message}");
             }
             return Task.CompletedTask;

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Spinner from "../Spinner/Spinner";
-import Masonry from "react-masonry-css";
-import WeddingPhotoSlider from "./WeddingPhotoSlider";
 import axios from "axios";
+import Masonry from "react-masonry-css";
+import Spinner from "../Spinner/Spinner";
+import WeddingPhotoSlider from "./WeddingPhotoSlider";
+import useAuth from "../hooks/useAuth";
 
 const WeddingPhotos = ({ weddingId }) => {
+  const {auth} = useAuth()
+
   const [thumbnails, setThumbnails] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const authData = JSON.parse(localStorage.getItem("auth"));
-  const accessToken = authData?.accessToken;
-
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [pageCount, setPageCount] = useState(null)
@@ -44,6 +43,7 @@ const WeddingPhotos = ({ weddingId }) => {
 
   const handlePhotoDeleted = () => {
     fetchThumbnails();
+    console.log("hej")
     if(thumbnails.length == 0){
       setPageCount(pageCount - 1)
       setPageIndex(pageIndex - 1)
@@ -56,7 +56,7 @@ const WeddingPhotos = ({ weddingId }) => {
           `${import.meta.env.VITE_API_URL}/wedding/details/?id=${weddingId}`,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${auth.accessToken}`,
             },
           }
         );
@@ -67,16 +67,6 @@ const WeddingPhotos = ({ weddingId }) => {
   };
 };
 
-useEffect(() => {
-fetchWeddingInfo()
-
-const interval = setInterval(() => {
-  fetchWeddingInfo();
-}, 1000);
-
-return () => clearInterval(interval);
-
-},[weddingId])
 
 const fetchThumbnails = async () => {
   setLoading(true);
@@ -85,25 +75,21 @@ const fetchThumbnails = async () => {
           `${import.meta.env.VITE_API_URL}/image/path?weddingId=${weddingId}&pageNumber=${pageIndex}`,
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${auth.accessToken}`,
             },
           }
         );
         if(response.data.length == 0){
           setPageCount(pageCount - 1)
-          setPageIndex(pageIndex - 1)
+          // setPageIndex(pageIndex - 1)
         }
-        const sortedData = response.data.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        );
-  
-        const thumbnailLinks = sortedData.map((item) => item.thumbnailPath);
+        const thumbnailLinks = response.data.map((item) => item.thumbnailPath);
         const authorizedThumbnails = await Promise.all(
           thumbnailLinks.map(async (thumbnail) => {
             try {
               const res = await axios.get(thumbnail, {
                 headers: {
-                  Authorization: `Bearer ${accessToken}`,
+                  Authorization: `Bearer ${auth.accessToken}`,
                 },
                 responseType: "arraybuffer",
               });
@@ -115,7 +101,6 @@ const fetchThumbnails = async () => {
             }
           })
         );
-  
         setThumbnails(
           authorizedThumbnails.filter((thumbnail) => thumbnail !== null)
         );
@@ -124,6 +109,15 @@ const fetchThumbnails = async () => {
         setLoading(false);
       }
     };
+
+  useEffect(() => {
+    fetchWeddingInfo()
+    const interval = setInterval(() => {
+      fetchWeddingInfo();
+    }, 1000);
+      
+    return () => clearInterval(interval);
+  },[weddingId])
 
   useEffect(() => {
     fetchThumbnails();

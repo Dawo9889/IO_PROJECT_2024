@@ -6,12 +6,18 @@ import CustomButton from '@/components/CustomButton'
 import { Link, router } from 'expo-router'
 
 import icons from '@/constants/icons'
-import { loginUser } from '@/constants/api'
+import { loginUser, resendEmailConfirmation } from '@/constants/api'
+import ProfileButton from '@/components/navigation/ProfileButton'
+import { getLoggedUsername } from '@/constants/storage'
 
 const SignIn = () => {
 
   const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const [emailValid, setEmailValid] = useState(false);
+  const [resendConfirmationMail, setResendConfirmationMail] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const [form, setForm] = useState({
     email: '',
@@ -32,19 +38,52 @@ const SignIn = () => {
     setIsSubmitting(true);
 
     try{
+      setLoading(true);
       const response = await loginUser(form.email, form.password)
       if (response == 200) {
         Alert.alert('You are logged in!')
         router.replace('/home');
       } 
     }
-    catch (error: any) {
-      Alert.alert('Error', error.message)
+    catch (err: any) {
+      //Alert.alert('Error', error.message)
+        if(!err?.response){
+          Alert.alert('No Server response')
+          // setErrMsg('No Server response')
+      }
+      if (err.response?.status === 400) {
+        Alert.alert('Login failed', 'Missing username or password.');
+      }
+      else if (err.response?.status === 401 && err.response?.data === "Email not confirmed.") {
+          setResendConfirmationMail(true);
+          Alert.alert('Login failed', 'Email address is not confirmed.');
+      }
+      else if (err.response?.status === 401 && err.response?.data !== "Email not confirmed.") {
+        Alert.alert('Login failed', 'Invalid email or passoword.');
+      }
+      else {
+        Alert.alert('Login Failed');
+      }
+      setLoginFailed(true);
     }
     finally{
+      setLoading(false);
       setIsSubmitting(false);
     }
   }
+
+  const handleResend = () => {
+    try{
+      setResendLoading(true);
+      const response = resendEmailConfirmation(form.email);
+      Alert.alert('Email sent', 'Please check your email inbox and spam folder.')
+    } catch(err: any){
+      Alert.alert('Error', err)
+    } finally {
+      setResendLoading(false);
+    }
+  }
+
 
   return (
     <SafeAreaView className='bg-primarygray h-full'>
@@ -72,9 +111,11 @@ const SignIn = () => {
               otherStyles="mt-5" placeholder='' keyboardType='default' inputValid={null}      />
 
             <CustomButton 
-              title="Sign in"
+              title={`Sign in`}
               handlePress={submit}
-              containerStyles='mt-7' textStyles={''} disabled={!emailValid || form.password == '' || isSubmitting}            />
+              containerStyles='mt-7' textStyles={''}
+              disabled={!emailValid || form.password == '' || isSubmitting || loading}
+              loading={loading}   />
 
             <View className='justif-center pt-5 flex-row gap-2'>
               <Text className='text-lg text-gray-100 font-pregular'>
@@ -82,6 +123,10 @@ const SignIn = () => {
               </Text>
               <Link href='./sign-up' className='text-lg text-secondary font-psemibold'>Sign up</Link>
             </View>
+            {resendConfirmationMail && 
+            <ProfileButton title='Resend confirmation email'
+            handlePress={handleResend} containerStyles={'w-3/4 mt-10 mx-auto'} textStyles={'text-xl'} loading={resendLoading}/>
+            }
           </View>
         </View>
       </ScrollView>

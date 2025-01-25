@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
 
 interface ProfileButtonProps {
@@ -7,11 +7,11 @@ interface ProfileButtonProps {
     containerStyles: string,
     textStyles: string,
     disabled?: boolean,
-    bgcolor?: string
-
+    bgcolor?: string,
+    loading?: boolean
 }
 
-const ProfileButton = ({title, handlePress, containerStyles, textStyles, disabled, bgcolor}: ProfileButtonProps) => {
+const ProfileButton = ({title, handlePress, containerStyles, textStyles, disabled, bgcolor, loading=false}: ProfileButtonProps) => {
   return (
     <TouchableOpacity
         onPress={handlePress}
@@ -20,9 +20,14 @@ const ProfileButton = ({title, handlePress, containerStyles, textStyles, disable
            min-h-[62px] justify-center items-center  ${containerStyles} ${bgcolor || 'bg-tertiary'} ${disabled ? 'opacity-50' : ''}`}
         disabled={disabled}
         >
-        <Text className={`text-black font-bbold text-3xl ${textStyles}`}>
-            {title}
-        </Text>
+          {loading ? 
+          (<ActivityIndicator size='large' color="#fff" />) :
+          (
+            <Text className={`text-black font-bbold text-3xl ${textStyles}`}>
+              {title}
+            </Text>
+          )}
+        
     </TouchableOpacity>
   )
 }
