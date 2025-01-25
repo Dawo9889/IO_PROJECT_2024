@@ -30,6 +30,7 @@
     "expo-file-system": "~18.0.4",
     "expo-font": "~13.0.1",
     "expo-haptics": "~14.0.0",
+    "expo-image": "^2.0.4",
     "expo-image-manipulator": "^13.0.5",
     "expo-linking": "~7.0.3",
     "expo-media-library": "~17.0.3",

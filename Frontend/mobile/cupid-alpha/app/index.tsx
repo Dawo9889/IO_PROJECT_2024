@@ -3,16 +3,19 @@ import { Link, Redirect, router } from 'expo-router'
 import { ScrollView, View, Image, Text, Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import CustomButton from '@/components/CustomButton'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import icons from '@/constants/icons'
 import { useEffect, useState } from 'react'
 import { getAccessToken, getLoggedUsername, getRefreshToken } from '@/constants/storage'
 import { refreshAccessToken } from '@/constants/api'
 import { logout } from '@/constants/helpers'
+import { useIsFocused } from '@react-navigation/native'
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Start as loading
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -24,14 +27,23 @@ const App = () => {
         if (!loggedUsername || !accessToken || !refreshToken) {
           setIsAuthenticated(false);
         } else {
-          await refreshAccessToken();
-          setIsAuthenticated(true);
+          const response = await refreshAccessToken();
+          if (response) {
+            setIsAuthenticated(true);
+            router.replace('/home');
+          }
+          else {
+            setIsAuthenticated(false);
+            Alert.alert('Session expired', 'Please log in again to continue.');
+            await logout();
+            router.replace('/');
+          }
         }
       } catch (error: any) {
           console.log('Access token expired. Redirecting to login page...');
           Alert.alert('Session expired', 'Please log in again to continue.');
           await logout();
-          // router.replace('/');
+          router.replace('/');
           setIsAuthenticated(false);
       } finally {
         setIsLoading(false); // End loading after the check
@@ -39,6 +51,18 @@ const App = () => {
     };
     checkLoginStatus();
   }, []);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const loggedUsername = await getLoggedUsername();
+      if (loggedUsername) {
+        router.replace('/home');
+      }
+    }
+    if (isFocused) {
+      checkLoginStatus();
+      }
+  }, [isFocused])
 
   useEffect(() => {
     // Navigate once authentication state is determined
@@ -54,6 +78,7 @@ const App = () => {
   
 
   return (
+    <GestureHandlerRootView>
     <SafeAreaView className='bg-primarygray h-full'>  
       <ScrollView contentContainerStyle={{
         height: '100%'
@@ -84,6 +109,7 @@ const App = () => {
       </ScrollView>
       <StatusBar translucent={true} />
     </SafeAreaView>
+    </GestureHandlerRootView>
   )
 }
 

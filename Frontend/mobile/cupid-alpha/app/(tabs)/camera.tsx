@@ -173,9 +173,9 @@ export default function Camera() {
               iconName={'ellipse-outline'}
               iconSize={90}
             /> :
-          <View className='flex-row absolute bottom-[20px] left-1/2 transform -translate-x-1/2 w-[230px]'>
-          <Text className='text-white text-3xl font-bbold mr-[20px] ml-[40px]'>JOIN PARTY</Text>
-          <Ionicons name='arrow-forward-outline' color='white' size={30}/>
+          <View className='flex-row mt-[25px] w-1/2 mx-auto items-center justify-center'>
+            <Text className='text-white text-2xl font-bbold mr-[10px] flex-row'>JOIN PARTY</Text>
+            <Ionicons name='arrow-forward-outline' color='white' size={30} className='flex-row'/>
           </View>
           }
           <IconButton
