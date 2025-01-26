@@ -50,7 +50,7 @@ export const addPage = (pages, setPages, setBookKey) => {
     setBookKey(prevKey => prevKey + 1);
 };
 
-export const handleImageDrop = (pages, setPages, src, pageNumber, layout = "default", dropIndex = null) => {
+export const handleImageDrop = (pages, setPages, src, pageNumber, layout = "default", dropIndex = null, author, description) => {
 
     setPages(pages.map(page => {
         if (page.number === pageNumber) {
@@ -58,17 +58,16 @@ export const handleImageDrop = (pages, setPages, src, pageNumber, layout = "defa
             if (page.layout === "vertical") maxImages = 2;
             if (page.layout === "horizontal") maxImages = 2;
             if (page.layout === "grid-2x2") maxImages = 4;
-            console.log(src)
             if (dropIndex != null) {
                 const updatedImages = [...page.images];
-                updatedImages[dropIndex] = { src, layout };
+                updatedImages[dropIndex] = { src, layout, author, description };
                 return { ...page, images: updatedImages };
             }
 
             if (page.images.length < maxImages) {
                 return {
                     ...page,
-                    images: [...page.images, { src, layout }]
+                    images: [...page.images, { src, layout, author, description }]
                 };
             }
         }

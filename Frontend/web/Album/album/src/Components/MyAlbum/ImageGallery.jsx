@@ -4,10 +4,12 @@ import axios from "axios";
 import Gallery from "./Gallery";
 
 function ImageGallery({ onWeddingSelect }) {
+
     const [weddings, setWeddings] = useState([]);
     const [selectedWedding, setSelectedWedding] = useState(null);
 
     useEffect(() => {
+
         const authData = JSON.parse(localStorage.getItem("auth"));
         const accessToken = authData?.accessToken;
 

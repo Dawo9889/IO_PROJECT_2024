@@ -32,8 +32,8 @@ function MyAlbum() {
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
-            const width = Math.floor((screenWidth * 0.3)); // np. 30% szerokości ekranu
-            const height = Math.floor((screenHeight * 0.5)); // np. 50% wysokości ekranu
+            const width = Math.floor((screenWidth * 0.35)); // np. 30% szerokości ekranu
+            const height = Math.floor((screenHeight * 0.52)); // np. 50% wysokości ekranu
 
             setBookDimensions({ width, height });
         };
@@ -100,8 +100,8 @@ function MyAlbum() {
                                     header={page.header}
                                     images={page.images}
                                     layout={page.layout}
-                                    onImageDrop={(src, number, layout, dropIndex) =>
-                                        handleImageDrop(pages, setPages, src, number, layout, dropIndex)
+                                    onImageDrop={(src, number, layout, dropIndex, author, description) =>
+                                        handleImageDrop(pages, setPages, src, number, layout, dropIndex, author, description)
                                     }
                                 />
                             ))}
@@ -180,12 +180,16 @@ function MyAlbum() {
                                 <h1>{page.header}</h1>
                                 <div className="staticDropZone">
                                     {page.images.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image.src}
-                                            alt="Dynamic"
-                                            className={`staticPageImage ${page.layout}`}
-                                        />
+                                        <div key={index} className="imageWithInfo">
+                                            <img
+                                                src={image.src}
+                                                alt={`Image on page ${page.number}`}
+                                                className={`staticPageImage ${page.layout}`}
+                                            />
+                                            <div className="imageDetails">
+                                                <p className="author">{"Autor: "+image.author}</p>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
