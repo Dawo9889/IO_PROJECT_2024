@@ -88,7 +88,7 @@ const App = () => {
           <View className='relative mt-5'>
             <Text className='text-3xl text-primary text-center font-bbold'>
               Welcome to{' '}
-            <Text className='text-secondary-200'>Cupid</Text>!
+            <Text className='text-secondary-200'>CUPID</Text>!
             </Text>
           </View>
           <Text className='text-lg text-primary font-bregular mt-7 text-center'>

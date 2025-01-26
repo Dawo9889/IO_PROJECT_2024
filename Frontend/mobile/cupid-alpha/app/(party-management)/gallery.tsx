@@ -66,7 +66,6 @@ const Gallery = () => {
     
       checkLogginStatus();
       fetchPartyDetails();
-      fetchPhotos();
       setIsLoading(false);
       console.log('Gallery page loaded');
     }, [partyID, isScreenFocused]);
@@ -159,12 +158,12 @@ return (
       <>
       {(isSliderOpen && currentIndex !== null && partyID) ? (
         <Slider
-          currentIndex={currentIndex + (pageIndex - 1) * 24}
-          setCurrentIndex={setCurrentIndex}
-          isSliderOpen={isSliderOpen}
-          setIsSliderOpen={setIsSliderOpen}
-          pageCount={pageCount}
-          partyID={partyID} />
+                      currentIndex={currentIndex + (pageIndex - 1) * 24}
+                      setCurrentIndex={setCurrentIndex}
+                      isSliderOpen={isSliderOpen}
+                      setIsSliderOpen={setIsSliderOpen}
+                      pageCount={pageCount}
+                      partyID={partyID} />
       ) : (
         <>
         <FlatList

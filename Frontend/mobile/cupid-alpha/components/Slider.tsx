@@ -12,7 +12,6 @@ interface sliderProps {
     setIsSliderOpen: React.Dispatch<React.SetStateAction<boolean>>;
     pageCount: number | null;
     partyID: string;
-    photos: any[];
 }
 
 const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, pageCount, partyID}: sliderProps) => {
@@ -123,12 +122,12 @@ const Slider = ({ currentIndex, setCurrentIndex, isSliderOpen, setIsSliderOpen, 
                   )}
                 </>
               )}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => setIsSliderOpen(false)}
                 className="absolute top-[65px] right-2 p-3 bg-red-500 rounded-md"
               >
                 <Text style={{ color: 'white' }}>Close</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </PanGestureHandler>
         </GestureHandlerRootView>

@@ -79,7 +79,8 @@ export default function Camera() {
   }, [isFocused]);
 
   if (isLoading) {
-    return <SafeAreaView className="bg-primarygray h-full" ><Text className='text-white font-bbold'>Loading...</Text></SafeAreaView>;
+    // return <SafeAreaView className="bg-primarygray h-full w-full items-center justify-center" ><Text className='text-white font-bbold'>Loading...</Text></SafeAreaView>;
+    return <View className="bg-primarygray w-full h-full" />;
   }
 
   if (!camPermission) {
@@ -191,7 +192,7 @@ export default function Camera() {
               iconSize={40}
             />
 
-</View>
+        </View>
         </CameraView>
       </View>
     }
