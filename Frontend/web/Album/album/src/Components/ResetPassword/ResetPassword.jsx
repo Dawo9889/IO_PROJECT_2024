@@ -58,6 +58,7 @@ const ResetPassword = () => {
         <button
           className="text-center w-full py-2 px-4 bg-project-yellow text-dark font-semibold rounded-lg hover:bg-project-yellow-buttons focus:outline-none focus:ring-2 focus:ring-project-yellow-buttons"
           type="submit"
+          disabled={loading}
         >
           Reset Password
        </button>

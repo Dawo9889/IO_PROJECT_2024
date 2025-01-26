@@ -22,9 +22,9 @@ const Login = () => {
     const [errMsg, setErrMsg] = useState('');
     const [loading, setLoading] = useState(false);
     const [resendConfirmationMail, setResendConfirmationMail] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        // console.clear()
         userRef.current.focus();
     }, [])
 
@@ -39,7 +39,7 @@ const Login = () => {
             const response = await axios.post(LOGIN_URL, 
                 {
                     "email": user,
-                    "password": password
+                    "password": password,
                 }
             );
             // const expiryTime = Date.now() + 90 * 1000;
@@ -74,7 +74,6 @@ const Login = () => {
             else {
                 toast.error('Login Failed');
             }
-            // errRef.current.focus();
         }
         finally{
             setLoading(false)
@@ -115,13 +114,23 @@ const Login = () => {
             <div>
                 <label htmlFor="password" className="block text-sm font-medium text-white">Password:</label>
                 <input 
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     id="password"
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     required
                     className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-project-blue"
                 />
+            </div>
+            <div className="flex items-center space-x-2">
+                        <input
+                            type="checkbox"
+                            id="showPassword"
+                            checked={showPassword}
+                            onChange={() => setShowPassword(!showPassword)}
+                            className="h-4 w-4"
+                        />
+                        <label htmlFor="showPassword" className="text-sm text-white">Show Password</label>
             </div>
             <div className="flex justify-center">
             {loading ? (

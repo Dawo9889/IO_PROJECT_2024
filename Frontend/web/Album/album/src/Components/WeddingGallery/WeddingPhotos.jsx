@@ -43,7 +43,6 @@ const WeddingPhotos = ({ weddingId }) => {
 
   const handlePhotoDeleted = () => {
     fetchThumbnails();
-    console.log("hej")
     if(thumbnails.length == 0){
       setPageCount(pageCount - 1)
       setPageIndex(pageIndex - 1)

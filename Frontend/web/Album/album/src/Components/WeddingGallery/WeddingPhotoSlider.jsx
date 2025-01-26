@@ -139,7 +139,8 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
         setCurrentPhoto({
           photoSrc: URL.createObjectURL(photoBlob),
           thumbnailSrc: URL.createObjectURL(thumbnailBlob),
-          description: photos[currentIndex].description
+          description: photos[currentIndex].description,
+          author: photos[currentIndex].author
         });
       } catch (err) {
         console.error(`Błąd podczas ładowania zdjęcia:`, err);
@@ -165,7 +166,7 @@ const WeddingPhotoSlider = ({ weddingId, pageCount, index, onPhotoDeleted, onClo
       ) : (
         <div className="flex flex-col">
           <div className='text-white text-2xl flex justify-center w-full'>
-              {currentPhoto?.description}
+              {currentPhoto?.description} ~ {currentPhoto?.author}
           </div>
           <div
             className="max-w-4xl flex items-center m-4"

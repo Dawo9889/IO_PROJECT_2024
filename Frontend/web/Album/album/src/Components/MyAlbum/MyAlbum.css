@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+
 /* Główne style aplikacji */
 .app-container {
-    min-height: 100vh;
-    padding: 20px;
+    display: flex; /* Flexbox dla układów */
+    justify-content: center; /* Wyśrodkowanie poziome */
+    align-items: center; /* Wyśrodkowanie pionowe */
+    min-height: 100vh; /* Pełna wysokość widoku */
+    margin: 0; /* Usuń domyślne marginesy */
+    padding: 0; /* Usuń domyślne odstępy */
 }
 
 .upload-box-container {
@@ -114,12 +121,15 @@ input {
 .coverStart, .coverBack,
 .staticCoverStart, .staticCoverBack {
     background-color: #ffed90;
-    width: 500px;
-    height: 750px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    text-align: center;
+    font-family: 'Playfair Display', serif; /* Zmieniamy czcionkę na Google Fonts, np. Roboto */
+    font-size: 2rem; /* Zwiększamy rozmiar czcionki */
+    font-weight: bold; /* Pogrubiamy czcionkę */
+    color: #333; /* Zmieniamy kolor na ciemniejszy */
 }
 
 .coverStart, .coverBack {
@@ -145,7 +155,7 @@ input {
     .staticPage img {
         width: 100%;
         height: 100%;
-        object-fit: fill;
+        object-fit: none;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
@@ -220,8 +230,6 @@ input {
 }
 
 .staticPage {
-    width: 500px;
-    height: 750px;
     margin: 20px auto;
     background-color: whitesmoke;
     box-sizing: border-box;
@@ -237,7 +245,7 @@ input {
     .staticPage img {
         width: 100%; /* Ustaw pełną szerokość */
         height: 100%; /* Ustaw pełną wysokość */
-        object-fit: fill; /* Dopasowanie obrazu tak jak w dynamicznym */
+        object-fit: none; /* Dopasowanie obrazu tak jak w dynamicznym */
         border-radius: 5px; /* Zaokrąglone rogi */
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
     }
@@ -247,8 +255,84 @@ input {
         justify-content: center;
         align-items: center;
         width: 90%; /* Dopasowanie do dynamicznego wyglądu */
-        height: calc(100% - 20px); /* Zachowanie proporcji */
-        margin: 10px auto; /* Wycentrowanie w kontenerze */
+        height: 90%; /* Zachowanie proporcji */
+        margin: 5%; /* Wycentrowanie w kontenerze */
         overflow: hidden; /* Ukrywanie nadmiaru */
         position: relative; /* Ustawienie dla obrazu */
+    }
+
+    /* Jedno zdjęcie - domyślny układ */
+    .staticPage.single .staticDropZone,
+    .page.single .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .staticPage.single img,
+    .page.single img {
+        width: 100%;
+        height: auto;
+        object-fit: none;
+    }
+
+    /* Dwa zdjęcia poziomo */
+    .page.horizontal .image-container {
+        display: flex; /* Zmieniamy na flexbox */
+        flex-direction: column; /* Ustawiamy elementy w kolumnie */
+        gap: 10px; /* Odstęp między zdjęciami */
+        justify-content: flex-start; /* Wyrównanie do góry */
+        align-items: center; /* Wyśrodkowanie zdjęć */
+    }
+    .staticPage.horizontal .staticDropZone {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        height: 100%; /* Pełna wysokość strefy */
+        overflow: hidden;
+    }
+
+    .page.horizontal img {
+        width: 100%;
+        height: 100%;
+    }
+    .staticPage.horizontal img {
+        width: 100%; /* Szerokość zdjęcia dopasowana */
+        height: calc(50% - 5px); /* Połowa wysokości strefy minus odstęp */
+        object-fit: cover; /* Dopasowanie bez zniekształceń */
+        border-radius: 5px; /* Zaokrąglone rogi */
+    }
+
+    /* Dwa zdjęcia pionowo */
+    .staticPage.vertical .staticDropZone,
+    .page.vertical .image-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .staticPage.vertical img,
+    .page.vertical img {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Siatka 2x2 */
+    .staticPage.grid-2x2 .staticDropZone,
+    .page.grid-2x2 .image-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
+        justify-items: center;
+        align-items: center;
+    }
+
+    .staticPage.grid-2x2 img,
+    .page.grid-2x2 img {
+        width: 100%;
+        height: 100%;
     }
