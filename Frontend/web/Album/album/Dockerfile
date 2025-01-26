@@ -20,6 +20,10 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+RUN mkdir -p /usr/share/nginx/html/downloads
+
+COPY cupid.apk /usr/share/nginx/html/downloads/cupid.apk
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
