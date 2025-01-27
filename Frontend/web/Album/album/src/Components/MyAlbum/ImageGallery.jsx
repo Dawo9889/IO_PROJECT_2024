@@ -56,7 +56,7 @@ function ImageGallery({ onWeddingSelect }) {
                     ))}
                 </select>
             </div>
-            <h3>Galeria zdjęć</h3>
+            <h3>Photo Gallery</h3>
             <div className="gallery-container">
                 {selectedWedding ? (
                     <Gallery weddingId={selectedWedding} />

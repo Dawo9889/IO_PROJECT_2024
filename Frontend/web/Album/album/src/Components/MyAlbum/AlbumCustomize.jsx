@@ -35,13 +35,13 @@ export const addPage = (pages, setPages, setBookKey) => {
     const newPages = [
         {
         number: maxNumber + 1,
-        header: `Nagłówek strony ${maxNumber + 1}`,
+        header: `Main description ${maxNumber + 1}`,
         images: [],
         layout: "default",
         },
         {
             number: maxNumber + 2,
-            header: `Nagłówek strony ${maxNumber + 2}`,
+            header: `Main description ${maxNumber + 2}`,
             images: [],
             layout: "default",
         },

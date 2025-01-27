@@ -38,7 +38,7 @@ const Page = React.forwardRef((props, ref) => {
                         onDrop={(e) => handleDrop(e, props.images.length)}
                         onDragOver={handleDragOver}
                     >
-                        <span className="drop-text">Upuść zdjęcie</span>
+                        <span className="drop-text">Drop Photo</span>
                     </div>
                 )}
             </div>
@@ -50,28 +50,32 @@ const Page = React.forwardRef((props, ref) => {
                     {/* Dla layoutu 'vertical' (domyślny) - opis poniżej zdjęcia */}
                     {props.layout === "vertical" && (
                         <div className="vertical-layout">
-                            <span className="author"><strong>Autor:</strong> {image.author}</span><br />
+                            <span className="author"><strong>Author:</strong> {image.author}</span><br />
+                            <span className="description"><strong>Descr:</strong> {image.description}</span><br />
                         </div>
                     )}
 
                     {/* Dla layoutu 'horizontal' - opis obok zdjęcia */}
                     {props.layout === "horizontal" && (
                         <div className="horizontal-layout">
-                            <span className="author"><strong>Autor:</strong> {image.author}</span><br />
+                            <span className="author"><strong>Author:</strong> {image.author}</span><br />
+                            <span className="description"><strong>Descr:</strong> {image.description}</span><br />
                         </div>
                     )}
 
                     {/* Dla layoutu 'grid-2x2' - opis poniżej zdjęcia */}
                     {props.layout === "grid-2x2" && (
                         <div className="grid-2x2-layout">
-                            <span className="author"><strong>Autor:</strong> {image.author}</span><br />
+                            <span className="author"><strong>Author:</strong> {image.author}</span><br />
+                            <span className="description"><strong>Descr:</strong> {image.description}</span><br />
                         </div>
                     )}
 
                     {/* Dla innych layoutów - opis poniżej zdjęcia */}
                     {(props.layout == "default" && props.layout !== "grid-2x2") && (
                         <div className="default-layout">
-                            <span className="author"><strong>Autor:</strong> {image.author}</span><br />
+                            <span className="author"><strong>Author:</strong> {image.author}</span><br />
+                            <span className="description"><strong>Descr:</strong> {image.description}</span><br />
                         </div>
                     )}
                 </div>
@@ -79,7 +83,7 @@ const Page = React.forwardRef((props, ref) => {
             </div>
 
             <div className="page-number">
-                {`Strona ${props.number}`}
+                {`Page ${props.number}`}
             </div>
         </div>
     );
