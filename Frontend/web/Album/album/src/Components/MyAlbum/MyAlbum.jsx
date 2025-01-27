@@ -13,7 +13,29 @@ function MyAlbum() {
     //functions and consts that cannot be moved
     const [inputText, setInputText] = useState("");
     const [selectedPage, setSelectedPage] = useState(1);
-    const [selectedWeddingName, setSelectedWeddingName] = useState(null);
+    const [selectedWedding, setSelectedWedding] = useState(() => {
+        return localStorage.getItem("selectedWedding") || "";
+    });
+    const [selectedWeddingName, setSelectedWeddingName] = useState(() => {
+        return localStorage.getItem("selectedWeddingName") || "";
+    });
+
+    // Odczytaj z Local Storage przy starcie
+    useEffect(() => {
+        const storedWedding = localStorage.getItem("selectedWedding");
+        const storedWeddingName = localStorage.getItem("selectedWeddingName");
+
+        if (storedWedding) setSelectedWedding(storedWedding);
+        if (storedWeddingName) setSelectedWeddingName(storedWeddingName);
+    }, []);
+
+    // Zapisuj do Local Storage przy każdej zmianie
+    useEffect(() => {
+        if (selectedWedding) {
+            localStorage.setItem("selectedWedding", selectedWedding);
+            localStorage.setItem("selectedWeddingName", selectedWeddingName);
+        }
+    }, [selectedWedding, selectedWeddingName]);
 
     const [pages, setPages] = useState([
         { number: 1, header: "Main description 1", images: [], layout: "default" },
@@ -70,9 +92,12 @@ function MyAlbum() {
             {!isStaticView ? (
                 <div style={{ display: "flex" }}>
                     <div className="upload-box-container">
-                        <ImageGallery onDragStart={handleDragStart} onWeddingSelect={(weddingId, weddingName) =>
-                            handleWeddingSelect(weddingId, weddingName, setSelectedWeddingName, setPages)
-                        } />
+                        <ImageGallery
+                            onDragStart={handleDragStart}
+                            onWeddingSelect={(weddingId, weddingName) =>
+                                handleWeddingSelect(weddingId, weddingName, setSelectedWedding, setSelectedWeddingName, setPages)
+                            }
+                        />
                     </div>
                     <div style={{ flex: 1 }}>
                         <HTMLFlipBook

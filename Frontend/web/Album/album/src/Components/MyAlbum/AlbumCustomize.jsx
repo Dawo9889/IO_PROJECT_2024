@@ -20,8 +20,13 @@ export const handleJumpToPage = (page, flipBookRef) => {
     }
 };
 
-export const handleWeddingSelect = (weddingId, weddingName, setSelectedWeddingName, setPages) => {
+export const handleWeddingSelect = (weddingId, weddingName, setSelectedWedding, setSelectedWeddingName, setPages) => {
+    setSelectedWedding(weddingId);
     setSelectedWeddingName(weddingName);
+
+    localStorage.setItem("selectedWedding", weddingId);
+    localStorage.setItem("selectedWeddingName", weddingName);
+
     setPages((prevPages) =>
         prevPages.map((page) => ({
             ...page,
@@ -29,6 +34,8 @@ export const handleWeddingSelect = (weddingId, weddingName, setSelectedWeddingNa
         }))
     );
 };
+
+
 
 export const addPage = (pages, setPages, setBookKey) => {
     const maxNumber = Math.max(...pages.map(page => page.number), 0);

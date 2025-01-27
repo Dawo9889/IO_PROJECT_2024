@@ -21,6 +21,11 @@ function ImageGallery({ onWeddingSelect }) {
             })
             .then((response) => {
                 setWeddings(response.data);
+
+                const savedWeddingId = localStorage.getItem("selectedWedding");
+                if (savedWeddingId) {
+                    setSelectedWedding(savedWeddingId); // Ustawiamy wybrane wesele z localStorage
+                }
             })
             .catch((err) => {
                 console.error("Error fetching weddings:", err);
@@ -32,6 +37,7 @@ function ImageGallery({ onWeddingSelect }) {
         const selectedName = weddings.find((wedding) => wedding.id === selectedId)?.name;
 
         setSelectedWedding(selectedId);
+        localStorage.setItem("selectedWedding", selectedId);
 
         if (onWeddingSelect) {
             onWeddingSelect(selectedId, selectedName);
