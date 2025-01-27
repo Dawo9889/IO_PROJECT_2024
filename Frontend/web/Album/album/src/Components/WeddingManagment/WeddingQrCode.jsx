@@ -17,6 +17,10 @@ const WeddingQRCode = ({ weddingId, onTokenUpdated  }) => {
         toast.error('Please provide the token expiration time in hours.');
         return;
       }
+    else if(tokenExpire < 0){
+      toast.error('Please provide a positive number.');
+        return;
+    }
     axios
     .put(
       `${import.meta.env.VITE_API_URL}/wedding/updateToken?id=${weddingId}&hours=${tokenExpire}`,

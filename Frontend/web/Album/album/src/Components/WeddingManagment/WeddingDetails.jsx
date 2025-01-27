@@ -61,6 +61,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            required
             className="w-full px-3 py-2 border border-2 rounded-lg bg-project-dark text-white"
           />
         </div>
@@ -91,6 +92,7 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
             name="description"
             value={formData.description}
             onChange={handleChange}
+            required
             className="w-full px-3 py-2 border border-2 rounded-lg bg-project-dark text-white"
           />
         </div>
@@ -169,11 +171,16 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if(weddingId !== null){
+      fetchData();
+    }
+    else {
+      setDetails(null)
+    }
   }, [weddingId]);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 sm:min-h-[800px] md:min-h-[700px] lg:min-h-[700px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="max-w-6xl mx-auto p-6 min-h-[200px] sm:min-h-[700px] md:min-h-[700px] lg:min-h-[700px] bg-project-dark-bg rounded-lg shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
       {loading ? (
         <Spinner />
       ) : error ? (
@@ -219,15 +226,25 @@ const WeddingDetails = ({ weddingId, onUpdate }) => {
           )}
         </>
       ) : (
-        <p className="h-full flex justify-center text-white text-center col-span-2 text-xl">
+        <div className="justify-center text-white text-center col-span-2 text-xl w-full">
           Click a wedding to see details
-        </p>
+          <div className='my-4 w-full'>
+            <a
+              className="w-full px-6 py-2 text-sm font-medium bg-project-yellow text-black rounded-lg shadow hover:bg-yellow-400 focus:ring-2 focus:ring-offset-2 focus:ring-project-blue"
+              href='/createWedding'
+            >
+              Create Wedding
+            </a>
+          </div>
+        </div>
       )}
       <div className="lg:col-span-1 md:col-span-2 h-full w-full flex flex-col justify-center">
+        {weddingId && (
         <WeddingQRCode
           weddingId={weddingId}
           onTokenUpdated={fetchData}
         />
+      )}
       </div>
     </div>
   );
