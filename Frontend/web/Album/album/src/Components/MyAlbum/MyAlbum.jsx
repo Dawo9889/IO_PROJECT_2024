@@ -13,11 +13,33 @@ function MyAlbum() {
     //functions and consts that cannot be moved
     const [inputText, setInputText] = useState("");
     const [selectedPage, setSelectedPage] = useState(1);
-    const [selectedWeddingName, setSelectedWeddingName] = useState(null);
+    const [selectedWedding, setSelectedWedding] = useState(() => {
+        return localStorage.getItem("selectedWedding") || "";
+    });
+    const [selectedWeddingName, setSelectedWeddingName] = useState(() => {
+        return localStorage.getItem("selectedWeddingName") || "";
+    });
+
+    // Odczytaj z Local Storage przy starcie
+    useEffect(() => {
+        const storedWedding = localStorage.getItem("selectedWedding");
+        const storedWeddingName = localStorage.getItem("selectedWeddingName");
+
+        if (storedWedding) setSelectedWedding(storedWedding);
+        if (storedWeddingName) setSelectedWeddingName(storedWeddingName);
+    }, []);
+
+    // Zapisuj do Local Storage przy każdej zmianie
+    useEffect(() => {
+        if (selectedWedding) {
+            localStorage.setItem("selectedWedding", selectedWedding);
+            localStorage.setItem("selectedWeddingName", selectedWeddingName);
+        }
+    }, [selectedWedding, selectedWeddingName]);
 
     const [pages, setPages] = useState([
-        { number: 1, header: "Nagłówek strony 1", images: [], layout: "default" },
-        { number: 2, header: "Nagłówek strony 2", images: [], layout: "default" },
+        { number: 1, header: "Main description 1", images: [], layout: "default" },
+        { number: 2, header: "Main description 2", images: [], layout: "default" },
     ]);
 
     const [bookKey, setBookKey] = useState(0);
@@ -32,8 +54,8 @@ function MyAlbum() {
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
 
-            const width = Math.floor((screenWidth * 0.3)); // np. 30% szerokości ekranu
-            const height = Math.floor((screenHeight * 0.5)); // np. 50% wysokości ekranu
+            const width = Math.floor((screenWidth * 0.37)); // np. 30% szerokości ekranu
+            const height = Math.floor((screenHeight * 0.55)); // np. 50% wysokości ekranu
 
             setBookDimensions({ width, height });
         };
@@ -70,9 +92,12 @@ function MyAlbum() {
             {!isStaticView ? (
                 <div style={{ display: "flex" }}>
                     <div className="upload-box-container">
-                        <ImageGallery onDragStart={handleDragStart} onWeddingSelect={(weddingId, weddingName) =>
-                            handleWeddingSelect(weddingId, weddingName, setSelectedWeddingName, setPages)
-                        } />
+                        <ImageGallery
+                            onDragStart={handleDragStart}
+                            onWeddingSelect={(weddingId, weddingName) =>
+                                handleWeddingSelect(weddingId, weddingName, setSelectedWedding, setSelectedWeddingName, setPages)
+                            }
+                        />
                     </div>
                     <div style={{ flex: 1 }}>
                         <HTMLFlipBook
@@ -91,7 +116,7 @@ function MyAlbum() {
                                 setSelectedPage(currentPage);
                             }}
                         >
-                            <StartPageCover> {selectedWeddingName ? `Album: ${selectedWeddingName}` : "Wybierz wesele"} </StartPageCover>
+                            <StartPageCover> {selectedWeddingName ? `Photo album: ${selectedWeddingName}` : "Choose Wedding"} </StartPageCover>
                             <EndPageCover></EndPageCover>
                             {pages.map((page) => (
                                 <Page
@@ -100,13 +125,13 @@ function MyAlbum() {
                                     header={page.header}
                                     images={page.images}
                                     layout={page.layout}
-                                    onImageDrop={(src, number, layout, dropIndex) =>
-                                        handleImageDrop(pages, setPages, src, number, layout, dropIndex)
+                                    onImageDrop={(src, number, layout, dropIndex, author, description) =>
+                                        handleImageDrop(pages, setPages, src, number, layout, dropIndex, author, description)
                                     }
                                 />
                             ))}
                             <EndPageCover></EndPageCover>
-                            <EndPageCover>Do zobaczenia na poprawinach</EndPageCover>
+                            <EndPageCover>Thanks for coming</EndPageCover>
                         </HTMLFlipBook>
                         <br />
                         <div className="formContainer">
@@ -115,7 +140,7 @@ function MyAlbum() {
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
                                 type="text"
-                                placeholder="Nowy nagłówek strony"
+                                placeholder="New main description"
                             />
                             <select
                                 className="form-control"
@@ -124,48 +149,48 @@ function MyAlbum() {
                             >
                                 {pages.map((page) => (
                                     <option key={page.number} value={page.number}>
-                                        Strona {page.number}
+                                        Page {page.number}
                                     </option>
                                 ))}
                             </select>
                             <button className="btn" onClick={() => updateHeader(pages, setPages, selectedPage, inputText, setInputText)}>
-                                Zmień nagłówek
+                                Change main description
                             </button>
                             <button className="btn" onClick={() => addPage(pages, setPages, setBookKey)}>
-                                Dodaj Kartkę
+                                Add Page
                             </button>
                         </div>
                         <div className="formContainer">
                             <button className="btn" onClick={() => handleJumpToPage(selectedPage, flipBookRef)}>
-                                Skocz do strony
+                                Go to page
                             </button>
                             <select
                                 className="form-control"
                                 onChange={(e) => updateLayout(pages, setPages, selectedPage, e.target.value)}
                             >
-                                <option value="default">Jedno zdjęcie</option>
-                                <option value="vertical">Dwa zdjęcia (pionowo)</option>
-                                <option value="horizontal">Dwa zdjęcia (poziomo)</option>
-                                <option value="grid-2x2">Siatka 2x2</option>
+                                <option value="default">One photo</option>
+                                <option value="vertical">Two photos (horizontal)</option>
+                                <option value="horizontal">Two photos (vetical)</option>
+                                <option value="grid-2x2">Grid 2x2</option>
                             </select>
                             <button className="btn" onClick={renderStaticView}>
-                                Render
+                                Render static view
                             </button>
                         </div>
                     </div>
                 </div>
             ) : (
                     <div style={{ textAlign: "center" }}>
-                    <button className="btn" onClick={handleBack}>Powrót do dynamicznego widoku</button>
-                    <button className="btn" onClick={handleExportToPDF}>Eksportuj album do PDF</button>
-                    <button className="btn" onClick={() => exportAlbumToDocx(pages)}>Eksportuj okładkę do DOCX</button>
+                    <button className="btn" onClick={handleBack}>Dynamic view</button>
+                    <button className="btn" onClick={handleExportToPDF}>Export to PDF</button>
+                    <button className="btn" onClick={() => exportAlbumToDocx(pages)}>Export to DOCX</button>
                         <div className="staticCoverStart"
                             style={{
                             height: bookDimensions.width,
                                 width: bookDimensions.height
                             }}
                         >
-                            <h2>Album: {selectedWeddingName}</h2>
+                            <h2>Photo album: {selectedWeddingName}</h2>
                     </div>
                     <div>
                         {pages.map((page) => (
@@ -180,12 +205,17 @@ function MyAlbum() {
                                 <h1>{page.header}</h1>
                                 <div className="staticDropZone">
                                     {page.images.map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image.src}
-                                            alt="Dynamic"
-                                            className={`staticPageImage ${page.layout}`}
-                                        />
+                                        <div key={index} className="imageWithInfo">
+                                            <img
+                                                src={image.src}
+                                                alt={`Image on page ${page.number}`}
+                                                className={`staticPageImage ${page.layout}`}
+                                            />
+                                            <div className="imageDetails">
+                                                <p className="author">{"Author: " + image.author}</p>
+                                                <p className="author">{"Descr: "+image.description}</p>
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -197,7 +227,7 @@ function MyAlbum() {
                                 width: bookDimensions.height
                             }}
                         >
-                        <h2>Do zobaczenia na poprawinach</h2>
+                        <h2>Thanks for coming</h2>
                     </div>
                 </div>
             )}

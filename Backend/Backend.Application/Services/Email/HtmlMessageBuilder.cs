@@ -70,7 +70,7 @@ namespace Backend.Application.Services.Email
                   <td style='padding: 20px; background-color: #20211a; border-radius: 8px 8px 8px 8px; text-align: center; color: #ffed90; font-size: 14px;'>
                     {_footer}
                     <p style='margin: 0;'>
-                      <a href='https://github.com/Dawo9889/IO_PROJECT_2024'style='color: #ffe14d; text-decoration: none;'>Contact Us</a>
+                      <a href='https://github.com/Dawo9889/cupid-app'style='color: #ffe14d; text-decoration: none;'>Contact Us</a>
                     </p>
                   </td>
                 </tr>"

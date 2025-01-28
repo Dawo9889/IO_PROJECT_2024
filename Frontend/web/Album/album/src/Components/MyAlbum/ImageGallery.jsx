@@ -4,10 +4,12 @@ import axios from "axios";
 import Gallery from "./Gallery";
 
 function ImageGallery({ onWeddingSelect }) {
+
     const [weddings, setWeddings] = useState([]);
     const [selectedWedding, setSelectedWedding] = useState(null);
 
     useEffect(() => {
+
         const authData = JSON.parse(localStorage.getItem("auth"));
         const accessToken = authData?.accessToken;
 
@@ -19,6 +21,11 @@ function ImageGallery({ onWeddingSelect }) {
             })
             .then((response) => {
                 setWeddings(response.data);
+
+                const savedWeddingId = localStorage.getItem("selectedWedding");
+                if (savedWeddingId) {
+                    setSelectedWedding(savedWeddingId); // Ustawiamy wybrane wesele z localStorage
+                }
             })
             .catch((err) => {
                 console.error("Error fetching weddings:", err);
@@ -30,6 +37,7 @@ function ImageGallery({ onWeddingSelect }) {
         const selectedName = weddings.find((wedding) => wedding.id === selectedId)?.name;
 
         setSelectedWedding(selectedId);
+        localStorage.setItem("selectedWedding", selectedId);
 
         if (onWeddingSelect) {
             onWeddingSelect(selectedId, selectedName);
@@ -54,7 +62,7 @@ function ImageGallery({ onWeddingSelect }) {
                     ))}
                 </select>
             </div>
-            <h3>Galeria zdjęć</h3>
+            <h3>Photo Gallery</h3>
             <div className="gallery-container">
                 {selectedWedding ? (
                     <Gallery weddingId={selectedWedding} />

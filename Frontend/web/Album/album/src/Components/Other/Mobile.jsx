@@ -7,6 +7,7 @@ const Mobile = () => {
         <div className="mb-8 text-center">
             <h1 className="text-3xl font-bold text-white">Download the Mobile App</h1>
             <a href="https://app.cupid.pics/downloads/cupid.apk" className="mt-4 inline-block bg-project-blue px-6 py-2 rounded-lg shadow-md hover:bg-project-blue-buttons">Download the latest version</a>
+            <h5 className="text-xs mt-2 font-bold text-white">SHA-256: ee209ee45dfa20bbc30236c5fe1e92a4f67f462df0ffc5bacc653a64e08da36c</h5>
         </div>
 
         <div className="mb-8">

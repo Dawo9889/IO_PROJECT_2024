@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
-
 /* Główne style aplikacji */
 .app-container {
     display: flex; /* Flexbox dla układów */
@@ -9,17 +8,6 @@
     min-height: 100vh; /* Pełna wysokość widoku */
     margin: 0; /* Usuń domyślne marginesy */
     padding: 0; /* Usuń domyślne odstępy */
-}
-
-.upload-box-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-right: 20px;
-}
-
-.flipbook-container {
-    flex: 1;
 }
 
 /* Formularze i kontrolki */
@@ -82,7 +70,6 @@ input {
 }
 
 .page {
-    box-shadow: 0 1.5em 3em -1em rgb(70, 69, 69);
     padding: 20px 20px 40px;
     background-color: whitesmoke;
     max-width: 100%;
@@ -102,20 +89,57 @@ input {
     justify-content: center;
     align-items: center;
     margin-top: 20px;
-    height: calc(100% - 80px);
+    height: 88%;
+}
+    .page .image-container .drop-zone.grid-2x2{
+        margin-bottom:25%;
+        height:80%;
+        gap:5px;
+    }
+
+    .page-number {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 18px;
+        color: white;
+        padding: 5px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 5px;
+    }
+.page.grid-2x2 .xd{
+    margin-top:-10%;
 }
 
-.page-number,
-.staticPageNumber {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 18px;
-    color: white;
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 5px;
+/* Przeciąganie zdjęć */
+.drop-zone {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
 }
+
+    .drop-zone img,
+    .staticPage img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 5px;
+    }
+
+    .drop-zone span {
+        color: gray;
+        position: absolute;
+    }
+
+    .drop-zone:has(img) {
+        text-indent: -9999px;
+    }
 
 /* Okładki */
 .coverStart, .coverBack,
@@ -138,83 +162,6 @@ input {
 .staticCoverStart, .staticCoverBack {
     margin: 20px auto;
 }
-    /* Przeciąganie zdjęć */
-    .drop-zone {
-    width: 100%;
-    height: 100%;
-    border: 2px dashed gray;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-    .drop-zone img,
-    .staticPage img {
-        width: 100%;
-        height: 100%;
-        object-fit: none;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .drop-zone span {
-        color: gray;
-        position: absolute;
-    }
-
-    .drop-zone:has(img) {
-        text-indent: -9999px;
-    }
-
-.upload-box {
-    width: 150px;
-    height: 200px;
-    border: 2px dashed gray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    position: relative;
-}
-
-    .upload-box input[type="file"] {
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-    }
-
-/* Galeria */
-.image-gallery {
-    margin-top: 20px;
-}
-
-    .image-gallery h3 {
-        text-align: center;
-        color: gray;
-    }
-
-.gallery-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
-.gallery-image {
-    width: 100px;
-    transition: border-color 0.3s;
-    cursor: pointer;
-    border: 2px solid transparent;
-}
-
-    .gallery-image:hover {
-        border-color: aquamarine;
-    }
 
 /* Widok statyczny */
 .static-view {
@@ -242,97 +189,182 @@ input {
     border-radius: 5px;
 }
 
-    .staticPage img {
-        width: 100%; /* Ustaw pełną szerokość */
-        height: 100%; /* Ustaw pełną wysokość */
-        object-fit: none; /* Dopasowanie obrazu tak jak w dynamicznym */
-        border-radius: 5px; /* Zaokrąglone rogi */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtelny cień */
-    }
-
     .staticPage .staticDropZone {
-        display: flex; /* Wyśrodkowanie obrazu */
-        justify-content: center;
-        align-items: center;
-        width: 90%; /* Dopasowanie do dynamicznego wyglądu */
-        height: 90%; /* Zachowanie proporcji */
-        margin: 5%; /* Wycentrowanie w kontenerze */
-        overflow: hidden; /* Ukrywanie nadmiaru */
-        position: relative; /* Ustawienie dla obrazu */
-    }
-
-    /* Jedno zdjęcie - domyślny układ */
-    .staticPage.single .staticDropZone,
-    .page.single .image-container {
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 100%;
+        height: 100%;
+        margin-top: -5%;
+        overflow: hidden;
+        position: relative;
     }
 
-    .staticPage.single img,
-    .page.single img {
-        width: 100%;
-        height: auto;
-        object-fit: none;
+    .staticPage .imageWithInfo {
+        justify-content: center;
+        width: 95%;
+        height: 90%;
+        border: 0px;
+        box-shadow: none;
+        position: relative
     }
+        .staticPage .imageWithInfo img {
+            width: 95%;
+            height: 95%;
+        }
+        .staticPage .imageWithInfo .imageDetails {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Jedno zdjęcie - domyślny układ */
+        .staticPage.default .staticDropZone,
+        .page.defaut .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .staticPage.default img,
+    .page.default img {
+        object-fit:contain;
+    }
+
+    .staticPage.default .staticDropZone{
+        margin-right:-2.5vh;
+    }
+    .staticPage.default .staticDropZone .imageDetails {
+        margin-left: -2.5vh;
+    }
+
 
     /* Dwa zdjęcia poziomo */
-    .page.horizontal .image-container {
-        display: flex; /* Zmieniamy na flexbox */
-        flex-direction: column; /* Ustawiamy elementy w kolumnie */
-        gap: 10px; /* Odstęp między zdjęciami */
-        justify-content: flex-start; /* Wyrównanie do góry */
-        align-items: center; /* Wyśrodkowanie zdjęć */
-    }
+    .page.horizontal .image-container,
     .staticPage.horizontal .staticDropZone {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        height: 100%; /* Pełna wysokość strefy */
-        overflow: hidden;
     }
 
-    .page.horizontal img {
-        width: 100%;
-        height: 100%;
+    .staticPage.horizontal .staticDropZone {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 1%;
+        margin-bottom: 1%;
     }
+
+.page.horizontal img {
+    width: 100%;
+    height: 100%;
+}
+
+.staticPage.horizontal .staticDropZone .imageWithInfo{
+    margin-top: 15vh;
+    margin-bottom: -35vh;
+}
+
     .staticPage.horizontal img {
-        width: 100%; /* Szerokość zdjęcia dopasowana */
-        height: calc(50% - 5px); /* Połowa wysokości strefy minus odstęp */
-        object-fit: cover; /* Dopasowanie bez zniekształceń */
-        border-radius: 5px; /* Zaokrąglone rogi */
+        margin-top: -15vh;
+        width: 100%;
+        height: 50%;
+        object-fit: contain;
+        border-radius: 5px;
     }
 
-    /* Dwa zdjęcia pionowo */
-    .staticPage.vertical .staticDropZone,
-    .page.vertical .image-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 10px;
-        justify-items: center;
-        align-items: center;
-    }
+/* Dwa zdjęcia pionowo */
+.staticPage.vertical .staticDropZone,
+.page.vertical .image-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1px;
+    justify-items: center;
+    align-items: center;
+}
 
+.staticPage.vertical .staticDropZone {
+    margin-right: auto;
+}
+    .staticPage.vertical .staticDropZone .imageWithInfo{
+        margin-top:-8vh;
+    }
     .staticPage.vertical img,
     .page.vertical img {
         width: 100%;
         height: 100%;
     }
 
-    /* Siatka 2x2 */
-    .staticPage.grid-2x2 .staticDropZone,
-    .page.grid-2x2 .image-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 10px;
-        justify-items: center;
-        align-items: center;
+/* Siatka 2x2 */
+.staticPage.grid-2x2 .staticDropZone,
+.page.grid-2x2 .image-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1px;
+    justify-items: center;
+    align-items: center;
+}
+
+.staticPage.grid-2x2 img,
+.page.grid-2x2 img {
+    width: 100%;
+    height: 100%;
+}
+
+.staticPage.grid-2x2 .staticDropZone{
+    width:90%;
+    height:90%;
+}
+.staticPage.grid-2x2 .staticDropZone .imageWithInfo {
+    margin-top:-20%;
+}
+
+    .staticPage.grid-2x2 .staticDropZone .imageWithInfo .imageDetails {
+        margin-top: -20%;
     }
 
-    .staticPage.grid-2x2 img,
-    .page.grid-2x2 img {
-        width: 100%;
-        height: 100%;
+.staticPage h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Playfair Display', serif;
+}
+
+/*desc and auth*/
+
+.xd {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+.image-info {
+    font-family: 'Playfair Display', serif;
+    z-index:1;
+}
+
+/* Galeria */
+.image-gallery {
+    margin-top: 20px;
+}
+
+    .image-gallery h3 {
+        text-align: center;
+        color: gray;
+    }
+
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.gallery-image {
+    width: 100px;
+    transition: border-color 0.3s;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+    .gallery-image:hover {
+        border-color: aquamarine;
     }
