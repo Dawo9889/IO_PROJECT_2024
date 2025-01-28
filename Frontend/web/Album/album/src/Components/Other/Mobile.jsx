@@ -2,12 +2,12 @@ import React from 'react'
 
 const Mobile = () => {
   return (
-<div className="rounded-2xl flex items-center justify-center bg-project-dark m-4">
-<div className='bg-project-dark-bg rounded-2xl shadow-2xl max-w-full lg:max-w-4/5 p-4 h-full overflow-y-auto'>
-        <div className="mb-8 text-center">
+<div className="rounded-2xl flex items-center justify-center bg-project-dark">
+<div className='bg-project-dark-bg rounded-2xl shadow-2xl max-w-full lg:max-w-4/5 p-4 h-full'>
+        <div className="my-2 text-center">
             <h1 className="text-3xl font-bold text-white">Download the Mobile App</h1>
             <a href="https://app.cupid.pics/downloads/cupid.apk" className="mt-4 inline-block bg-project-blue px-6 py-2 rounded-lg shadow-md hover:bg-project-blue-buttons">Download the latest version</a>
-            <h5 className="text-xs mt-2 font-bold text-white">SHA-256: ee209ee45dfa20bbc30236c5fe1e92a4f67f462df0ffc5bacc653a64e08da36c</h5>
+            <p className="text-xs mt-4 font-bold text-white break-all">SHA-256: ee209ee45dfa20bbc30236c5fe1e92a4f67f462df0ffc5bacc653a64e08da36c</p>
         </div>
 
         <div className="mb-8">

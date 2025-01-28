@@ -34,7 +34,7 @@ function App() {
             <Route path="resetPassword" element={<PublicRoute element={<ResetPassword />} />} />
             <Route path="resetPasswordForm" element={<PublicRoute element={<ResetPasswordForm />} />} />
             <Route path="team" element={<Team />} />
-            <Route path="mobile" element={<Mobile />} />
+            <Route path="mobile" element={<div className="p-4 bg-project-dark"><Mobile /></div>} />
             <Route path="unauthorized" element={<Unauthorized />} />
             <Route path="/" element={<div className="p-4 bg-project-dark"><Home /></div>} />
          
