@@ -42,7 +42,7 @@ const Settings = () => {
 
     return (
         <div className="flex flex-col items-center justify-center p-6">
-          <div className="sm:w-full lg:w-1/2 bg-project-dark-bg rounded-lg shadow-lg p-6">
+          <div className="sm:w-full lg:w-1/3 bg-project-dark-bg rounded-lg shadow-lg p-6">
           <div className="flex items-center justify-center mb-6 flex-col sm:flex-row">
             <img
               alt="User Avatar"

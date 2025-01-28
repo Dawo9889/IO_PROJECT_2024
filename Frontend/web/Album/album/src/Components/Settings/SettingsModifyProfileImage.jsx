@@ -13,6 +13,7 @@ const SettingsModifyProfileImage = () => {
   const [newProfilePhotoCheck, setNewProfilePhotoCheck] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingNewPhoto, setLoadingNewPhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(profileImage ? `data:image/png;base64,${profileImage}` : null);
 
   const handlePhotoChange = (e) => {
@@ -47,7 +48,7 @@ const SettingsModifyProfileImage = () => {
     formData.append("file", newProfilePhoto);
 
     setError(null);
-
+    setLoadingNewPhoto(true)
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/identity/upload-profile-picture`,
@@ -65,6 +66,7 @@ const SettingsModifyProfileImage = () => {
       const base64Image = btoa(binaryString);
       updateProfileImage(base64Image);
       setNewProfilePhotoCheck(false)
+      setLoadingNewPhoto(false)
       window.location.reload();
     } catch (err) {
     }
@@ -92,7 +94,7 @@ const SettingsModifyProfileImage = () => {
         </h1>
   
         <form onSubmit={handleSubmit} className="space-y-8">
-  {/* Obrazek */}
+
   <div className="flex justify-center">
     {loading ? (
       <div className="w-60 h-60 rounded-full border-2 border-project-blue shadow-lg">
@@ -112,7 +114,10 @@ const SettingsModifyProfileImage = () => {
       />
     )}
   </div>
-  
+
+    {loadingNewPhoto ? (
+      <Spinner />
+    ) : (
   <div className="flex flex-col md:flex-row items-center justify-center gap-4">
     <div
       className="text-center bg-project-blue hover:bg-project-blue-buttons rounded-xl p-2 cursor-pointer w-48"
@@ -127,7 +132,6 @@ const SettingsModifyProfileImage = () => {
         className="hidden"
       />
     </div>
-
     {newProfilePhotoCheck ? (
       <button
         type="submit"
@@ -147,6 +151,7 @@ const SettingsModifyProfileImage = () => {
       </button>
     )}
   </div>
+    )}
 </form>
       </div>
     </div>
