@@ -165,7 +165,6 @@ export const exportAlbumToPDF = async (coverFront, coverBack, staticPages) => {
     const pdf = new jsPDF("p", "mm", "a4");
 
     if (!coverFront || !coverBack || staticPages.length === 0) {
-        console.error("Nie znaleziono wszystkich wymaganych elementów (okładek i stron).");
         return;
     }
 
@@ -195,8 +194,8 @@ export const exportAlbumToPDF = async (coverFront, coverBack, staticPages) => {
 };
 
 export const exportAlbumToDocx = async (pages) => {
-    const frontCoverText = document.querySelector(".staticCoverStart")?.innerText || "Okładka przednia";
-    const backCoverText = document.querySelector(".staticCoverBack")?.innerText || "Okładka tylna";
+    const frontCoverText = document.querySelector(".staticCoverStart")?.innerText || "Front";
+    const backCoverText = document.querySelector(".staticCoverBack")?.innerText || "Back";
 
     const albumPages = pages.map((page) => ({
         header: page.header,

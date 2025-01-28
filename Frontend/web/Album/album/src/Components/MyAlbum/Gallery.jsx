@@ -11,6 +11,7 @@ const Gallery = ({ weddingId }) => {
 
     const authData = JSON.parse(localStorage.getItem("auth"));
     const accessToken = authData?.accessToken;
+
     const goToPrevious = () => {
         if (pageIndex > 1) {
             setPageIndex((prev) => prev - 1);
@@ -21,6 +22,13 @@ const Gallery = ({ weddingId }) => {
         if (pageIndex < pageCount) {
             setPageIndex((prev) => prev + 1);
         }
+    };
+
+    const handleDragStart = (e, image) => {
+        e.dataTransfer.setData("text", image.photo);
+        e.dataTransfer.setData("layout", image.layout || "default");
+        e.dataTransfer.setData("author", image.author);
+        e.dataTransfer.setData("description", image.description);
     };
 
     useEffect(() => {
@@ -60,8 +68,12 @@ const Gallery = ({ weddingId }) => {
                     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
                 );
 
-                // Pobierz ścieżki do oryginalnych zdjęć
+                // Pobierz ścieżki do oryginalnych zdjęć/autorów/opisów
                 const originalPhotoLinks = sortedData.map((item) => item.filePath);
+                const photoDetails = sortedData.map((item) => ({
+                    author: item.author,
+                    description: item.description
+                }));
 
                 // Pobierz każde oryginalne zdjęcie i przekształć w URL
                 const authorizedOriginalPhotos = await Promise.all(
@@ -82,9 +94,15 @@ const Gallery = ({ weddingId }) => {
                     })
                 );
 
+                const combinedData = authorizedOriginalPhotos.map((photo, index) => ({
+                    photo,
+                    author: photoDetails[index]?.author || "Unknown Author",
+                    description: photoDetails[index]?.description || "No Description",
+                })); 
+
                 // Ustaw stan dla oryginalnych zdjęć (filtrując null, jeśli są błędy)
                 setOriginalPhotos(
-                    authorizedOriginalPhotos.filter((photo) => photo !== null)
+                   combinedData.filter((item) => item.photo !== null)
                 );
             } catch (err) {
                 console.error("Error fetching original photos:", err);
@@ -148,14 +166,16 @@ const Gallery = ({ weddingId }) => {
                         <div className="h-[400px] lg:min-h-[600px] w-full">
                             {thumbnails.length > 0 ? (
                                 <div className="grid grid-cols-2 gap-3">
-                                    {thumbnails.map((thumbnail, photoIndex) => (
+                                    {thumbnails.map((item, photoIndex) => (
                                         <div
                                             key={photoIndex}
                                             className="w-full h-40 lg:h-60 rounded-lg overflow-hidden shadow-lg"
+                                            draggable
+                                            onDragStart={(e) => handleDragStart(e, item)}
                                         >
                                             <img
-                                                src={thumbnail}
-                                                alt={`Thumbnail ${photoIndex + 1}`}
+                                                src={item.photo}
+                                                alt={`${item.author} - ${item.description}`}
                                                 className="w-[250px] h-full object-contain transition-opacity rounded-lg shadow-lg duration-200"
                                             />
                                         </div>
