@@ -110,11 +110,6 @@ const fetchThumbnails = async () => {
 
   useEffect(() => {
     fetchWeddingInfo()
-    const interval = setInterval(() => {
-      fetchWeddingInfo();
-    }, 1000);
-      
-    return () => clearInterval(interval);
   },[weddingId])
 
   useEffect(() => {

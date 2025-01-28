@@ -112,8 +112,7 @@ const SettingsModifyProfileImage = () => {
       />
     )}
   </div>
-
-  {/* Przyciski */}
+  
   <div className="flex flex-col md:flex-row items-center justify-center gap-4">
     <div
       className="text-center bg-project-blue hover:bg-project-blue-buttons rounded-xl p-2 cursor-pointer w-48"

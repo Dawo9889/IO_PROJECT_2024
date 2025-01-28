@@ -51,13 +51,7 @@ function Navbar() {
             const base64Image = btoa(binaryString);
             updateProfileImage(base64Image);
           })
-          .catch((err) => {
-            if (err.response?.status === 404) {
-              setError('Profile Image not found (404).');
-            } else {
-              setError('Error fetching Profile Image.');
-            }
-          })
+          .catch(() => {})
           .finally(() => {
             setProfileImageLoading(false);
           });

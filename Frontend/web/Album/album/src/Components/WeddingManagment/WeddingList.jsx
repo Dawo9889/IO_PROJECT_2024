@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import DeleteWedding from '../Weddings/DeleteWedding';
+import useAuth from '../hooks/useAuth';
 
 const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings,onDeleteWedding }) => {
+  const {auth} = useAuth()
+
   const [error, setError] = useState(null);
   const [isDeleteWindowIsOpen, setIsDeleteWindowIsOpen] = useState(false);
   const [weddingId, setWeddingId] = useState(null);
@@ -22,12 +25,10 @@ const WeddingList = ({ weddings, setSelectedWedding, fetchWeddings,onDeleteWeddi
   };
 
   const confirmDelete = (id) => {
-    const authData = JSON.parse(localStorage.getItem('auth'));
-    const accessToken = authData?.accessToken;
     axios
       .delete(`${import.meta.env.VITE_API_URL}/wedding/?id=${id}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${auth.accessToken}`,
         },
       })
       .then(() => {

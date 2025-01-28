@@ -42,17 +42,17 @@ const Settings = () => {
 
     return (
         <div className="flex flex-col items-center justify-center p-6">
-          <div className="w-full max-w-md mx-auto bg-project-dark-bg rounded-lg shadow-lg p-6">
-            <div className="flex items-center justify-center mb-6">
-              <img
-                alt="User Avatar"
-                src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
-                className="w-12 h-12 lg:h-16 lg:w-16 rounded-full border-2 border-project-blue"
-              />
-              <div className="mx-2 text-white text-xl sm:text-xl lg:text-2xl font-semibold">
-                {auth.user}
-              </div>
+          <div className="sm:w-full lg:w-1/2 bg-project-dark-bg rounded-lg shadow-lg p-6">
+          <div className="flex items-center justify-center mb-6 flex-col sm:flex-row">
+            <img
+              alt="User Avatar"
+              src={profileImage ? `data:image/png;base64,${profileImage}` : '/login-photo.png'}
+              className="w-32 h-32 lg:h-16 lg:w-16 rounded-full border-2 border-project-blue mb-2"
+            />
+            <div className="mx-2 text-white text-xl sm:text-xl lg:text-2xl font-semibold">
+              {auth.user}
             </div>
+          </div>
             <p className="text-white text-xl font-bold text-center mb-4">
               User Account Settings
             </p>
