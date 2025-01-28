@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Admin Panel', href: '/admin', current: false },
   { name: 'Team', href: '/team', current: false },
   { name: 'Mobile App', href: '/mobile', current: false},
-  { name: 'GitHub', href: 'https://github.com/Dawo9889/IO_PROJECT_2024', current: false}
+  { name: 'GitHub', href: 'https://github.com/Dawo9889/cupid-app', current: false}
 ]
 
 function classNames(...classes) {

@@ -10,7 +10,7 @@ TARGET_IP="192.168.100.200"
 FOLDER_PATH="/docker_github"
 DATA_FOLDER_PATH="data"
 # GitHub repository URL
-GIT_REPO_URL="git@github.com:Dawo9889/IO_PROJECT_2024.git"
+GIT_REPO_URL="git@github.com:Dawo9889/cupid-app.git"
 REPO_DIR=$(basename "$GIT_REPO_URL" .git)
 
 # Branch name to synchronize
